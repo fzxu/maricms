@@ -30,14 +30,16 @@ GEM
       activesupport (= 3.0.3)
     activesupport (3.0.3)
     arel (2.0.4)
+    bcrypt-ruby (2.1.2)
     bson (1.1.4)
     bson_ext (1.1.4)
     builder (2.1.2)
+    devise (1.1.5)
+      bcrypt-ruby (~> 2.1.2)
+      warden (~> 1.0.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     i18n (0.5.0)
-    jnunemaker-validatable (1.8.4)
-      activesupport (>= 2.3.4)
     mail (2.2.11)
       activesupport (>= 2.3.6)
       i18n (~> 0.5.0)
@@ -46,12 +48,11 @@ GEM
     mime-types (1.16)
     mongo (1.1.4)
       bson (>= 1.1.1)
-    mongo_mapper (0.8.6)
-      activesupport (>= 2.3.4)
-      jnunemaker-validatable (~> 1.8.4)
-      plucky (~> 0.3.6)
-    plucky (0.3.6)
+    mongoid (2.0.0.beta.20)
+      activemodel (~> 3.0)
       mongo (~> 1.1)
+      tzinfo (~> 0.3.22)
+      will_paginate (~> 3.0.pre)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -76,13 +77,17 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
+    warden (1.0.2)
+      rack (>= 1.0.0)
+    will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bson_ext
-  mongo_mapper
+  devise
+  mongoid (= 2.0.0.beta.20)
   rails (= 3.0.3)
 
 METADATA

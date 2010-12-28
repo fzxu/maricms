@@ -1,4 +1,11 @@
 TianTing::Application.routes.draw do
+  
+  devise_for :users
+  #resource :users, :only => [:new, :create, :edit, :update]
+   
+  # root
+  root :controller => :application, :action => :index
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

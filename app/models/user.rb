@@ -12,6 +12,11 @@ class User
   
   field :user_name
   
+  validates_presence_of :user_name
+  validates_uniqueness_of :user_name, :scope => authentication_keys[1..-1],
+    :case_sensitive => false, :allow_blank => true
+  #TODO validates_format_of     :user_name, :with  => email_regexp, :allow_blank => true
+  
   protected
 
   def self.find_for_database_authentication(conditions)

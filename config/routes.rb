@@ -1,5 +1,9 @@
 TianTing::Application.routes.draw do
   
+  resources :ds
+
+  resources :pages
+
   devise_for :users
   #resource :users, :only => [:new, :create, :edit, :update]
    

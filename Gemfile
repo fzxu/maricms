@@ -7,6 +7,9 @@ gem "bson_ext"
 gem "mongoid", "2.0.0.beta.20"
 
 gem "devise"
+gem "themes_for_rails"
+
+gem "liquid"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

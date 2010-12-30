@@ -6,4 +6,10 @@ en:
     attributes:
       user:
         login: "Username or email"
+      d:
+        name: "Name"
+      ds_element:
+        key: "Key"
+        name: "Name"
+        type: "Type"
   

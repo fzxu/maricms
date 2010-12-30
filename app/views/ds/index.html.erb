@@ -1,0 +1,21 @@
+<h1>Listing ds</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @ds.each do |d| %>
+  <tr>
+    <td><%= link_to 'Show', d %></td>
+    <td><%= link_to 'Edit', edit_d_path(d) %></td>
+    <td><%= link_to 'Destroy', d, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New D', new_d_path %>

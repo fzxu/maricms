@@ -2,9 +2,34 @@ require 'test_helper'
 
 class PagesControllerTest < ActionController::TestCase
   setup do
-    @page = pages(:one)
+    @page = Page.new(:slug => "home", :title => "Home", :js_paths => ["accordion.js", "event/cool.js"],
+                     :page_metas => [
+                       {
+                         :http_equiv => "Content-Type",
+                         :content => "text/html; charset=utf-8"
+                       },
+                       {
+                         :http_equiv => "Pragma",
+                         :content => "no-cache"
+                       }
+    ])
+    @page.save
+
+    @event_page = Page.new(:slug => "event", :title => "Event", :css_paths =>["event.css"],
+                           :page_metas => [
+                             {
+                               :http_equiv => "Author",
+                               :content => "ark"
+                             }
+    ])
   end
 
+  teardown do
+    Page.all.each do |page|
+      page.destroy
+    end
+  end
+  
   test "should get index" do
     get :index
     assert_response :success
@@ -18,7 +43,7 @@ class PagesControllerTest < ActionController::TestCase
 
   test "should create page" do
     assert_difference('Page.count') do
-      post :create, :page => @page.attributes
+      post :create, :page => @event_page.attributes
     end
 
     assert_redirected_to page_path(assigns(:page))

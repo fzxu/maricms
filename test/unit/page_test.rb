@@ -9,7 +9,8 @@ class PageTest < ActiveSupport::TestCase
   end
 
   test "create a normal page" do
-    page = Page.new(:slug => "home", :title => "Home", :js_paths => ["accordion.js", "event/cool.js"],
+    page = Page.new(:slug => "home", :title => "Home", :theme_path=> "home.liquid",
+                    :js_paths => ["accordion.js", "event/cool.js"],
                     :page_metas => [
                       {
                         :http_equiv => "Content-Type",
@@ -29,6 +30,7 @@ class PageTest < ActiveSupport::TestCase
     assert_equal "event/cool.js", page_ret.js_paths.second
     assert_equal "text/html; charset=utf-8", page_ret.page_metas.first.content
     assert_equal "Pragma", page_ret.page_metas.second.http_equiv
+    assert_equal "home.liquid", page_ret.theme_path
   end
 
   test "create an abnormal page, without slug" do

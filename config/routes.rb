@@ -8,7 +8,7 @@ TianTing::Application.routes.draw do
   #resource :users, :only => [:new, :create, :edit, :update]
    
   # root
-  root :controller => :page, :action => :index
+  root :controller => :pages, :action => :index
 
   themes_for_rails
   

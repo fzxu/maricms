@@ -15,7 +15,11 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.xml
   def show
-    @page = Page.find(:first, :conditions => {:slug => params[:id]})
+    begin
+      @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+    rescue BSON::InvalidObjectId => e
+      #TODO redirect to an empty page
+    end
 
     respond_to do |format|
       format.html { render :layout => "front"}

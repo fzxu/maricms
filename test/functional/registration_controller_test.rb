@@ -25,12 +25,13 @@ class RegistrationControllerTest < ActionController::TestCase
   end
 
   test "should create new user" do
-    # users = User.find(:all)
-    # assert_equal users.size, 2
-    # users.each do |user|
-    #   assert_equal user.user_name, "ark01"
-    # end
     post :create, :user => {:email => "ark01@test.com", :user_name => "ark01", :password => "123456"}
-    assert_redirected_to :new
+    #assert_redirected_to :new
+    assert_response :success
+    
+    user_ret = User.all.first
+    assert_equal "ark01@test.com", user_ret.email
+    assert_equal "ark01", user_ret.user_name
+    assert_nil user_ret.confirmed_at
   end
 end

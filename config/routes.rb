@@ -9,6 +9,8 @@ TianTing::Application.routes.draw do
    
   # root
   root :controller => :application, :action => :index
+
+  themes_for_rails
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  theme "wow"
+  
   # GET /pages
   # GET /pages.xml
   def index
@@ -13,10 +15,10 @@ class PagesController < ApplicationController
   # GET /pages/1
   # GET /pages/1.xml
   def show
-    @page = Page.find(params[:id])
+    @page = Page.find(:first, :conditions => {:slug => params[:id]})
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "front"}
       format.xml  { render :xml => @page }
     end
   end

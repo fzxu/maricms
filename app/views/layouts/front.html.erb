@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= @page.title if @page %></title>
+  <%= stylesheet_link_tag current_theme_stylesheet_path :global %>
+  <%= javascript_include_tag current_theme_javascript_path :global %>
+	<% if @page %>
+		<% @page.page_metas.each do |meta| %>
+			<meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
+		<% end %>
+	<% end %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ class Page
   
   references_many :ds, :stored_as => :array, :inverse_of => :pages
   embeds_many :page_metas
+  referenced_in :tab
   
   validates_presence_of :slug
   validates_uniqueness_of :slug

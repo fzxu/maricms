@@ -1,5 +1,7 @@
 TianTing::Application.routes.draw do
   
+  resources :tabs
+
   resources :ds
 
   resources :pages

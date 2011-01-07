@@ -6,7 +6,7 @@
   <%= javascript_include_tag current_theme_javascript_path :global %>
 	<% if @page %>
 		<% @page.page_metas.each do |meta| %>
-			<meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
+      <meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
 		<% end %>
 	<% end %>
   <%= csrf_meta_tag %>

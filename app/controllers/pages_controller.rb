@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   theme "wow"
-  
+
   # GET /pages
   # GET /pages.xml
   def index
@@ -17,13 +17,18 @@ class PagesController < ApplicationController
   def show
     begin
       @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+      
+      ds = @page.ds
+      template_content = IO.read(File.join(theme_path, "theme", @page.theme_path))
+      template = Liquid::Template.parse(template_content)  # Parses and compiles the template
+      #TODO need to cache the template somewhere in future
+      
+      respond_to do |format|
+        format.html { render :layout => "front", :text => template.render( 'name' => ds.first.get_klass.all.first.title )}
+        format.xml  { render :xml => @page }
+      end
     rescue BSON::InvalidObjectId => e
       #TODO redirect to an empty page
-    end
-
-    respond_to do |format|
-      format.html { render :layout => "front"}
-      format.xml  { render :xml => @page }
     end
   end
 

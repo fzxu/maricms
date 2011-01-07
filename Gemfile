@@ -11,6 +11,8 @@ gem "themes_for_rails"
 
 gem "liquid"
 
+gem "ruby-debug19", :require => "ruby-debug"
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

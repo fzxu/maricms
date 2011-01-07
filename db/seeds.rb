@@ -5,7 +5,7 @@
 #
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
-page = Page.create(:slug => "home", :title => "Home", :theme_path => "general.liquid",
+page = Page.create(:slug => "home", :title => "Home", :theme_path => "page_default.html",
                    :js_paths => ["accordion.js", "event/cool.js"],
                    :page_metas => [
                      {
@@ -28,6 +28,7 @@ ds_blog = D.create(:key => "blog", :name => "Blog", :ds_elements => [
                        :name => "Description"
                      }
 ])
+ds_blog.get_klass.create(:title => "Noah's ARK", :description => "Very first blog")
 
 ds_event = D.create(:key => "event", :name => "Event", :ds_elements => [
                       {

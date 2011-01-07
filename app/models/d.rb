@@ -21,6 +21,7 @@ class D
       meta_string = meta_string + "field :#{ds_element.key}, :type => #{ds_element.type} \n"
       liquid_string = liquid_string + "'#{ds_element.key}' => self.#{ds_element.key}, \n"
     end
+    liquid_string = liquid_string[0..-4] + "\n" #remove the last ','
     
     liquidinj = <<LIQUIDINJ
     def to_liquid

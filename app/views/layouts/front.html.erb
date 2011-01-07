@@ -5,9 +5,24 @@
   <%= stylesheet_link_tag current_theme_stylesheet_path :global %>
   <%= javascript_include_tag current_theme_javascript_path :global %>
 	<% if @page %>
-		<% @page.page_metas.each do |meta| %>
-      <meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
+	  <% if @page.js_paths %>
+  	  <% @page.js_paths.each do |js| %>
+  	    <%= javascript_include_tag(current_theme_javascript_path(js)) %>
+  	  <% end %>
+	  <% end %>
+
+	  <% if @page.css_paths %>
+  	  <% @page.css_paths.each do |css| %>
+  	    <%= stylesheet_link_tag(current_theme_stylesheet_path(css)) %>
+  	  <% end %>
+	  <% end %>
+	  
+	  <% if @page.page_metas %>
+  		<% @page.page_metas.each do |meta| %>
+        <meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
+  		<% end %>
 		<% end %>
+		
 	<% end %>
   <%= csrf_meta_tag %>
 </head>

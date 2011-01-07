@@ -6,7 +6,8 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 page = Page.create(:slug => "home", :title => "Home", :theme_path => "page_default.html",
-                   :js_paths => ["accordion.js", "event/cool.js"],
+                   :js_paths => ["accordion", "event/cool"],
+                   :css_paths => ["home"],
                    :page_metas => [
                      {
                        :http_equiv => "Content-Type",
@@ -41,6 +42,7 @@ ds_event = D.create(:key => "event", :name => "Event", :ds_elements => [
                         :type => "Date"
                       }
 ])
+ds_event.get_klass.create(:name => "Open Source Camp", :when => "20110101")
 
 page.ds = [ds_blog, ds_event]
 page.save

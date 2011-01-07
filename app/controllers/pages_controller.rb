@@ -23,8 +23,16 @@ class PagesController < ApplicationController
       template = Liquid::Template.parse(template_content)  # Parses and compiles the template
       #TODO need to cache the template somewhere in future
       
+      #Assemble the variable and it's content, and then pass to template
+      render_params = Hash.new
+      if ds
+        for d in ds
+          render_params[d.key] = d.get_klass.all
+        end
+      end
+      
       respond_to do |format|
-        format.html { render :layout => "front", :text => template.render( 'name' => ds.first.get_klass.all.first.title )}
+        format.html { render :layout => "front", :text => template.send(:render, render_params)}
         format.xml  { render :xml => @page }
       end
     rescue BSON::InvalidObjectId => e

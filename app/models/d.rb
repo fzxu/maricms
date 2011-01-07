@@ -12,13 +12,24 @@ class D
   validates_uniqueness_of :key
   
   def get_klass
-    class_name = "GoingToChange" + self.key.capitalize
+    class_name = "Data" + self.key.capitalize
     klass = Object.const_set(class_name,Class.new)
     
     meta_string = "include Mongoid::Document \n"
+    liquid_string = ""
     self.ds_elements.each do |ds_element|
       meta_string = meta_string + "field :#{ds_element.key}, :type => #{ds_element.type} \n"
+      liquid_string = liquid_string + "'#{ds_element.key}' => self.#{ds_element.key}, \n"
     end
+    
+    liquidinj = <<LIQUIDINJ
+    def to_liquid
+      {
+        #{liquid_string}
+      }
+    end
+LIQUIDINJ
+    meta_string = meta_string + liquidinj
     klass.class_eval(meta_string)
     klass
   end

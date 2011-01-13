@@ -7,7 +7,7 @@ class Page
   field :css_paths, :type => Array
   field :theme_path
   
-  references_many :ds, :stored_as => :array, :inverse_of => :pages
+  references_and_referenced_in_many :ds
   embeds_many :page_metas
   referenced_in :tab
   

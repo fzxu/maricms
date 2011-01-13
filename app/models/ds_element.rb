@@ -5,7 +5,7 @@ class DsElement
   field :name
   field :type, :default => "String"
   
-  embedded_in :d, :inverse_of => :ds_elements
+  embedded_in :d
   
   validates_presence_of :key
   validates_presence_of :name

@@ -4,8 +4,8 @@ source 'http://gemcutter.org'
 gem 'rails', '3.0.3'
 #gem "mongo_mapper"
 gem "bson_ext"
-gem "mongoid", "2.0.0.rc.1"
-gem 'mongoid-tree', :require => 'mongoid/tree'
+gem "mongoid", "2.0.0.rc.3"
+#gem 'mongoid-tree', :require => 'mongoid/tree'
 
 gem "devise"
 gem "themes_for_rails"

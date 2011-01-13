@@ -36,7 +36,7 @@ class PagesController < ApplicationController
         format.xml  { render :xml => @page }
       end
     rescue BSON::InvalidObjectId => e
-      #TODO redirect to an empty page
+      render :text => "page not found"
     end
   end
 

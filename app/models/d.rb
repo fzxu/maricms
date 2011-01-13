@@ -6,7 +6,7 @@ class D
   field :name
 
   embeds_many :ds_elements
-  references_many :pages, :stored_as => :array, :inverse_of => :ds
+  references_and_referenced_in_many :pages
 
   validates_presence_of :key
   validates_uniqueness_of :key

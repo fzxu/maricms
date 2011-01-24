@@ -13,4 +13,8 @@ class Page
   
   validates_presence_of :slug
   validates_uniqueness_of :slug
+  
+  def to_param
+    self.slug
+  end
 end

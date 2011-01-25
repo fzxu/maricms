@@ -17,12 +17,12 @@ class PagesController < ApplicationController
   def show
     begin
       @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-      
+
       ds = @page.ds
       template_content = IO.read(File.join(theme_path, "theme", @page.theme_path))
       template = Liquid::Template.parse(template_content)  # Parses and compiles the template
       #TODO need to cache the template somewhere in future
-      
+
       #Assemble the variable and it's content, and then pass to template
       render_params = Hash.new
       if ds
@@ -30,13 +30,15 @@ class PagesController < ApplicationController
           render_params[d.key] = d.get_klass.all
         end
       end
-      
+
       respond_to do |format|
         format.html { render :layout => "front", :text => template.send(:render, render_params)}
         format.xml  { render :xml => @page }
       end
     rescue BSON::InvalidObjectId => e
       render :text => "page not found"
+    rescue Errno::ENOENT => e
+      render :text => "theme can not be read"
     end
   end
 

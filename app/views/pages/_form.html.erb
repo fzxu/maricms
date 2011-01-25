@@ -11,6 +11,38 @@
     </div>
   <% end %>
 
+	<label>
+		Title: <%= f.text_field :title %>
+	</label><br/>
+	
+	<label>
+		Slug: <%= f.text_field :slug %>
+	</label><br/>
+	
+	<label>
+		Theme Path: <%= f.text_field :theme_path %>
+	</label><br/>
+	
+	<label>
+		Javascript paths:<br/>
+		<% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str| 
+			base_name = File.basename(js_file_str, ".js") %>
+			<%= fields_for "page[js_paths]" do |form| %>
+				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.include?("global")}, base_name, "" %>
+			<% end %>
+		<% end %>
+	</label><br/>
+	
+	<label>
+		CSS paths:<br/>
+		<% Dir.glob(File.join(theme_path, "stylesheets", "*.css")).each do |css_file_str| 
+			base_name = File.basename(css_file_str, ".css") %>
+			<%= fields_for "page[css_paths]" do |form| %>
+				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.include?("global")}, base_name, "" %>
+			<% end %>
+		<% end %>
+	</label><br/>
+	
   <div class="actions">
     <%= f.submit %>
   </div>

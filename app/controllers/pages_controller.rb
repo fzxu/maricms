@@ -78,9 +78,18 @@ class PagesController < ApplicationController
   # PUT /pages/1.xml
   def update
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-
+    ds = []
+    if params[:ds]
+      params[:ds].each do |d|
+        unless d.blank?
+          ds << D.find(d)
+        end
+      end
+    end
+    @page.ds = ds
+    
     respond_to do |format|
-      if @page.update_attributes(params[:page])
+      if @page.save && @page.update_attributes(params[:page])
         format.html { redirect_to(@page, :notice => 'Page was successfully updated.') }
         format.xml  { head :ok }
       else

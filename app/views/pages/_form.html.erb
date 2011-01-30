@@ -25,10 +25,12 @@
 	
 	<label>
 		Javascript paths:<br/>
-		<% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str| 
+		<% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str|
 			base_name = File.basename(js_file_str, ".js") %>
-			<%= fields_for "page[js_paths]" do |form| %>
-				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.include?("global")}, base_name, "" %>
+			<% if base_name != 'global' %>
+  			<%= fields_for "page[js_paths]" do |form| %>
+  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.include?(base_name)}, base_name, "" %><br/>
+  			<% end %>
 			<% end %>
 		<% end %>
 	</label><br/>
@@ -37,11 +39,22 @@
 		CSS paths:<br/>
 		<% Dir.glob(File.join(theme_path, "stylesheets", "*.css")).each do |css_file_str| 
 			base_name = File.basename(css_file_str, ".css") %>
-			<%= fields_for "page[css_paths]" do |form| %>
-				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.include?("global")}, base_name, "" %>
+			<% if base_name != 'global' %>
+  			<%= fields_for "page[css_paths]" do |form| %>
+  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.include?(base_name)}, base_name, "" %><br/>
+  			<% end %>
 			<% end %>
 		<% end %>
 	</label><br/>
+	
+	<label>
+	  Data Stores:<br/>
+	  <% D.all.each do |ds| %>
+	    <%= fields_for "ds" do |form| %>
+	      <%= ds.name %>:<%= form.check_box nil,{:checked => @page.ds.include?(ds)},ds.id,""%><br/>
+	    <% end %>
+	  <% end %>
+	</label>
 	
   <div class="actions">
     <%= f.submit %>

@@ -32,8 +32,8 @@ GEM
     archive-tar-minitar (0.5.2)
     arel (2.0.6)
     bcrypt-ruby (2.1.4)
-    bson (1.1.5)
-    bson_ext (1.1.5)
+    bson (1.2.0)
+    bson_ext (1.2.0)
     builder (2.1.2)
     columnize (0.3.2)
     devise (1.1.5)
@@ -51,13 +51,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
-    mongo (1.1.5)
-      bson (>= 1.1.5)
-    mongoid (2.0.0.rc.3)
-      activemodel (~> 3.0)
-      mongo (~> 1.1.5)
-      tzinfo (~> 0.3.22)
-      will_paginate (~> 3.0.pre)
+    mongo (1.2.0)
+      bson (>= 1.2.0)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -101,10 +96,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bson_ext
+  bson_ext (~> 1.2)
   devise
   liquid
-  mongoid (= 2.0.0.rc.3)
+  mongo
   rails (= 3.0.3)
   ruby-debug19
   themes_for_rails
+  will_paginate

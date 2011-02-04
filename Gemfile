@@ -4,7 +4,7 @@ source 'http://gemcutter.org'
 gem 'rails', '3.0.3'
 #gem "mongo_mapper"
 gem "bson_ext", "~> 1.2"
-gem "mongoid", "2.0.0.rc.6"
+gem "mongoid", "2.0.0.rc.7"
 #gem 'mongoid-tree', :require => 'mongoid/tree'
 
 gem "devise"
@@ -15,8 +15,6 @@ gem "themes_for_rails"
 #gem "mongo"
 
 gem "liquid"
-
-gem "ruby-debug19", :require => "ruby-debug"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

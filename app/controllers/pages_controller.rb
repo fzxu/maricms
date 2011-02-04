@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   theme "wow"
-
   # GET /pages
   # GET /pages.xml
   def index
@@ -80,14 +79,19 @@ class PagesController < ApplicationController
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
     ds = []
     if params[:ds]
+    	#this should be a bug of mongoid
+    	@page.ds.each do |d|
+    		@page.ds.delete(d)
+    	end
+    	
       params[:ds].each do |d|
         unless d.blank?
-          ds << D.find(d)
+        ds << D.find(d)
         end
       end
+      @page.ds = ds
     end
-    @page.ds = ds
-    
+
     respond_to do |format|
       if @page.save && @page.update_attributes(params[:page])
         format.html { redirect_to(@page, :notice => 'Page was successfully updated.') }

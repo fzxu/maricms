@@ -2,7 +2,7 @@ require 'test_helper'
 
 class PagesControllerTest < ActionController::TestCase
   setup do
-    @page = Page.new(:slug => "home", :title => "Home", :js_paths => ["accordion.js", "event/cool.js"],
+    @page = Page.create(:slug => "home", :title => "Home", :js_paths => ["accordion.js", "event/cool.js"],
                      :page_metas => [
                        {
                          :http_equiv => "Content-Type",
@@ -12,8 +12,7 @@ class PagesControllerTest < ActionController::TestCase
                          :http_equiv => "Pragma",
                          :content => "no-cache"
                        }
-    ])
-    @page.save
+    ], :theme_path => "home.html")
 
     @event_page = Page.new(:slug => "event", :title => "Event", :css_paths =>["event.css"],
                            :page_metas => [
@@ -21,12 +20,55 @@ class PagesControllerTest < ActionController::TestCase
                                :http_equiv => "Author",
                                :content => "ark"
                              }
-    ])
+    ], :theme_path => "even.thml")
+    
+    @ds_blog = D.create(:key => "blog", :name => "Blog", :ds_elements => [
+                     {
+                       :key => "title",
+                       :name => "Title"
+                     },
+                     {
+                       :key => "description",
+                       :name => "Description"
+                     }
+		])
+		
+		@ds_dummy = D.create(:key => "ds0",
+                     		:name => "dsname0",
+                     		:ds_elements => [
+                     			{
+                     				:key => "field0",
+                     				:name => "field0"	
+                     			},
+                     			{
+                     				:key => "field1",
+                     				:name => "field1"
+                     			}
+                     		])
+
+    @page_with_ds = Page.create(:slug => "home_again", :title => "Home Again", :js_paths => ["accordion.js", "event/cool.js"],
+                     :page_metas => [
+                       {
+                         :http_equiv => "Content-Type",
+                         :content => "text/html; charset=utf-8"
+                       },
+                       {
+                         :http_equiv => "Pragma",
+                         :content => "no-cache"
+                       }
+                     ],
+                     :theme_path => "home_again.html")
+    @page_with_ds.ds = [@ds_dummy, @ds_blog]
+    @page_with_ds.save
+
   end
 
   teardown do
     Page.all.each do |page|
       page.destroy
+    end
+    D.all.each do	|d|
+    	d.destroy
     end
   end
   
@@ -59,9 +101,27 @@ class PagesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should update page" do
-    put :update, :id => @page.to_param, :page => @page.attributes
+  test "should update page title" do
+    put :update, :id => @page.to_param, :page => {:title => "Home2"}
     assert_redirected_to page_path(assigns(:page))
+    assert_equal assigns(:page).title, "Home2"
+  end
+  
+  test "should update page datasource when there was no ds for a page" do 
+  	put :update, :id => @page.to_param, :ds => ["#{@ds_blog.id}"]
+  	assert_redirected_to page_path(assigns(:page))
+  	assert_equal assigns(:page).ds.size, 1 
+  end
+  
+  test "should update page datasource when where were ds for a page" do
+  	assert_equal @page_with_ds.ds.size, 2
+  	#assert_equal @page_with_ds.ds.first.id, @ds_dummy.id
+  	put :update, :id => @page_with_ds.to_param, :ds => ["","#{@ds_blog.id}"]
+  	assert_redirected_to page_path(assigns(:page))
+  	assert_equal assigns(:page).ds.size, 1
+  	assert_equal assigns(:page).ds.first.id, @ds_blog.id
+  	@page_with_ds.reload
+  	assert_equal @page_with_ds.ds.size, 1
   end
 
   test "should destroy page" do

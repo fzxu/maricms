@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/benedikt/mongoid-tree.git
+  revision: 83222efec004fc0a24578f48df972780a054a11b
+  branch: mongoid-2.0.0
+  specs:
+    mongoid-tree (0.5.0)
+
 GEM
   remote: http://rubygems.org/
   remote: http://gemcutter.org/
@@ -91,5 +98,6 @@ DEPENDENCIES
   devise
   liquid
   mongoid (= 2.0.0.rc.7)
+  mongoid-tree!
   rails (= 3.0.3)
   themes_for_rails

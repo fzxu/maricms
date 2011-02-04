@@ -2,12 +2,15 @@ require 'test_helper'
 
 class PageTest < ActiveSupport::TestCase
 
-  def setup
-    Page.find(:all).each do |page|
-      page.destroy
-    end
-  end
-
+	teardown do
+		Page.all.each do |page|
+			page.destroy
+		end
+		D.all.each do |d|
+			d.destroy
+		end
+	end
+	
   test "create a normal page" do
     page = Page.new(:slug => "home", :title => "Home", :theme_path=> "home.liquid",
                     :js_paths => ["accordion.js", "event/cool.js"],
@@ -48,7 +51,7 @@ class PageTest < ActiveSupport::TestCase
   end
 
   test "create a page with two data sources" do
-    ds_blog = D.new(:key => "blog", :name => "Blog", :ds_elements => [
+    ds_blog = D.create(:key => "blog", :name => "Blog", :ds_elements => [
                       {
                         :key => "title",
                         :name => "Title"
@@ -60,7 +63,7 @@ class PageTest < ActiveSupport::TestCase
     ])
     assert ds_blog.valid?, ds_blog.errors.full_messages.map { |msg| msg + ".\n" }.join
 
-    ds_event = D.new(:key => "event", :name => "Event", :ds_elements => [
+    ds_event = D.create(:key => "event", :name => "Event", :ds_elements => [
                        {
                          :key => "name",
                          :name => "Name"

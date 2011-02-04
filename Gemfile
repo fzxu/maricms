@@ -5,7 +5,7 @@ gem 'rails', '3.0.3'
 #gem "mongo_mapper"
 gem "bson_ext", "~> 1.2"
 gem "mongoid", "2.0.0.rc.7"
-#gem 'mongoid-tree', :require => 'mongoid/tree'
+gem 'mongoid-tree', :git => "https://github.com/benedikt/mongoid-tree.git", :branch => "mongoid-2.0.0", :require => 'mongoid/tree'
 
 gem "devise"
 gem "themes_for_rails"

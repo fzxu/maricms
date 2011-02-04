@@ -13,7 +13,7 @@ class TabsController < ApplicationController
   # GET /tabs/1
   # GET /tabs/1.xml
   def show
-    @tab = Tab.find(params[:id])
+  	@tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -34,7 +34,7 @@ class TabsController < ApplicationController
 
   # GET /tabs/1/edit
   def edit
-    @tab = Tab.find(params[:id])
+    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
   end
 
   # POST /tabs
@@ -56,7 +56,7 @@ class TabsController < ApplicationController
   # PUT /tabs/1
   # PUT /tabs/1.xml
   def update
-    @tab = Tab.find(params[:id])
+    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
 
     respond_to do |format|
       if @tab.update_attributes(params[:tab])
@@ -72,7 +72,7 @@ class TabsController < ApplicationController
   # DELETE /tabs/1
   # DELETE /tabs/1.xml
   def destroy
-    @tab = Tab.find(params[:id])
+    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
     @tab.destroy
 
     respond_to do |format|

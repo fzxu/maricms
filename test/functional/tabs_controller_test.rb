@@ -5,11 +5,19 @@ class TabsControllerTest < ActionController::TestCase
     @tab = Tab.new(:slug => "home", :name => "Home", :description => "Used for the home page", :hidden => false)
     
     @tabed = Tab.create(:slug => "event", :name => "Event", :description => "Event menu", :hidden => false)
+    @page = Page.create(:slug => "home1")
+    @tabed.page = @page
+    @tabed.param_string = "p=123"
+    @tabed.save
   end
 
 	teardown do
 		Tab.all.each do |tab|
-			tab.destroy
+      tab.delete_descendants
+      tab.destroy
+		end
+		Page.all.each do |page|
+			page.destroy
 		end	
 	end
 	
@@ -26,12 +34,25 @@ class TabsControllerTest < ActionController::TestCase
 
   test "should create tab" do
     assert_difference('Tab.count') do
-      post :create, :tab => @tab.attributes
+      post :create, :tab => @tab.attributes.merge({:page => @page.id})
     end
 
     assert_redirected_to tab_path(assigns(:tab))
   end
 
+	test "should create tab with page" do
+    assert_difference('Tab.count') do
+      post :create, :tab => {:slug => "home1", :name => "Home1", :description => "This is the home page", :param_string => "cat=123",
+      	:page => @page.id}
+    end
+
+    assert_redirected_to tab_path(assigns(:tab))
+    
+    tab_with_page = assigns(:tab)
+    tab_with_page.reload
+    assert_equal tab_with_page.page.id, @page.id
+  end
+  
   test "should show tab" do
     get :show, :id => @tabed.to_param
     assert_response :success

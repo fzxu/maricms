@@ -1,19 +1,25 @@
 require 'test_helper'
 
+class Devise::RegistrationsController < ApplicationController
+  include Devise::Controllers::InternalHelpers
+end
+
 class RegistrationControllerTest < ActionController::TestCase
   tests Devise::RegistrationsController
   #fixtures :users
 
-  def setup
+  setup do
     @mock_warden = OpenStruct.new
     @controller.request.env['warden'] = @mock_warden
     @controller.request.env['devise.mapping'] = Devise.mappings[:user]
-
-    def @mock_warden.authenticated?(resource_name)
-      false
-    end
   end
 
+	teardown do
+		User.all.each do |user|
+			user.destroy
+		end
+	end
+	
   test "should get signup page" do
     get :new
     assert_response :success

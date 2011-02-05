@@ -5,7 +5,7 @@ class Page
   field :title
   field :js_paths, :type => Array  #page based javascript include path
   field :css_paths, :type => Array
-  field :theme_path, :default => "page_default.html"
+  field :theme_path
   
   references_and_referenced_in_many :ds
   embeds_many :page_metas

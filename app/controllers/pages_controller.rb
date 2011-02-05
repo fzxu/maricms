@@ -18,12 +18,17 @@ class PagesController < ApplicationController
       @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
 
       ds = @page.ds
-      template_content = IO.read(File.join(theme_path, "theme", @page.theme_path))
+      begin
+        template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
+      rescue
+        template_content = IO.read(File.join(theme_path, "theme", "page_default.html" ))
+      end
       template = Liquid::Template.parse(template_content)  # Parses and compiles the template
       #TODO need to cache the template somewhere in future
 
       #Assemble the variable and it's content, and then pass to template
       render_params = Hash.new
+      render_params[:params] = params
       if ds
         for d in ds
           render_params[d.key] = d.get_klass.all
@@ -36,8 +41,6 @@ class PagesController < ApplicationController
       end
     rescue BSON::InvalidObjectId => e
       render :text => "page not found"
-    rescue Errno::ENOENT => e
-      render :text => "theme can not be read"
     end
   end
 
@@ -79,17 +82,17 @@ class PagesController < ApplicationController
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
     ds = []
     if params[:ds]
-    	#this should be a bug of mongoid
-    	@page.ds.each do |d|
-    		@page.ds.delete(d)
-    	end
-    	
+      #this should be a bug of mongoid
+      @page.ds.each do |d|
+        @page.ds.delete(d)
+      end
+
       params[:ds].each do |d|
         unless d.blank?
         ds << D.find(d)
         end
       end
-      @page.ds = ds
+    @page.ds = ds
     end
 
     respond_to do |format|

@@ -29,7 +29,7 @@
 			base_name = File.basename(js_file_str, ".js") %>
 			<% if base_name != 'global' %>
   			<%= fields_for "page[js_paths]" do |form| %>
-  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.include?(base_name)}, base_name, "" %><br/>
+  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.nil? ? false : @page.js_paths.include?(base_name)}, base_name, "" %><br/>
   			<% end %>
 			<% end %>
 		<% end %>
@@ -41,7 +41,7 @@
 			base_name = File.basename(css_file_str, ".css") %>
 			<% if base_name != 'global' %>
   			<%= fields_for "page[css_paths]" do |form| %>
-  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.include?(base_name)}, base_name, "" %><br/>
+  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.nil? ? false : @page.css_paths.include?(base_name)}, base_name, "" %><br/>
   			<% end %>
 			<% end %>
 		<% end %>
@@ -51,7 +51,7 @@
 	  Data Stores:<br/>
 	  <% D.all.each do |ds| %>
 	    <%= fields_for "ds" do |form| %>
-	      <%= ds.name %>:<%= form.check_box nil,{:checked => @page.ds.include?(ds)},ds.id,""%><br/>
+	      <%= ds.name %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%><br/>
 	    <% end %>
 	  <% end %>
 	</label>

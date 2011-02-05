@@ -11,6 +11,18 @@
     </div>
   <% end %>
 
+	<p>
+		<%= f.label :slug %>
+		<%= f.text_field :slug%>
+	</p>
+	<p>
+		<%= f.label :name %>
+		<%= f.text_field :name %>
+	</p>
+	<p>
+		<%= f.label :page %>
+		<%= f.collection_select :page, Page.all, :id, :title %>
+	</p>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -21,7 +21,19 @@
 	</p>
 	<p>
 		<%= f.label :page %>
-		<%= f.collection_select :page, Page.all, :id, :title %>
+		<%= f.collection_select :page, Page.all, :id, :title, :prompt => true %>
+	</p>
+	<p>
+		<%= f.label :param_string%>
+		<%= f.text_field :param_string %>
+	</p>
+	<p>
+		<%= f.label :ref_url %>
+		<%= f.text_field :ref_url %>
+	</p>
+	<p>
+		<%= f.label :open_in_new_window %>
+		<%= f.check_box :open_in_new_window %>
 	</p>
   <div class="actions">
     <%= f.submit %>

@@ -14,31 +14,36 @@ class TabsController < ApplicationController
   # GET /tabs/1
   # GET /tabs/1.xml
   def show
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
     begin
+      @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+
       @page = @tab.page
 
-      ds = @page.ds
-      begin
-        template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
-      rescue
-        template_content = IO.read(File.join(theme_path, "theme", "page_default.html" ))
-      end
-      template = Liquid::Template.parse(template_content)  # Parses and compiles the template
-      #TODO need to cache the template somewhere in future
-
-      #Assemble the variable and it's content, and then pass to template
-      render_params = Hash.new
-      render_params[:params] = params
-      if ds
-        for d in ds
-          render_params[d.key] = d.get_klass.all
+      if @page
+        ds = @page.ds
+        begin
+          template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
+        rescue
+          template_content = IO.read(File.join(theme_path, "theme", "page_default.html" ))
         end
-      end
+        template = Liquid::Template.parse(template_content)  # Parses and compiles the template
+        #TODO need to cache the template somewhere in future
 
-      respond_to do |format|
-        format.html { render :layout => "front", :text => template.send(:render, render_params)}
-        format.xml  { render :xml => @page }
+        #Assemble the variable and it's content, and then pass to template
+        render_params = Hash.new
+        render_params[:params] = params
+        if ds
+          for d in ds
+            render_params[d.key] = d.get_klass.all
+          end
+        end
+
+        respond_to do |format|
+          format.html { render :layout => "front", :text => template.send(:render, render_params)}
+          format.xml  { render :xml => @page }
+        end
+      else
+        redirect_to "http://" + @tab.ref_url
       end
     rescue BSON::InvalidObjectId => e
       render :text => "page not found"
@@ -65,9 +70,9 @@ class TabsController < ApplicationController
   # POST /tabs.xml
   def create
     @tab = Tab.new(params[:tab])
-    if params[:tab][:page]
+    unless params[:tab][:page].blank?
       @page = Page.find(params[:tab][:page])
-      @tab.page = @page
+    @tab.page = @page
     end
 
     respond_to do |format|

@@ -8,6 +8,8 @@ class Tab
   field :description
   field :param_string
   field :hidden, :type => Boolean
+  field :ref_url
+  field :open_in_new_window, :type => Boolean
 
   references_one :page, :autosave => true
 
@@ -15,8 +17,6 @@ class Tab
   validates_presence_of :slug
   validates_uniqueness_of :slug
 
-	validates_presence_of :page
-	
   before_destroy :move_children_to_parent
 
   def to_param

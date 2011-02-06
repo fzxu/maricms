@@ -4,6 +4,8 @@
   <tr>
   	<th>Slug</th>
   	<th>Name</th>
+  	<th>Parent Tab</th>
+  	<th>Position</th>
     <th></th>
     <th></th>
     <th></th>
@@ -13,6 +15,8 @@
   <tr>
   	<td><%= tab.slug %></td>
   	<td><%= tab.name %></td>
+  	<td><%= tab.parent.name if tab.parent %></td>
+  	<td><%= tab.position.to_i %></td>
     <td><%= link_to 'Show', tab %></td>
     <td><%= link_to 'Edit', edit_tab_path(tab) %></td>
     <td><%= link_to 'Destroy', tab, :confirm => 'Are you sure?', :method => :delete %></td>

@@ -35,6 +35,8 @@ class TabsController < ApplicationController
 
         #Assemble the variable and it's content, and then pass to template
         render_params = Hash.new
+        
+        #add the parameters to the template
         unless @tab.param_string.blank?
         	param_hash = Hash.new
         	@tab.param_string.split('&').each do |p_str|
@@ -43,6 +45,14 @@ class TabsController < ApplicationController
         	end
         	render_params["params"] = param_hash
         end
+        
+        #add the tabs to the template
+        tabs = Array.new
+        Tab.traverse(:depth_first) do |tab|
+        	tabs << tab
+        end
+        render_params["tabs"] = tabs
+        
         if ds
           for d in ds
             render_params[d.key] = d.get_klass.all

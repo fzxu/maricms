@@ -24,4 +24,20 @@ class Tab
     self.slug
   end
 
+	def to_liquid
+		{
+			"slug" => self.slug,
+			"name" => self.name,
+			"description" => self.description,
+			"param_string" => self.param_string,
+			"hidden" => self.hidden,
+			"ref_url" => self.ref_url,
+			"open_in_new_window" => self.open_in_new_window,
+			"root?" => self.root?,
+			"leaf?" => self.leaf?,
+			"parent" => self.parent,
+			"children" => self.children,
+			"depth" => self.depth
+		}
+	end
 end

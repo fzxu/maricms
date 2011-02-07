@@ -15,7 +15,11 @@ class TabsController < ApplicationController
   # GET /tabs/1.xml
   def show
     begin
-      @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+      if params[:id]
+        @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+      else
+      @tab = Tab.root
+      end
 
       @page = @tab.page
 
@@ -31,7 +35,14 @@ class TabsController < ApplicationController
 
         #Assemble the variable and it's content, and then pass to template
         render_params = Hash.new
-        render_params[:params] = params
+        unless @tab.param_string.blank?
+        	param_hash = Hash.new
+        	@tab.param_string.split('&').each do |p_str|
+        		pair = p_str.strip.split('=')
+        		param_hash[pair.first] = pair.last
+        	end
+        	render_params["params"] = param_hash
+        end
         if ds
           for d in ds
             render_params[d.key] = d.get_klass.all
@@ -47,7 +58,7 @@ class TabsController < ApplicationController
       #TODO actually it is not necessary, should be processed in the browser side
       end
     rescue BSON::InvalidObjectId => e
-      render :text => "page not found"
+      render :text => "page not found" + e.to_s
     end
   end
 
@@ -70,19 +81,19 @@ class TabsController < ApplicationController
   # POST /tabs
   # POST /tabs.xml
   def create
-  	parent_id = params[:tab].delete(:parent)
+    parent_id = params[:tab].delete(:parent)
     @tab = Tab.new(params[:tab])
     unless params[:tab][:page].blank?
       @page = Page.find(params[:tab][:page])
-    	@tab.page = @page
+   		@tab.page = @page
     end
     unless parent_id.blank?
     	@tab.parent = Tab.find(parent_id)
     end
-		
+
     respond_to do |format|
       if @tab.save
-      	#@tab.move_to_bottom
+        #@tab.move_to_bottom
         format.html { redirect_to(tabs_url, :notice => 'Tab was successfully created.') }
         format.xml  { render :xml => @tab, :status => :created, :location => @tab }
       else
@@ -95,10 +106,20 @@ class TabsController < ApplicationController
   # PUT /tabs/1
   # PUT /tabs/1.xml
   def update
+    parent_id = params[:tab].delete(:parent)
+    page_id = params[:tab].delete(:page)
     @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+    unless page_id.blank?
+      @page = Page.find(page_id)
+    	@tab.page = @page
+    end
+    unless parent_id.blank?
+    	@tab.parent = Tab.find(parent_id)
+    end
+
 
     respond_to do |format|
-      if @tab.update_attributes(params[:tab])
+      if @tab.save && @tab.update_attributes(params[:tab])
         format.html { redirect_to(@tab, :notice => 'Tab was successfully updated.') }
         format.xml  { head :ok }
       else

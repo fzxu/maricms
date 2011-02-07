@@ -51,7 +51,7 @@
 	  Data Stores:<br/>
 	  <% D.all.each do |ds| %>
 	    <%= fields_for "ds" do |form| %>
-	      <%= ds.name %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%><br/>
+	      <%= "#{ds.name}(#{ds.key})" %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%><br/>
 	    <% end %>
 	  <% end %>
 	</label>

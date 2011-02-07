@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
-  theme "wow"
+  theme :get_theme
+  
   # GET /pages
   # GET /pages.xml
   def index

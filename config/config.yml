@@ -1,0 +1,9 @@
+# config/config.yml
+development:
+  theme: wow
+
+test:
+  theme: wow
+
+production:
+  theme: wow

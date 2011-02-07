@@ -1,5 +1,6 @@
 class TabsController < ApplicationController
-  theme "wow"
+  theme :get_theme
+  
   # GET /tabs
   # GET /tabs.xml
   def index
@@ -35,24 +36,24 @@ class TabsController < ApplicationController
 
         #Assemble the variable and it's content, and then pass to template
         render_params = Hash.new
-        
+
         #add the parameters to the template
         unless @tab.param_string.blank?
-        	param_hash = Hash.new
-        	@tab.param_string.split('&').each do |p_str|
-        		pair = p_str.strip.split('=')
-        		param_hash[pair.first] = pair.last
-        	end
-        	render_params["params"] = param_hash
+          param_hash = Hash.new
+          @tab.param_string.split('&').each do |p_str|
+            pair = p_str.strip.split('=')
+            param_hash[pair.first] = pair.last
+          end
+          render_params["params"] = param_hash
         end
-        
+
         #add the tabs to the template
         tabs = Array.new
         Tab.traverse(:depth_first) do |tab|
-        	tabs << tab
+          tabs << tab
         end
         render_params["tabs"] = tabs
-        
+
         if ds
           for d in ds
             render_params[d.key] = d.get_klass.all
@@ -95,10 +96,10 @@ class TabsController < ApplicationController
     @tab = Tab.new(params[:tab])
     unless params[:tab][:page].blank?
       @page = Page.find(params[:tab][:page])
-   		@tab.page = @page
+    @tab.page = @page
     end
     unless parent_id.blank?
-    	@tab.parent = Tab.find(parent_id)
+    @tab.parent = Tab.find(parent_id)
     end
 
     respond_to do |format|
@@ -120,13 +121,12 @@ class TabsController < ApplicationController
     page_id = params[:tab].delete(:page)
     @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
     unless page_id.blank?
-      @page = Page.find(page_id)
-    	@tab.page = @page
+    @page = Page.find(page_id)
+    @tab.page = @page
     end
     unless parent_id.blank?
-    	@tab.parent = Tab.find(parent_id)
+    @tab.parent = Tab.find(parent_id)
     end
-
 
     respond_to do |format|
       if @tab.save && @tab.update_attributes(params[:tab])

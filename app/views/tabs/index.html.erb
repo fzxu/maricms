@@ -1,29 +1,31 @@
 <h1>Listing tabs</h1>
-
 <table>
   <tr>
-  	<th>Slug</th>
-  	<th>Name</th>
-  	<th>Parent Tab</th>
-  	<th>Position</th>
+    <th>Slug</th>
+    <th>Name</th>
+    <th>Parent Tab</th>
+    <th>Position</th>
+    <th></th>
+    <th></th>>
     <th></th>
     <th></th>
     <th></th>
   </tr>
-
-<% @tabs.each do |tab| %>
+  <% Tab.traverse(:depth_first) do |tab| %>
+  <% indentation = '>' * tab.depth %>
   <tr>
-  	<td><%= tab.slug %></td>
-  	<td><%= tab.name %></td>
-  	<td><%= tab.parent.name if tab.parent %></td>
-  	<td><%= tab.position.to_i %></td>
+    <td><%= indentation + tab.slug %></td>
+    <td><%= tab.name %></td>
+    <td><%= tab.parent.name if tab.parent %></td>
+    <td><%= tab.position.to_i %></td>
+    <td><%= button_to 'Move Up', move_up_tab_path(tab) %></td>
+    <td><%= button_to 'Move Down', move_down_tab_path(tab) %></td>
     <td><%= link_to 'Show', tab %></td>
     <td><%= link_to 'Edit', edit_tab_path(tab) %></td>
     <td><%= link_to 'Destroy', tab, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
-<% end %>
+  <% end %>
 </table>
-
 <br />
 
 <%= link_to 'New Tab', new_tab_path %>

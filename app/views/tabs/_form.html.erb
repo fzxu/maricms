@@ -24,6 +24,10 @@
 		<%= f.collection_select :page, Page.all, :id, :title, :prompt => true %>
 	</p>
 	<p>
+		<%= f.label :parent %>
+		<%= f.collection_select :parent, Tab.all - [@tab], :id, :name, :prompt => true %>
+	</p>
+	<p>
 		<%= f.label :param_string%>
 		<%= f.text_field :param_string %>
 	</p>

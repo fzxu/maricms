@@ -3,7 +3,7 @@ class TabsController < ApplicationController
   # GET /tabs
   # GET /tabs.xml
   def index
-    @tabs = Tab.all
+    #@tabs = Tab.roots
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,6 +44,7 @@ class TabsController < ApplicationController
         end
       else
         redirect_to "http://" + @tab.ref_url
+      #TODO actually it is not necessary, should be processed in the browser side
       end
     rescue BSON::InvalidObjectId => e
       render :text => "page not found"
@@ -69,15 +70,20 @@ class TabsController < ApplicationController
   # POST /tabs
   # POST /tabs.xml
   def create
+  	parent_id = params[:tab].delete(:parent)
     @tab = Tab.new(params[:tab])
     unless params[:tab][:page].blank?
       @page = Page.find(params[:tab][:page])
-    @tab.page = @page
+    	@tab.page = @page
     end
-
+    unless parent_id.blank?
+    	@tab.parent = Tab.find(parent_id)
+    end
+		
     respond_to do |format|
       if @tab.save
-        format.html { redirect_to(@tab, :notice => 'Tab was successfully created.') }
+      	#@tab.move_to_bottom
+        format.html { redirect_to(tabs_url, :notice => 'Tab was successfully created.') }
         format.xml  { render :xml => @tab, :status => :created, :location => @tab }
       else
         format.html { render :action => "new" }
@@ -110,6 +116,26 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(tabs_url) }
+      format.xml  { head :ok }
+    end
+  end
+
+  def move_up
+    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+    @tab.move_up
+
+    respond_to do |format|
+      format.html {redirect_to(tabs_url)}
+      format.xml  { head :ok }
+    end
+  end
+
+  def move_down
+    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+    @tab.move_down
+
+    respond_to do |format|
+      format.html { redirect_to(tabs_url)}
       format.xml  { head :ok }
     end
   end

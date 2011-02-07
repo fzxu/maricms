@@ -1,6 +1,11 @@
 TianTing::Application.routes.draw do
   
-  resources :tabs
+  resources :tabs do
+  	member do
+  		post 'move_up'
+  		post 'move_down'
+  	end
+  end
 
   resources :ds
 
@@ -10,7 +15,7 @@ TianTing::Application.routes.draw do
   #resource :users, :only => [:new, :create, :edit, :update]
    
   # root
-  root :controller => :pages, :action => :index
+  root :controller => :tabs, :action => :index
 
   themes_for_rails
   

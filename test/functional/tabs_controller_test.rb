@@ -37,7 +37,8 @@ class TabsControllerTest < ActionController::TestCase
       post :create, :tab => @tab.attributes.merge({:page => @page.id})
     end
 
-    assert_redirected_to tab_path(assigns(:tab))
+    #assert_redirected_to tab_path(assigns(:tab))
+    assert_redirected_to tabs_path
   end
 
 	test "should create tab with page" do
@@ -46,11 +47,20 @@ class TabsControllerTest < ActionController::TestCase
       	:page => @page.id}
     end
 
-    assert_redirected_to tab_path(assigns(:tab))
+    #assert_redirected_to tab_path(assigns(:tab))
+    assert_redirected_to tabs_path
     
     tab_with_page = assigns(:tab)
     tab_with_page.reload
     assert_equal tab_with_page.page.id, @page.id
+  end
+  
+  test "should create tab with specific params" do
+  	assert_difference('Tab.count') do
+  		post :create, :tab=>{"slug"=>"t1", "name"=>"t1", "page"=>"", "parent"=>"", "param_string"=>"", "ref_url"=>"www.google.com", "open_in_new_window"=>"1"}
+  	end
+  	
+  	assert_redirected_to tabs_path
   end
   
   test "should show tab" do

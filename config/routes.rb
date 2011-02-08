@@ -11,6 +11,12 @@ TianTing::Application.routes.draw do
   	member do
   		post 'create_ds_element'
   		delete 'destroy_ds_element'
+  		get 'manage'
+  		get 'edit_record'
+  		put 'update_record'
+  		get 'new_record'
+  		post 'create_record'
+  		delete 'destroy_record'
   	end
   end
 

@@ -19,7 +19,7 @@ class TabsController < ApplicationController
       if params[:id]
         @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
       else
-      @tab = Tab.root
+      	@tab = Tab.root
       end
 
       @page = @tab.page

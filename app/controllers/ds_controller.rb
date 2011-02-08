@@ -25,7 +25,7 @@ class DsController < ApplicationController
   # GET /ds/new.xml
   def new
     @d = D.new
-		
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @d }
@@ -123,5 +123,77 @@ class DsController < ApplicationController
         format.xml  { render :xml => @d.errors, :status => :unprocessable_entity }
       end
     end
+  end
+
+  def manage
+    @d = D.find(params[:id])
+    @records = @d.get_klass.all
+
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @records }
+    end
+  end
+
+  def edit_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
+
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @record }
+    end
+  end
+
+  def update_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
+
+    respond_to do |format|
+      if @record.update_attributes(params[:record])
+        format.html { redirect_to(manage_d_path(@d)) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit_record" }
+        format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  def new_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.new
+
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @record }
+    end
+  end
+
+  def create_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.new(params[:record])
+
+    respond_to do |format|
+      if @record.save
+        format.html { redirect_to(manage_d_path(@d))}
+        format.xml { head :ok}
+      else
+        format.html { render :action => "new_record"}
+        format.xml { render :xml => @record.erros, :status => :unprocessable_entity}
+      end
+    end
+  end
+
+  def destroy_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
+    @record.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(manage_d_path(@d)) }
+      format.xml  { head :ok }
+    end
+
   end
 end

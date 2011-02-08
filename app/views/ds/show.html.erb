@@ -1,5 +1,27 @@
-<p id="notice"><%= notice %></p>
-
-
+<p id="notice">
+  <%= notice %>
+</p>
+<p>
+  <%= label_tag "Key:" %>
+  <%= @d.key %>
+</p>
+<p>
+  <%= label_tag "Name:" %>
+  <%= @d.name %>
+</p>
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Name</th>
+    <th>Type</th>
+  </tr>
+  <% @d.ds_elements.each do |ds_element| %>
+  <tr>
+    <td><%= ds_element.key %></td>
+    <td><%= ds_element.name %></td>
+    <td><%= ds_element.type %></td>
+  </tr>
+  <% end %>
+</table>
 <%= link_to 'Edit', edit_d_path(@d) %> |
 <%= link_to 'Back', ds_path %>

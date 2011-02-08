@@ -1,7 +1,9 @@
-<h1>Listing ds</h1>
+<h1>Listing DataSource</h1>
 
 <table>
   <tr>
+  	<th>Key(Unique)</th>
+  	<th>Name</th>
     <th></th>
     <th></th>
     <th></th>
@@ -9,6 +11,8 @@
 
 <% @ds.each do |d| %>
   <tr>
+  	<td><%= d.key %></td>
+  	<td><%= d.name %></td>
     <td><%= link_to 'Show', d %></td>
     <td><%= link_to 'Edit', edit_d_path(d) %></td>
     <td><%= link_to 'Destroy', d, :confirm => 'Are you sure?', :method => :delete %></td>
@@ -18,4 +22,4 @@
 
 <br />
 
-<%= link_to 'New D', new_d_path %>
+<%= link_to 'New DataSource', new_d_path %>

@@ -84,6 +84,7 @@ class PagesController < ApplicationController
     ds = []
     if params[:ds]
       #this should be a bug of mongoid
+      
       @page.ds.each do |d|
         @page.ds.delete(d)
       end

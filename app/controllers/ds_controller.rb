@@ -25,7 +25,7 @@ class DsController < ApplicationController
   # GET /ds/new.xml
   def new
     @d = D.new
-
+		
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @d }
@@ -35,6 +35,7 @@ class DsController < ApplicationController
   # GET /ds/1/edit
   def edit
     @d = D.find(params[:id])
+    @ds_element = DsElement.new
   end
 
   # POST /ds
@@ -57,10 +58,17 @@ class DsController < ApplicationController
   # PUT /ds/1.xml
   def update
     @d = D.find(params[:id])
+    new_ds_elements = params[:d].delete(:ds_elements)
+    unless new_ds_elements.blank?
+      @d.ds_elements.destroy_all
+      new_ds_elements.each do |key, value|
+        @d.ds_elements << DsElement.new(value)
+      end
+    end
 
     respond_to do |format|
-      if @d.update_attributes(params[:d])
-        format.html { redirect_to(@d, :notice => 'D was successfully updated.') }
+      if @d.save && @d.update_attributes(params[:d])
+        format.html { redirect_to(edit_d_path(@d)) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -78,6 +86,42 @@ class DsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(ds_url) }
       format.xml  { head :ok }
+    end
+  end
+
+  def create_ds_element
+    @d = D.find(params[:id])
+    ds_element = DsElement.new(params[:ds_element])
+    @d.ds_elements << ds_element
+
+    respond_to do |format|
+      if @d.save
+        format.html { redirect_to(edit_d_path(@d)) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @d.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  def destroy_ds_element
+    @d = D.find(params[:id])
+    ds_element_id = params[:ds_element_id]
+    @d.ds_elements.each do |ds_element|
+      if ds_element.id.to_s ==  ds_element_id
+      ds_element.destroy
+      end
+    end
+
+    respond_to do |format|
+      if @d.save
+        format.html { redirect_to(edit_d_path(@d)) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @d.errors, :status => :unprocessable_entity }
+      end
     end
   end
 end

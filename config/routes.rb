@@ -7,7 +7,12 @@ TianTing::Application.routes.draw do
   	end
   end
 
-  resources :ds
+  resources :ds do
+  	member do
+  		post 'create_ds_element'
+  		delete 'destroy_ds_element'
+  	end
+  end
 
   resources :pages
 

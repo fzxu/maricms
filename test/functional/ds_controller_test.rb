@@ -63,9 +63,17 @@ class DsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should update d" do
-    put :update, :id => @d_blog.to_param, :d => @d_blog.attributes
-    assert_redirected_to d_path(assigns(:d))
+  # test "should update d" do
+  #   put :update, :id => @d_blog.to_param, :d => @d_blog.attributes
+  #   assert_redirected_to edit_d_path(assigns(:d))
+  # end
+
+  test "should update d with params" do #change the update behavior to adopt the ui side
+    put :update, :id => @d_blog.to_param, :d => {
+    	"ds_elements"=>{"4d5030558dd76d2548000009"=>{"key"=>"name", "name"=>"Name", "type"=>"String"}}}
+    assert_redirected_to edit_d_path(assigns(:d))
+    d = assigns(:d).reload
+    assert_equal d.ds_elements.size, 1
   end
 
   test "should destroy d" do
@@ -74,5 +82,14 @@ class DsControllerTest < ActionController::TestCase
     end
 
     assert_redirected_to ds_path
+  end
+  
+  test "should add new ds element" do
+  	assert_equal @d_blog.ds_elements.size, 2
+  	post :create_ds_element, :id => @d_blog.to_param, :ds_element => {:key => 'key1', :name => 'name1', :type => 'Integer'}
+  	assert_redirected_to edit_d_path(assigns(:d))
+
+    d = assigns(:d).reload
+    assert_equal d.ds_elements.size, 3  	
   end
 end

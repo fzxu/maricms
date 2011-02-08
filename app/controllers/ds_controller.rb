@@ -194,6 +194,16 @@ class DsController < ApplicationController
       format.html { redirect_to(manage_d_path(@d)) }
       format.xml  { head :ok }
     end
+  end
+  
+  def show_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
 
+    respond_to do |format|
+      format.html 
+      format.xml  { render :xml => @record }
+    end
+  	
   end
 end

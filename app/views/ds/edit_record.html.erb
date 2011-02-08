@@ -1,6 +1,6 @@
 <h2>Edit the datasource record</h2>
 
-<%= form_for(:record, :url => update_record_d_path(@d, :rec_id => @record.id), :html => {:method => :put}) do |f| %>
+<%= form_for(:record, :url => update_record_d_path(@d, :rec_id => @record.id), :html => {:method => :put, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
 <div id="error_explanation">
   <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
@@ -14,12 +14,9 @@
 </div>
 <% end %>
 
-<% @d.ds_elements.each do |element| %>
-	<p>
-		<%= f.label element.name %>
-		<%= f.text_field element.key %>
-	</p>
-<% end %>
+
+<%= render :partial => "form_record_element", :object => f %>
+
 
 <div class="actions">
   <%= f.submit %>

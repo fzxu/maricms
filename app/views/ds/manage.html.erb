@@ -6,13 +6,15 @@
     <% end %>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
   <% @records.each do |rec| %>
   <tr>
     <% @d.ds_elements.each do |ds_element|%>
     <td><%= rec[ds_element.key] %></td>
     <% end %>
-    <td><%= link_to "Edit", edit_record_d_path(@d, :rec_id => rec.id)%></td>
+    <td><%= link_to "Show", show_record_d_path(@d, :rec_id => rec.id) %></td>
+    <td><%= link_to "Edit", edit_record_d_path(@d, :rec_id => rec.id) %></td>
     <td><%= link_to "Destroy", destroy_record_d_path(@d, :rec_id => rec.id), :confirm => 'Are you sure?', :method => :delete %></td>    
   </tr>
   <% end %>

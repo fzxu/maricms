@@ -61,6 +61,11 @@ GEM
       mongo (~> 1.2)
       tzinfo (~> 0.3.22)
       will_paginate (~> 3.0.pre)
+    mongoid-paperclip (0.0.2)
+      paperclip (~> 2.3.6)
+    paperclip (2.3.8)
+      activerecord
+      activesupport
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -98,6 +103,7 @@ DEPENDENCIES
   devise
   liquid
   mongoid (= 2.0.0.rc.7)
+  mongoid-paperclip
   mongoid-tree!
   rails (= 3.0.3)
   themes_for_rails

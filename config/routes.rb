@@ -17,6 +17,7 @@ TianTing::Application.routes.draw do
   		get 'new_record'
   		post 'create_record'
   		delete 'destroy_record'
+  		get 'show_record'
   	end
   end
 

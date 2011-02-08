@@ -10,6 +10,9 @@ gem 'mongoid-tree', :git => "https://github.com/benedikt/mongoid-tree.git", :bra
 gem "devise"
 gem "themes_for_rails"
 
+gem "mongoid-paperclip", :require => "mongoid_paperclip"
+#gem "rmagick"
+
 # the following two is for mongoid plugin
 #gem "will_paginate"
 #gem "mongo"

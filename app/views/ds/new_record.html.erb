@@ -1,6 +1,5 @@
 <h2>Add datasource record</h2>
-
-<%= form_for(:record, :url => create_record_d_path(@d, :rec_id => @record.id), :html => {:method => :post}) do |f| %>
+<%= form_for(:record, :url => create_record_d_path(@d, :rec_id => @record.id), :html => {:method => :post, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
 <div id="error_explanation">
   <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
@@ -14,15 +13,9 @@
 </div>
 <% end %>
 
-<% @d.ds_elements.each do |element| %>
-	<p>
-		<%= f.label element.name %>
-		<%= f.text_field element.key %>
-	</p>
-<% end %>
+<%= render :partial => "form_record_element", :object => f %>
 
 <div class="actions">
   <%= f.submit %>
 </div>
-
 <% end %>

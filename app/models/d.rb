@@ -74,7 +74,7 @@ class D
     begin
       klass = Object.const_get(class_name)
       if klass.is_a?(Class)
-      return klass
+      	return klass
       end
     rescue NameError
     #do nothing

@@ -3,6 +3,10 @@
   <%= form_record_element.label element.name %>
   <% if element.type == "File" || element.type == "Image" %>
   	<%= form_record_element.file_field element.key %>
+  <% elsif element.type == "Text" %>
+  	<%= form_record_element.text_area element.key %>
+  <% elsif element.type == "Boolean" %>
+  	<%= form_record_element.check_box element.key %>
   <% else %>
   	<%= form_record_element.text_field element.key %>
   <% end %>

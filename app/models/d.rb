@@ -37,13 +37,7 @@ class D
       elsif ds_element.type == "Image"
         meta_string = meta_string + <<-IMAGEMETA
         	has_mongoid_attached_file :#{ds_element.key},
-        	:styles => {
-      			:original => ['1920x1680>', :jpg],
-      			:small    => ['100x100#',   :jpg],
-      			:medium   => ['250x250',    :jpg],
-      			:large    => ['500x500>',   :jpg]
-    			}
-    			
+        	:styles => {#{APP_CONFIG[:att_style]}}
         IMAGEMETA
       elsif ds_element.type == "Text"
         meta_string = meta_string + "field :#{ds_element.key}, :type => String \n"

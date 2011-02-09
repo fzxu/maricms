@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 source 'http://gemcutter.org'
 
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.4'
 #gem "mongo_mapper"
 gem "bson_ext", "~> 1.2"
 gem "mongoid", "2.0.0.rc.7"
@@ -11,11 +11,6 @@ gem "devise"
 gem "themes_for_rails"
 
 gem "mongoid-paperclip", :require => "mongoid_paperclip"
-#gem "rmagick"
-
-# the following two is for mongoid plugin
-#gem "will_paginate"
-#gem "mongo"
 
 gem "liquid"
 

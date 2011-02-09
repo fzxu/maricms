@@ -1,13 +1,15 @@
 <% @d.ds_elements.each do |element| %>
 <p>
-  <%= label_tag element.name %>
+  <%= label_tag element.name %><br/>
   <% if element.type == "File" %>
-  	<%= @record[element.key] %>
+  	<%= link_to "Download", @record.send(element.key).url %>
   <% elsif element.type == "Image"%>
-  	<%= @record[element.key] %>
-  	<%#= image_tag @record[element.key].url if @record[element.key] %>
+  	<%= image_tag @record.send(element.key).url %>
   <% else %>
-  	<%= @record[element.key] %>
+  	<%= @record.send(element.key) %>
   <% end %>
 </p>
 <% end %>
+
+<%= link_to "Edit", edit_record_d_path(@d, :rec_id => @record.id ) %> |
+<%= link_to "Back", manage_d_path(@d) %>

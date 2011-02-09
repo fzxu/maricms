@@ -33,10 +33,10 @@ class D
     liquid_string = ""
     self.ds_elements.each do |ds_element|
       if ds_element.type == "File"
-        meta_string = meta_string + "has_attached_file :#{ds_element.key} \n"
+        meta_string = meta_string + "has_mongoid_attached_file :#{ds_element.key} \n"
       elsif ds_element.type == "Image"
         meta_string = meta_string + <<-IMAGEMETA
-        	has_attached_file :#{ds_element.key},
+        	has_mongoid_attached_file :#{ds_element.key},
         	:styles => {
       			:original => ['1920x1680>', :jpg],
       			:small    => ['100x100#',   :jpg],

@@ -1,8 +1,12 @@
 <% @d.ds_elements.each do |element| %>
 <p>
   <%= form_record_element.label element.name %>
-  <% if element.type == "File" || element.type == "Image" %>
-  	<%= form_record_element.file_field element.key %>
+  <% if element.type == "File" %>
+  	<%= form_record_element.file_field element.key %><br/>
+  	File Name: <%= @record.send("#{element.key}_file_name")%>
+ 	<% elsif element.type == "Image" %>
+ 		<%= form_record_element.file_field element.key %><br/>
+ 		<%= image_tag @record.send(element.key).url %>
   <% elsif element.type == "Text" %>
   	<%= form_record_element.text_area element.key %>
   <% elsif element.type == "Boolean" %>

@@ -140,7 +140,7 @@ class DsController < ApplicationController
     @record = @d.get_klass.find(params[:rec_id])
 
     respond_to do |format|
-      format.html
+      format.html { render :layout => "edit_record" }
       format.xml  { render :xml => @record }
     end
   end
@@ -165,7 +165,7 @@ class DsController < ApplicationController
     @record = @d.get_klass.new
 
     respond_to do |format|
-      format.html
+      format.html { render :layout => "edit_record" }
       format.xml  { render :xml => @record }
     end
   end

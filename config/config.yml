@@ -1,19 +1,19 @@
 # config/config.yml
 defaults: &defaults
   theme: "wow"
-  att_style:
-:original: 
-- 1920x1680>
-- :jpg
-:small: 
-- 100x100#
-- :jpg
-:medium: 
-- 250x250
-- :jpg
-:large: 
-- 500x500>
-- :jpg
+  :att_style:
+    :original: 
+    - 1920x1680>
+    - :jpg
+    :small: 
+    - 100x100#
+    - :jpg
+    :medium: 
+    - 250x250
+    - :jpg
+    :large: 
+    - 500x500>
+    - :jpg
 	
 development:
   <<: *defaults

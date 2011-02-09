@@ -2,6 +2,8 @@ source 'http://rubygems.org'
 source 'http://gemcutter.org'
 
 gem 'rails', '3.0.4'
+gem 'jquery-rails'
+
 #gem "mongo_mapper"
 gem "bson_ext", "~> 1.2"
 gem "mongoid", "2.0.0.rc.7"

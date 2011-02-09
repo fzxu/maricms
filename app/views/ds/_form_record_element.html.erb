@@ -8,7 +8,23 @@
  		<%= form_record_element.file_field element.key %><br/>
  		<%= image_tag @record.send(element.key).url %>
   <% elsif element.type == "Text" %>
-  	<%= form_record_element.text_area element.key %>
+  	<%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
+  	<script>
+      KE.show({
+        id : "record_<%=element.key%>"//,
+        //cssPath : './index.css',
+        // afterCreate : function(id) {
+        //   KE.event.ctrl(document, 13, function() {
+        //     KE.util.setData(id);
+        //     document.forms['example'].submit();
+        //   });
+        //   KE.event.ctrl(KE.g[id].iframeDoc, 13, function() {
+        //     KE.util.setData(id);
+        //     document.forms['example'].submit();
+        //   });
+        //}
+      });
+    </script>
   <% elsif element.type == "Boolean" %>
   	<%= form_record_element.check_box element.key %>
   <% else %>

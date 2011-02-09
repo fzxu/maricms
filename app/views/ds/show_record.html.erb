@@ -5,6 +5,8 @@
   	<%= link_to "Download", @record.send(element.key).url %>
   <% elsif element.type == "Image"%>
   	<%= image_tag @record.send(element.key).url %>
+  <% elsif element.type == "Text" %>
+    <%= render :inline => @record.send(element.key) %>
   <% else %>
   	<%= @record.send(element.key) %>
   <% end %>

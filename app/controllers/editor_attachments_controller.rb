@@ -11,10 +11,6 @@ class EditorAttachmentsController < ApplicationController
   end  
 
   def images_list 
-   #  <%
-   #    order="@images=EditorAttachment.asc(order_param)"
-   #  %>
-   # <%=order%>
     @images=EditorAttachment.asc(order_param)
     @json = []  
     for image in @images  

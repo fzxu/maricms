@@ -37,10 +37,10 @@ class D
       elsif ds_element.type == "Image"
         meta_string = meta_string + <<-IMAGEMETA
         	has_mongoid_attached_file :#{ds_element.key},
-        	:styles => #{APP_CONFIG[:att_style]},
+        	:styles => #{APP_CONFIG[:image_style]},
         	:convert_options => { :all => '-quality 100'}
         IMAGEMETA
-        APP_CONFIG[:att_style].each do |key, style|
+        APP_CONFIG[:image_style].each do |key, style|
           liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
         end
       elsif ds_element.type == "Text"

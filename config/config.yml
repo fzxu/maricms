@@ -1,7 +1,7 @@
 # config/config.yml
 defaults: &defaults
   theme: "wow"
-  :att_style:
+  :image_style:
     :original: 
     - 1920x1680>
     - :jpg

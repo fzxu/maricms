@@ -1,6 +1,6 @@
 TianTing::Application.routes.draw do
   
-  resources :themes
+  resources :mythemes
 
   resources :tabs do
   	member do

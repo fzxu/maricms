@@ -20,7 +20,7 @@
 	</label><br/>
 	
 	<label>
-		Theme Path: <%= f.text_field :theme_path %>
+		Theme Path: <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|f| File.basename(f)}, :to_s, :to_s %>
 	</label><br/>
 	
 	<label>

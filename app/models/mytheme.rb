@@ -1,3 +1,3 @@
-class Theme
+class Mytheme
   include Mongoid::Document
 end

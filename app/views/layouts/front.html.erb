@@ -7,13 +7,13 @@
     <% if @page %>
       <% if @page.js_paths %>
         <% @page.js_paths.each do |js| %>
-          <%= javascript_include_tag(current_theme_javascript_path(js)) %>
+          <%= javascript_include_tag(current_theme_javascript_path(js)) unless js.blank? %>
         <% end %>
       <% end %>
 
       <% if @page.css_paths %>
         <% @page.css_paths.each do |css| %>
-          <%= stylesheet_link_tag(current_theme_stylesheet_path(css)) %>
+          <%= stylesheet_link_tag(current_theme_stylesheet_path(css)) unless css.blank? %>
         <% end %>
       <% end %>
 

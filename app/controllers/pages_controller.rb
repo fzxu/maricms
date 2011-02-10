@@ -65,7 +65,22 @@ class PagesController < ApplicationController
   # POST /pages.xml
   def create
     @page = Page.new(params[:page])
+    ds = []
+    if params[:ds]
+      #this should be a bug of mongoid
+      
+      @page.ds.each do |d|
+        @page.ds.delete(d)
+      end
 
+      params[:ds].each do |d|
+        unless d.blank?
+        ds << D.find(d)
+        end
+      end
+      @page.ds = ds
+    end
+    
     respond_to do |format|
       if @page.save
         format.html { redirect_to(@page, :notice => 'Page was successfully created.') }
@@ -94,7 +109,7 @@ class PagesController < ApplicationController
         ds << D.find(d)
         end
       end
-    @page.ds = ds
+      @page.ds = ds
     end
 
     respond_to do |format|

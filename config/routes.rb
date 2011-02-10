@@ -1,5 +1,7 @@
 TianTing::Application.routes.draw do
   
+  resources :themes
+
   resources :tabs do
   	member do
   		post 'move_up'
@@ -31,9 +33,10 @@ TianTing::Application.routes.draw do
 
   themes_for_rails
   
-  match 'editor_attachments/upload' => 'editor_attachments#upload'
-  match 'editor_attachments/images_list' => 'editor_attachments#images_list';
-  
+  match 'editor_attachments/:action', :controller => :editor_attachments
+
+	match 'setting(/:action)', :controller => :setting
+	  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

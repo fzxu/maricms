@@ -1,0 +1,21 @@
+<h1>Listing themes</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @themes.each do |theme| %>
+  <tr>
+    <td><%= link_to 'Show', theme %></td>
+    <td><%= link_to 'Edit', edit_theme_path(theme) %></td>
+    <td><%= link_to 'Destroy', theme, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Theme', new_theme_path %>

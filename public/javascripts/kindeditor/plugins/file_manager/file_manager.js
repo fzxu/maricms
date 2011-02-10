@@ -64,8 +64,9 @@ KE.event.ready(function() {
 		}
 	};
 	var bindEvent = function (el, result, data, createFunc) {
-		var fileUrl = result.current_url + data.filename;
-		fileUrl = KE.format.getUrl(fileUrl, 'absolute');
+		//var fileUrl = result.current_url + data.filename;
+		//fileUrl = KE.format.getUrl(fileUrl, 'absolute');
+		var fileUrl = data.url;
 		if (data.is_dir) {
 			el.onclick = (function (url, path, title) {
 				return function () {
@@ -121,6 +122,7 @@ KE.event.ready(function() {
 			var cell0 = row.insertCell(0);
 			cell0.className = 'name';
 			var iconName = data.is_dir ? 'folder-16.gif' : 'file-16.gif';
+			//var iconName = data.is_dir ? 'folder-16.gif' : data.icon;
 			var img = KE.$$('img', document);
 			img.src = './images/' + iconName;
 			img.width = 16;
@@ -164,7 +166,8 @@ KE.event.ready(function() {
 			var cell = tableObj.cell;
 			cell.valign = 'middle';
 			cell.align = 'center';
-			var fileUrl = result.current_url + data.filename;
+			//var fileUrl = result.current_url + data.filename;
+			var fileUrl = data.icon
 			var iconUrl = data.is_dir ? './images/folder-64.gif' : (data.is_photo ? fileUrl : './images/file-64.gif');
 			var img = KE.$$('img', document);
 			img.src = iconUrl;

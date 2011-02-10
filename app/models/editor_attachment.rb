@@ -6,7 +6,11 @@ class EditorAttachment
   field :asset_updated_at,:type => DateTime
 
   has_mongoid_attached_file :asset,
-          :styles => APP_CONFIG[:att_style],
+          :styles => {
+            :icon => ['80x80#', :jpg],
+            :large => ['500x500>', :jpg],
+            :original => ['1920x1680>', :jpg]  
+          },
           :convert_options => { :all => '-quality 100'}
           
   before_create :randomize_file_name

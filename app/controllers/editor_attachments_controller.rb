@@ -20,8 +20,10 @@ class EditorAttachmentsController < ApplicationController
     for image in @images  
       temp =  %Q/{"filesize" : #{image.asset.size},  
       "filename" : "#{image.asset_file_name}",  
-      "dir_path" : "#{image.asset.url}",  
-      "datetime" : "#{image.created_at}"}/  
+      "url" : "#{image.asset.url}",
+      "icon" : "#{image.asset.url(:icon)}",
+      "is_photo" : true,  
+      "datetime" : "#{image.created_at.to_s(:short)}"}/  
       @json << temp     
     end     
     render :text => ("{\"file_list\":[" << @json.join(", ") << "]}")  

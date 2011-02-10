@@ -11,7 +11,9 @@
   	<%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
   	<script>
       KE.show({
-        id : "record_<%=element.key%>"//,
+        id : "record_<%=element.key%>",
+        allowFileManager : true,
+        imageUploadJson:'/editor_attachments/upload'
         //cssPath : './index.css',
         // afterCreate : function(id) {
         //   KE.event.ctrl(document, 13, function() {

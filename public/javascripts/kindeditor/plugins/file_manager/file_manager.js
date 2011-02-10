@@ -1,4 +1,4 @@
-var JSON_URL = '../../php/file_manager_json.php';
+var JSON_URL = '/editor_attachments/images_list';
 
 var KE = parent.KindEditor;
 location.href.match(/\?id=([\w-]+)/i);

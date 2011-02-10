@@ -1,0 +1,2 @@
+module EditorAttachmentsHelper
+end

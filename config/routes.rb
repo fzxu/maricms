@@ -31,6 +31,9 @@ TianTing::Application.routes.draw do
 
   themes_for_rails
   
+  match 'editor_attachments/upload' => 'editor_attachments#upload'
+  match 'editor_attachments/images_list' => 'editor_attachments#images_list';
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

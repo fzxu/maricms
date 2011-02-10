@@ -11,7 +11,7 @@ class EditorAttachmentsController < ApplicationController
   end  
 
   def images_list 
-    @images=EditorAttachment.asc(order_param)
+    @images = EditorAttachment.desc(params[:order] || "asset_created_at")
     @json = []  
     for image in @images  
       temp =  %Q/{"filesize" : #{image.asset.size},  
@@ -25,9 +25,4 @@ class EditorAttachmentsController < ApplicationController
     render :text => ("{\"file_list\":[" << @json.join(", ") << "]}")  
   end
   
-  private
-  
-  def order_param
-    params[:order] || "asset_file_name"
-  end 
 end

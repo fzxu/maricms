@@ -17,9 +17,10 @@ KE.event.ready(function() {
 	moveupImg.alt = moveupImg.title = lang.moveup;
 	viewType.options[0] = new Option(lang.viewImage, 'VIEW');
 	viewType.options[1] = new Option(lang.listImage, 'LIST');
-	orderType.options[0] = new Option(lang.fileName, 'asset_file_name');
-	orderType.options[1] = new Option(lang.fileSize, 'asset_file_size');
-	orderType.options[2] = new Option(lang.fileType, 'asset_content_type');
+	orderType.options[0] = new Option('创建日期', 'asset_created_at');
+	orderType.options[1] = new Option(lang.fileName, 'asset_file_name');
+	orderType.options[2] = new Option(lang.fileSize, 'asset_file_size');
+	orderType.options[3] = new Option(lang.fileType, 'asset_content_type');
 	var changeType = function(type) {
 		if (type == 'VIEW') {
 			listDiv.style.display = 'none';

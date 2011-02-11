@@ -1,7 +1,5 @@
 TianTing::Application.routes.draw do
   
-  resources :mythemes
-
   resources :tabs do
   	member do
   		post 'move_up'

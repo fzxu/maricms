@@ -1,4 +1,65 @@
-<h2><%= link_to "Manage Tabs", tabs_path %></h2>
-<h2><%= link_to "Manage Pages", pages_path %></h2>
-<h2><%= link_to "Manage Datasources", ds_path %></h2>
-<h2><%= link_to "Manage Themes", mythemes_path %></h2>
+<h1>Setting</h1>
+<%= form_for(@setting, :url => "/setting/update") do |f| %>
+<p>
+  <%= f.label :application_title %>
+  <%= f.text_field :application_title %>
+</p>
+<p>
+  <%= f.label :current_theme %>
+  <%= f.collection_select :current_theme,Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"], :to_s, :to_s %>
+</p>
+<!-- <p>
+  <% 4.times.each do |i|%>
+  	<%= f.label :image_style %>
+  	<%= text_field_tag "setting[image_style][]", @setting.image_style.nil? ? "" : @setting.image_style[i]%>
+  	<br/>
+  <% end%>
+</p> -->
+
+<p>
+	<%= f.label "Image Style[Original]" %>
+	<%= text_field_tag "setting[image_style][original]", @setting.image_style.nil? ? "" : @setting.image_style["original"].to_s %>
+</p>
+
+<p>
+	<%= f.label "Image Style[Large]" %>
+	<%= text_field_tag "setting[image_style][large]", @setting.image_style.nil? ? "" : @setting.image_style["large"].to_s %>
+</p>
+
+<p>
+	<%= f.label "Image Style[Medium]" %>
+	<%= text_field_tag "setting[image_style][medium]", @setting.image_style.nil? ? "" : @setting.image_style["medium"].to_s %>
+</p>
+
+<p>
+	<%= f.label "Image Style[Small]" %>
+	<%= text_field_tag "setting[image_style][small]", @setting.image_style.nil? ? "" : @setting.image_style["small"].to_s %>
+</p>
+
+<p>
+  <%= f.label :date_format %>
+  <%= f.collection_select :date_format, Setting::DATE_FORMATS.collect {|f| [Date.today.strftime(f), f]}, :last, :first %>
+</p>
+<p>
+  <%= f.label :time_format %>
+  <%= f.collection_select :time_format, Setting::TIME_FORMATS.collect {|f| [Time.now.strftime(f), f]}, :last, :first %>
+</p>
+<p>
+  <%= f.label :attachment_max_size %>
+  <%= f.text_field :attachment_max_size %>
+</p>
+<p>
+  <%= f.label :host_name %>
+  <%= f.text_field :host_name %>
+</p>
+<div class="actions">
+  <%= f.submit %>
+</div>
+<% end %>
+
+<%= link_to "Reset all to default", "/setting/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
+
+<h3><%= link_to "Manage Tabs", tabs_path %></h3>
+<h3><%= link_to "Manage Pages", pages_path %></h3>
+<h3><%= link_to "Manage Datasources", ds_path %></h3>
+<h3><% #= link_to "Manage Themes", mythemes_path %></h3>

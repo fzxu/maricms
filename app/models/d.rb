@@ -4,6 +4,7 @@ class D
   # This model is for data source
   field :key
   field :name
+	field :time_log, :type => Boolean
 
   embeds_many :ds_elements
   references_and_referenced_in_many :pages
@@ -29,7 +30,12 @@ class D
     
     klass = Object.const_set(class_name,Class.new)
 
-    meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n"
+    meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n "
+
+    if self.time_log
+    	meta_string += "\n include Mongoid::Timestamps \n"
+    end
+
     liquid_string = ""
     self.ds_elements.each do |ds_element|
       if ds_element.type == "File"
@@ -44,12 +50,19 @@ class D
           liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
         end
       elsif ds_element.type == "Text"
-        meta_string = meta_string + "field :#{ds_element.key}, :type => String \n"
+        meta_string += "field :#{ds_element.key}, :type => String \n"
       else
-        meta_string = meta_string + "field :#{ds_element.key}, :type => #{ds_element.type} \n"
+        meta_string += "field :#{ds_element.key}, :type => #{ds_element.type} \n"
       end
-      liquid_string = liquid_string + "'#{ds_element.key}' => self.#{ds_element.key}, \n"
+      liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
     end
+
+		#explore the timestamp to liquid
+    if self.time_log
+    	#TODO need to add the global time format here
+    	liquid_string += "'created_at' => self.created_at, \n 'updated_at' => self.updated_at, \n"
+    end
+
     liquid_string = liquid_string[0..-4] + "\n" #remove the last ','
 
     liquidinj = <<-LIQUIDINJ

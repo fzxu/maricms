@@ -22,6 +22,10 @@
   <%= f.label :name %>
   <%= f.text_field :name %>
 </p>
+<p>
+	<%= f.label :time_log %>
+	<%= f.check_box :time_log %>(When enabled, you can use the 'created_at' and 'updated_at' method)
+</p>
 <% if params[:action] == 'edit' %>
 <table>
   <tr>

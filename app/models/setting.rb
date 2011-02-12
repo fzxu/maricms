@@ -26,4 +26,10 @@ class Setting
 	field :attachment_max_size, :type => Integer
 	field :host_name
 
+
+  # after_find :convert_hash_symbol
+  # 
+  # def convert_hash_symbol
+  #   self.image_style = self.image_style.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+  # end
 end

@@ -1,4 +1,6 @@
 class DsController < ApplicationController
+  before_filter :get_setting
+
   # GET /ds
   # GET /ds.xml
   def index

@@ -12,6 +12,8 @@ class Tab
   field :ref_url
   field :open_in_new_window, :type => Boolean
 
+	index :slug, :unique => true
+	
   references_one :page, :autosave => true
 
   validates_presence_of :name

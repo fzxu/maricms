@@ -1,19 +1,24 @@
 # config/config.yml
 defaults: &defaults
-  theme: "wow"
-  :image_style:
+  application_title: "TianTing"
+  current_theme: "default"
+  image_style: 
     :original: 
-    - 1920x1680>
-    - :jpg
-    :small: 
-    - 100x100#
-    - :jpg
-    :medium: 
-    - 250x250
-    - :jpg
+      :geometry: 1920x1680>
+      :format: jpg
     :large: 
-    - 500x500>
-    - :jpg
+      :geometry: 100x100#
+      :format: jpg
+    :medium: 
+      :geometry: 250x250
+      :format: jpg
+    :small: 
+      :geometry: 500x500>
+      :format: jpg
+  date_format: "%Y-%m-%d"
+  time_format: "%H:%M"
+  attachment_max_size: ""
+  host_name: "localhost"
 	
 development:
   <<: *defaults

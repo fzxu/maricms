@@ -1,5 +1,7 @@
 class TabsController < ApplicationController
+  before_filter :get_setting
   theme :get_theme
+  
   
   # GET /tabs
   # GET /tabs.xml

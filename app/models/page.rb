@@ -7,6 +7,8 @@ class Page
   field :css_paths, :type => Array
   field :theme_path
   
+  index :slug, :unique => true
+  
   references_and_referenced_in_many :ds
   embeds_many :page_metas
   referenced_in :tab

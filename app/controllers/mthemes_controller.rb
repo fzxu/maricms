@@ -12,7 +12,7 @@ class MthemesController < ApplicationController
 
     notice = `svnadmin create /home/svn/#{theme_name}`
     notice += `chown -R svn /home/svn/#{theme_name}`
-    notice += `chgrp -R www-data /home/svn/#{theme_name}`
+    notice += `chgrp -R svn /home/svn/#{theme_name}`
     notice += `svn co svn+ssh://svn@#{@setting.host_name}/home/svn/#{theme_name} #{File.join(Rails.root, "themes", theme_name)}`
 
     notice += `rails g theme_for_tt:theme #{theme_name}`

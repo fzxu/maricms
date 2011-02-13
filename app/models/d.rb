@@ -49,7 +49,7 @@ class D
       elsif ds_element.ftype == "Image"
         meta_string = meta_string + <<-IMAGEMETA
           has_mongoid_attached_file :#{ds_element.key},
-          :styles => #{image_style},
+          :styles => #{image_style.inspect},
           :convert_options => {:all => '-quality 100'} \n
         IMAGEMETA
         image_style.each do |key, style|

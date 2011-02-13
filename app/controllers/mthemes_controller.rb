@@ -17,9 +17,8 @@ class MthemesController < ApplicationController
 
     notice = `rails g theme_for_tt:theme #{theme_name}`
     
-    `cd #{File.join(Rails.root, "themes", theme_name)}`
-    `svn add *`
-    `svn commit -m "init"`
+    `svn add #{File.join(Rails.root, "themes", theme_name)}/*`
+    `svn commit #{File.join(Rails.root, "themes", theme_name)} -m "init"`
     
     respond_to do |format|
       format.html { redirect_to '/setting', :notice => notice}

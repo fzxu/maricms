@@ -22,6 +22,7 @@ TianTing::Application.routes.draw do
   end
 
   resources :pages
+  resources :mthemes
 
   devise_for :users
   #resource :users, :only => [:new, :create, :edit, :update]

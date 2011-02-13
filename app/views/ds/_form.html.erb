@@ -2,7 +2,7 @@
 
 <%= form_for(@d) do |f| %>
 <% if @d.errors.any? %>
-<div id="error_explanation">
+<div id="error_explanation" class="error">
   <h2><%= pluralize(@d.errors.count, "error") %> prohibited this d from being saved:</h2>
   <ul>
     <% @d.errors.full_messages.each do |msg| %>
@@ -14,57 +14,72 @@
 </div>
 <% end %>
 
-<p>
-  <%= f.label :key %>
-  <%= f.text_field :key %>
-</p>
-<p>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-</p>
-<p>
-	<%= f.label :time_log %>
-	<%= f.check_box :time_log %>(When enabled, you can use the 'created_at' and 'updated_at' method)
-</p>
+<fieldset>
+  <legend>
+    Main
+  </legend>
+  <p>
+    <%= f.label :key %>
+    <%= f.text_field :key %>
+  </p>
+  <p>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :time_log %>
+    <%= f.check_box :time_log %>(When enabled, you can use the 'created_at' and 'updated_at' method)
+  </p>
+</fieldset>
 <% if params[:action] == 'edit' %>
-<table>
-  <tr>
-    <th>Key(Unique)</th>
-    <th>Name</th>
-    <th>Type</th>
-    <th></th>
-  </tr>
-  <% @d.ds_elements.each do |ds_element| %>
-  <%= f.fields_for "ds_elements[]", ds_element do |ds_element_field| %>
-  <tr>
-    <td><%= ds_element_field.text_field :key %></td>
-    <td><%= ds_element_field.text_field :name %></td>
-    <td><%= ds_element_field.collection_select :type, supported_types, :to_s, :to_s %></td>
-    <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-  <% end %>
-  <% end %>
-</table>
+<fieldset>
+  <legend>
+    Fields
+  </legend>
+  <table>
+    <tr>
+      <th>Key(Unique)</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    <% @d.ds_elements.each do |ds_element| %>
+    <%= f.fields_for "ds_elements[]", ds_element do |ds_element_field| %>
+    <tr>
+      <td><%= ds_element_field.text_field :key %></td>
+      <td><%= ds_element_field.text_field :name %></td>
+      <td><%= ds_element_field.collection_select :type, supported_types, :to_s, :to_s %></td>
+      <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+    <% end %>
+    <% end %>
+  </table>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+</fieldset>
 <% end %>
-<div class="actions">
-  <%= f.submit %>
-</div>
 <% end %>
 <% if params[:action] == 'edit' %>
 <%= form_for(:ds_element, :url => create_ds_element_d_path(@d)) do |f| %>
-<table>
-  <tr>
-    <th>Key(Unique)</th>
-    <th>Name</th>
-    <th>Type</th>
-    <th></th>
-  </tr>
-  <tr>
-    <td><%= f.text_field :key %></td>
-    <td><%= f.text_field :name %></td>
-    <td><%= f.collection_select :type, supported_types, :to_s, :to_s %></td>
-    <td><%= f.submit "Add Field" %></td>
-  </tr>
-</table>
+<fieldset>
+  <legend>
+    To Add
+  </legend>
+  <table>
+    <tr>
+      <th>Key(Unique)</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td><%= f.text_field :key %></td>
+      <td><%= f.text_field :name %></td>
+      <td><%= f.collection_select :type, supported_types, :to_s, :to_s %></td>
+      <td><%= f.submit "Add Field" %></td>
+    </tr>
+  </table>
+</fieldset>
 <% end %>
 <% end %>

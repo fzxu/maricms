@@ -1,61 +1,79 @@
 <%= form_for(@page) do |f| %>
   <% if @page.errors.any? %>
-    <div id="error_explanation">
+    <div id="error_explanation" class="error">
       <h2><%= pluralize(@page.errors.count, "error") %> prohibited this page from being saved:</h2>
-
       <ul>
-      <% @page.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+        <% @page.errors.full_messages.each do |msg| %>
+        <li>
+          <%= msg %>
+        </li>
+        <% end %>
       </ul>
     </div>
   <% end %>
-
-	<label>
-		Title: <%= f.text_field :title %>
-	</label><br/>
-	
-	<label>
-		Slug: <%= f.text_field :slug %>
-	</label><br/>
-	
-	<label>
-		Theme Path: <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|f| File.basename(f)}, :to_s, :to_s %>
-	</label><br/>
-	
-	<label>
-		Javascript paths:<br/>
-		<% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str|
-			base_name = File.basename(js_file_str, ".js") %>
-			<% if base_name != 'global' %>
-  			<%= fields_for "page[js_paths]" do |form| %>
-  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.nil? ? false : @page.js_paths.include?(base_name)}, base_name, "" %><br/>
-  			<% end %>
-			<% end %>
-		<% end %>
-	</label><br/>
-	
-	<label>
-		CSS paths:<br/>
-		<% Dir.glob(File.join(theme_path, "stylesheets", "*.css")).each do |css_file_str| 
-			base_name = File.basename(css_file_str, ".css") %>
-			<% if base_name != 'global' %>
-  			<%= fields_for "page[css_paths]" do |form| %>
-  				<%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.nil? ? false : @page.css_paths.include?(base_name)}, base_name, "" %><br/>
-  			<% end %>
-			<% end %>
-		<% end %>
-	</label><br/>
-	
-	<label>
-	  Data Stores:<br/>
-	  <% D.all.each do |ds| %>
-	    <%= fields_for "ds" do |form| %>
-	      <%= "#{ds.name}(#{ds.key})" %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%><br/>
-	    <% end %>
-	  <% end %>
-	</label>
-	
+  
+  <fieldset>
+    <legend>
+      Main
+    </legend>
+    <p>
+      <%= f.label :title %>
+      <%= f.text_field :title %>
+    </p>  
+    <p>
+      <%= f.label :slug %>
+      <%= f.text_field :slug %>
+    </p>
+    <p>
+      <%= f.label :theme_path %>
+      <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|f| File.basename(f)}, :to_s, :to_s %>
+    </p>
+  </fieldset>
+  <fieldset>
+    <legend>
+      Display
+    </legend>
+    <p>
+      Javascript paths:
+      <br/>
+      <% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str|
+      base_name = File.basename(js_file_str, ".js") %>
+      <% if base_name != 'global' %>
+      <%= fields_for "page[js_paths]" do |form| %>
+      <%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.nil? ? false : @page.js_paths.include?(base_name)}, base_name, "" %>
+      <br/>
+      <% end %>
+      <% end %>
+      <% end %>
+    </p>
+  
+    <p>
+      CSS paths:
+      <br/>
+      <% Dir.glob(File.join(theme_path, "stylesheets", "*.css")).each do |css_file_str|
+      base_name = File.basename(css_file_str, ".css") %>
+      <% if base_name != 'global' %>
+      <%= fields_for "page[css_paths]" do |form| %>
+      <%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.nil? ? false : @page.css_paths.include?(base_name)}, base_name, "" %>
+      <br/>
+      <% end %>
+      <% end %>
+      <% end %>
+    </p>
+  </fieldset>
+  <fieldset>
+    <legend>
+      Datasource
+    </legend>
+    <p>
+      <% D.all.each do |ds| %>
+      <%= fields_for "ds" do |form| %>
+      <%= "#{ds.name}(#{ds.key})" %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%>
+      <br/>
+      <% end %>
+      <% end %>
+    </p>
+  </fieldset>
   <div class="actions">
     <%= f.submit %>
   </div>

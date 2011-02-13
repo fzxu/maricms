@@ -1,77 +1,87 @@
 <h1>Setting</h1>
 <%= form_for(@setting, :url => "/setting/update") do |f| %>
-<p>
-  <%= f.label :application_title %>
-  <%= f.text_field :application_title %>
-</p>
-<p>
-  <%= f.label :current_theme %>
-  <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
-  <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
-  <% if @setting.current_theme %>
+<fieldset>
+  <legend>
+    Application
+  </legend>
+  <p>
+    <%= f.label :application_title %>
+    <%= f.text_field :application_title %>
+  </p>
+  <p>
+    <%= f.label :current_theme %>
+    <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
+    <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
+    <% if @setting.current_theme %>
     You can use the following svn url to check out the theme code:
-    <b>svn co svn+ssh://svn@<%=@setting.host_name%>/home/svn/<%= @setting.current_theme %></b><br/>
-  <% end %>
-  <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post, 
-  :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
-  <% if list_themes.size > 0 %>
+    <b>svn co svn+ssh://svn@<%= @setting.host_name%>/home/svn/<%= @setting.current_theme %></b>
+    <br/>
+    <% end %>
+    <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post,
+    :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
+    <% if list_themes.size > 0 %>
     <%= link_to "Sync and Cache the theme", sync_mtheme_path(:id => "default"), :method => :post %>
-  <% end %>
-</p>
-
-<p>
-	<%= f.label "Image Style Geometry [Original]" %>
-	<%= text_field_tag "setting[image_style][original][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["geometry"] %>
-  <%= f.label "Image Style Format [Original]" %>
-  <%= text_field_tag "setting[image_style][original][format]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["format"] %>
-</p>
-
-<p>
-	<%= f.label "Image Style Geometry [Large]" %>
-	<%= text_field_tag "setting[image_style][large][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["geometry"] %>
-  <%= f.label "Image Style Format [Large]" %>
-  <%= text_field_tag "setting[image_style][large][format]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["format"] %>
-</p>
-
-<p>
-	<%= f.label "Image Style Geometry [Medium]" %>
-	<%= text_field_tag "setting[image_style][medium][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["geometry"] %>
-  <%= f.label "Image Style Format [Medium]" %>
-  <%= text_field_tag "setting[image_style][medium][format]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["format"] %>
-</p>
-
-<p>
-	<%= f.label "Image Style Geometry [Small]" %>
-	<%= text_field_tag "setting[image_style][small][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["geometry"] %>
-  <%= f.label "Image Style Format [Small]" %>
-  <%= text_field_tag "setting[image_style][small][format]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["format"] %>
-</p>
-
-<p>
-  <%= f.label :date_format %>
-  <%= f.collection_select :date_format, Setting::DATE_FORMATS.collect {|f| [Date.today.strftime(f), f]}, :last, :first %>
-</p>
-<p>
-  <%= f.label :time_format %>
-  <%= f.collection_select :time_format, Setting::TIME_FORMATS.collect {|f| [Time.now.strftime(f), f]}, :last, :first %>
-</p>
-<p>
-  <%= f.label :attachment_max_size %>
-  <%= f.text_field :attachment_max_size %>
-</p>
-<p>
-  <%= f.label :host_name %>
-  <%= f.text_field :host_name %>
-</p>
+    <% end %>
+  </p>
+  <p>
+    <%= f.label :host_name %>
+    <%= f.text_field :host_name %>
+  </p>
+  <p>
+    <%= f.label :attachment_max_size %>
+    <%= f.text_field :attachment_max_size %>
+  </p>
+</fieldset>
+<fieldset>
+  <legend>
+    Image Style
+  </legend>
+  <p>
+    <%= f.label "Image Style Geometry [Original]" %>
+    <%= text_field_tag "setting[image_style][original][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["geometry"] %>
+    <%= f.label "Image Style Format [Original]" %>
+    <%= text_field_tag "setting[image_style][original][format]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["format"] %>
+  </p>
+  <p>
+    <%= f.label "Image Style Geometry [Large]" %>
+    <%= text_field_tag "setting[image_style][large][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["geometry"] %>
+    <%= f.label "Image Style Format [Large]" %>
+    <%= text_field_tag "setting[image_style][large][format]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["format"] %>
+  </p>
+  <p>
+    <%= f.label "Image Style Geometry [Medium]" %>
+    <%= text_field_tag "setting[image_style][medium][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["geometry"] %>
+    <%= f.label "Image Style Format [Medium]" %>
+    <%= text_field_tag "setting[image_style][medium][format]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["format"] %>
+  </p>
+  <p>
+    <%= f.label "Image Style Geometry [Small]" %>
+    <%= text_field_tag "setting[image_style][small][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["geometry"] %>
+    <%= f.label "Image Style Format [Small]" %>
+    <%= text_field_tag "setting[image_style][small][format]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["format"] %>
+  </p>
+</fieldset>
+<fieldset>
+  <legend>
+    Format
+  </legend>
+  <p>
+    <%= f.label :date_format %>
+    <%= f.collection_select :date_format, Setting::DATE_FORMATS.collect {|f| [Date.today.strftime(f), f]}, :last, :first %>
+  </p>
+  <p>
+    <%= f.label :time_format %>
+    <%= f.collection_select :time_format, Setting::TIME_FORMATS.collect {|f| [Time.now.strftime(f), f]}, :last, :first %>
+  </p>
+</fieldset>
 <div class="actions">
-  <%= f.submit %>
+  <%= f.submit %> | <%= link_to "Reset all to default", "/setting/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
 </div>
 <% end %>
 
-<%= link_to "Reset all to default", "/setting/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
-
-<h3><%= link_to "Manage Tabs", tabs_path %></h3>
-<h3><%= link_to "Manage Pages", pages_path %></h3>
-<h3><%= link_to "Manage Datasources", ds_path %></h3>
-
-<%= notice %>
+<h3><%= link_to "Manage Tabs", tabs_path %> |
+<%= link_to "Manage Pages", pages_path %> |
+<%= link_to "Manage Datasources", ds_path %></h3>
+<div class="success">
+  <%= notice %>
+</div>

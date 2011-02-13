@@ -26,7 +26,7 @@
     </p>
     <p>
       <%= f.label :theme_path %>
-      <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|f| File.basename(f)}, :to_s, :to_s %>
+      <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|tf| File.basename(tf)}, :to_s, :to_s %>
     </p>
   </fieldset>
   <fieldset>

@@ -30,7 +30,7 @@ class PagesController < ApplicationController
 
       #Assemble the variable and it's content, and then pass to template
       render_params = Hash.new
-      render_params[:params] = params
+      render_params["params"] = params
       if ds
         for d in ds
           render_params[d.key] = d.get_klass.all

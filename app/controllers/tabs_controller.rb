@@ -56,6 +56,7 @@ class TabsController < ApplicationController
         end
         render_params["tabs"] = tabs
 
+        # add the datasource to the template
         if ds
           for d in ds
             render_params[d.key] = d.get_klass.all

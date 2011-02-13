@@ -22,7 +22,12 @@ TianTing::Application.routes.draw do
   end
 
   resources :pages
-  resources :mthemes
+  
+  resources :mthemes do
+    member do
+      post 'sync'
+    end
+  end
 
   devise_for :users
   #resource :users, :only => [:new, :create, :edit, :update]

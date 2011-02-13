@@ -8,10 +8,10 @@
   <%= f.label :current_theme %>
   <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
   <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %><br/>
-  <%= link_to "(Re)Generate Default Theme", mthemes_path(:theme_name => "default"), :method => :post, 
+  <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post, 
   :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
   <% if list_themes.size > 0 %>
-    <%= link_to "Sync and Cache the theme"%>
+    <%= link_to "Sync and Cache the theme", sync_mtheme_path(:id => "default"), :method => :post %>
   <% end %>
 </p>
 

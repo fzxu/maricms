@@ -1,5 +1,6 @@
 class MthemesController < ApplicationController
   before_filter :get_setting
+  
   def create
     theme_name = params[:id]
     if Dir.exist?(File.join(Rails.root, "themes", theme_name))
@@ -30,8 +31,8 @@ class MthemesController < ApplicationController
 
     notice = `svn update #{File.join(Rails.root, "themes", theme_name)}`
     
-    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; rake themes:update_cache`
-    
+    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; /usr/local/ruby/bin/rake themes:update_cache`
+
     respond_to do |format|
       format.html { redirect_to '/setting', :notice => notice}
       format.xml { head :ok}

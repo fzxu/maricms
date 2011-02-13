@@ -7,7 +7,11 @@
 <p>
   <%= f.label :current_theme %>
   <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
-  <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %><br/>
+  <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
+  <% if @setting.current_theme %>
+    You can use the following svn url to check out the theme code:
+    <b>svn co svn+ssh://svn@<%=@setting.host_name%>/home/svn/<%= @setting.current_theme %></b><br/>
+  <% end %>
   <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post, 
   :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
   <% if list_themes.size > 0 %>

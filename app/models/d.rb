@@ -18,7 +18,8 @@ class D
   after_save :gen_klass
   def gen_klass
     # convert all the key to symbol due to the paperclip need
-    image_style = convert_symbol(Setting.first.image_style)
+    setting = Setting.first
+    image_style = convert_symbol(setting.image_style)
 
     # Need to recreate the klass even it is exist, because it has been changed
 
@@ -65,10 +66,13 @@ class D
     #explore the timestamp to liquid
     if self.time_log
       #TODO need to add the global time format here
-      liquid_string += "'created_at' => self.created_at, \n 'updated_at' => self.updated_at, \n"
+      liquid_string += <<-TIMELOG
+        'created_at' => self.created_at.nil? ? "" : self.created_at.strftime("#{setting.date_format}"), 
+        'updated_at' => self.updated_at.nil? ? "" : self.updated_at.strftime("#{setting.date_format}"),
+      TIMELOG
     end
 
-    liquid_string = liquid_string[0..-4] + "\n" #remove the last ','
+    #liquid_string = liquid_string[0..-4] + "\n" #remove the last ','
 
     liquidinj = <<-LIQUIDINJ
 	    def to_liquid

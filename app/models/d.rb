@@ -44,9 +44,9 @@ class D
 
     liquid_string = ""
     self.ds_elements.each do |ds_element|
-      if ds_element.type == "File"
+      if ds_element.ftype == "File"
         meta_string = meta_string + "has_mongoid_attached_file :#{ds_element.key} \n"
-      elsif ds_element.type == "Image"
+      elsif ds_element.ftype == "Image"
         meta_string = meta_string + <<-IMAGEMETA
         	has_mongoid_attached_file :#{ds_element.key},
         	:styles => #{image_style},
@@ -55,10 +55,10 @@ class D
         image_style.each do |key, style|
           liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
         end
-      elsif ds_element.type == "Text"
+      elsif ds_element.ftype == "Text"
         meta_string += "field :#{ds_element.key}, :type => String \n"
       else
-        meta_string += "field :#{ds_element.key}, :type => #{ds_element.type} \n"
+        meta_string += "field :#{ds_element.key}, :type => #{ds_element.ftype} \n"
       end
       liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
     end

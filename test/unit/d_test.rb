@@ -21,7 +21,7 @@ class DTest < ActiveSupport::TestCase
       {
         :key => "number",
         :name => "Number",
-        :type => "Integer"
+        :ftype => "Integer"
       }
       ])
     blog.save
@@ -51,7 +51,7 @@ class DTest < ActiveSupport::TestCase
       {
         :key => "number",
         :name => "Number",
-        :type => "Integer"
+        :ftype => "Integer"
       }
       ])
     klass = blog_meta.get_klass

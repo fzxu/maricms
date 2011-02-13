@@ -3,13 +3,13 @@
   <% @d.ds_elements.each do |element| %>
     <p>
       <%= form_record_element.label element.name %>
-      <% if element.type == "File" %>
+      <% if element.ftype == "File" %>
         <%= form_record_element.file_field element.key %><br/>
         File Name: <%= @record.send("#{element.key}_file_name")%>
-      <% elsif element.type == "Image" %>
+      <% elsif element.ftype == "Image" %>
         <%= form_record_element.file_field element.key %><br/>
         <%= image_tag @record.send(element.key).url %>
-      <% elsif element.type == "Text" %>
+      <% elsif element.ftype == "Text" %>
         <%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
         <script>
           KE.show({
@@ -29,7 +29,7 @@
             //}
           });
         </script>
-      <% elsif element.type == "Boolean" %>
+      <% elsif element.ftype == "Boolean" %>
         <%= form_record_element.check_box element.key %>
       <% else %>
         <%= form_record_element.text_field element.key %>

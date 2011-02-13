@@ -3,11 +3,11 @@
 <% @d.ds_elements.each do |element| %>
 <p>
   <%= label_tag element.name %><br/>
-  <% if element.type == "File" %>
+  <% if element.ftype == "File" %>
   	<%= link_to "Download", @record.send(element.key).url %>
-  <% elsif element.type == "Image"%>
+  <% elsif element.ftype == "Image"%>
   	<%= image_tag @record.send(element.key).url %>
-  <% elsif element.type == "Text" %>
+  <% elsif element.ftype == "Text" %>
     <%= render :inline => @record.send(element.key) %>
   <% else %>
   	<%= @record.send(element.key) %>

@@ -3,7 +3,7 @@ class DsElement
   
   field :key
   field :name
-  field :type, :default => "String"
+  field :ftype, :default => "String"
   
   embedded_in :d
   

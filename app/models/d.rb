@@ -48,9 +48,9 @@ class D
         meta_string = meta_string + "has_mongoid_attached_file :#{ds_element.key} \n"
       elsif ds_element.ftype == "Image"
         meta_string = meta_string + <<-IMAGEMETA
-        	has_mongoid_attached_file :#{ds_element.key},
-        	:styles => #{image_style},
-        	:convert_options => { :all => '-quality 100'}
+          has_mongoid_attached_file :#{ds_element.key},
+          :styles => #{image_style},
+          :convert_options => {:all => '-quality 100'} \n
         IMAGEMETA
         image_style.each do |key, style|
           liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
@@ -75,12 +75,12 @@ class D
     #liquid_string = liquid_string[0..-4] + "\n" #remove the last ','
 
     liquidinj = <<-LIQUIDINJ
-	    def to_liquid
-	      {
-	        #{liquid_string}
-	      }
-	    end
-		LIQUIDINJ
+      def to_liquid
+        {
+          #{liquid_string}
+        }
+      end
+  	LIQUIDINJ
     meta_string = meta_string + liquidinj
     klass.class_eval(meta_string)
     klass

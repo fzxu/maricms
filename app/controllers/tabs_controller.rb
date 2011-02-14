@@ -54,6 +54,7 @@ class TabsController < ApplicationController
           tabs << tab
         end
         render_params["tabs"] = tabs
+        render_params["current_tab"] = @tab
 
         # Query the datasource based on the parameters
         q = {}

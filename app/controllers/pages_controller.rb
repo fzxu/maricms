@@ -31,9 +31,23 @@ class PagesController < ApplicationController
       #Assemble the variable and it's content, and then pass to template
       render_params = Hash.new
       render_params["params"] = params
+      
+      # Query the datasource based on the parameters
+      q = {}
+      params.each do |k,v|
+        s = k.split(".")
+        if s && s.size > 2 && s[0] == "ds"
+          q[s[1]] = {s[2] => v}
+        end  
+      end
+        
       if ds
         for d in ds
-          render_params[d.key] = d.get_klass.all
+          if q[d.key].nil?
+            render_params[d.key] = d.get_klass.all
+          else
+            render_params[d.key] = d.get_klass.where(q[d.key])
+          end
         end
       end
 

@@ -40,8 +40,8 @@ class TabsController < ApplicationController
         render_params = Hash.new
 
         #add the parameters to the template
+        param_hash = params
         unless @tab.param_string.blank?
-          param_hash = Hash.new
           @tab.param_string.split('&').each do |p_str|
             pair = p_str.strip.split('=')
             param_hash[pair.first] = pair.last
@@ -56,10 +56,24 @@ class TabsController < ApplicationController
         end
         render_params["tabs"] = tabs
 
-        # add the datasource to the template
+        # Query the datasource based on the parameters
+        q = {}
+        if param_hash
+          param_hash.each do |k,v|
+            s = k.split(".")
+            if s && s.size > 2 && s[0] == "ds"
+              q[s[1]] = {s[2] => v}
+            end  
+          end
+        end
+          
         if ds
           for d in ds
-            render_params[d.key] = d.get_klass.all
+            if q[d.key].nil?
+              render_params[d.key] = d.get_klass.all
+            else
+              render_params[d.key] = d.get_klass.where(q[d.key])
+            end
           end
         end
 
@@ -124,8 +138,15 @@ class TabsController < ApplicationController
     page_id = params[:tab].delete(:page)
     @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
     unless page_id.blank?
-    @page = Page.find(page_id)
-    @tab.page = @page
+      @page = Page.find(page_id)
+    
+      # should be mongoid bug, remove the old page's tab id
+      old_page_id = @tab.page.id
+      old_page = Page.find(old_page_id)
+      old_page.update_attributes({:tab_id => ""})
+      # end
+      
+      @tab.page = @page
     end
     unless parent_id.blank?
     @tab.parent = Tab.find(parent_id)

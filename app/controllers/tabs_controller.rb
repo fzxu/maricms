@@ -46,9 +46,8 @@ class TabsController < ApplicationController
             pair = p_str.strip.split('=')
             param_hash[pair.first] = pair.last
           end
-          render_params["params"] = param_hash
         end
-
+        render_params["params"] = param_hash
         #add the tabs to the template
         tabs = Array.new
         Tab.traverse(:depth_first) do |tab|
@@ -141,9 +140,11 @@ class TabsController < ApplicationController
       @page = Page.find(page_id)
     
       # should be mongoid bug, remove the old page's tab id
-      old_page_id = @tab.page.id
-      old_page = Page.find(old_page_id)
-      old_page.update_attributes({:tab_id => ""})
+      if @tab.page
+        old_page_id = @tab.page.id
+        old_page = Page.find(old_page_id)
+        old_page.update_attributes({:tab_id => ""})
+      end
       # end
       
       @tab.page = @page

@@ -22,7 +22,9 @@
           <meta name="<%= meta.http_equiv%>" content="<%= meta.content %>"/>
         <% end %>
       <% end %>
-
+      <% if @page.head_yield %>
+        <%= render :inline => @page.head_yield %>
+      <% end %>
     <% end %>
     <%= csrf_meta_tag %>
   </head>

@@ -6,6 +6,7 @@ class Page
   field :js_paths, :type => Array  #page based javascript include path
   field :css_paths, :type => Array
   field :theme_path
+  field :head_yield
   
   index :slug, :unique => true
   

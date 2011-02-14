@@ -110,11 +110,16 @@ class TabsController < ApplicationController
   # POST /tabs.xml
   def create
     parent_id = params[:tab].delete(:parent)
+    page_id = params[:tab].delete(:page)
+    
     @tab = Tab.new(params[:tab])
-    unless params[:tab][:page].blank?
-      @page = Page.find(params[:tab][:page])
-    @tab.page = @page
+    
+    if page_id && !page_id.blank?
+      @page = Page.find(page_id)
+      @tab.page = @page
     end
+
+    
     unless parent_id.blank?
     @tab.parent = Tab.find(parent_id)
     end
@@ -141,13 +146,13 @@ class TabsController < ApplicationController
       @page = Page.find(page_id)
     
       # should be mongoid bug, remove the old page's tab id
-      if @tab.page
-        old_page_id = @tab.page.id
-        old_page = Page.find(old_page_id)
-        old_page.update_attributes({:tab_id => ""})
-      end
+#      if @tab.page
+        # old_page_id = @tab.page.id
+        # old_page = Page.find(old_page_id)
+        # old_page.tabs.delete(@tab)
+        # old_page.save
+#      end
       # end
-      
       @tab.page = @page
     end
     unless parent_id.blank?

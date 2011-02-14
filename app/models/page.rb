@@ -12,7 +12,8 @@ class Page
   
   references_and_referenced_in_many :ds
   embeds_many :page_metas
-  referenced_in :tab
+  
+  #references_many :tabs, :autosave => true
   
   validates_presence_of :slug
   validates_uniqueness_of :slug

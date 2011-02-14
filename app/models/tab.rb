@@ -14,7 +14,7 @@ class Tab
 
 	index :slug, :unique => true
 	
-  references_one :page, :autosave => true
+  referenced_in :page#, :autosave => true
 
   validates_presence_of :name
   validates_presence_of :slug

@@ -31,11 +31,11 @@
     </legend>
     <p>
       <%= f.label :page %>
-      <%= f.collection_select :page, Page.all, :id, :title, :prompt => true %>
+      <%= collection_select :tab, "page_id", Page.all, :id, :title, :prompt => true %>
     </p>
     <p>
       <%= f.label :parent %>
-      <%= f.collection_select :parent, Tab.all - [@tab], :id, :name, :prompt => true %>
+      <%= collection_select :tab, "parent_id", Tab.all - [@tab], :id, :name, :prompt => true %>
     </p>
     <p>
       <%= f.label :param_string%>

@@ -56,7 +56,7 @@ class D
       after_destroy :move_lower_siblings_up
       
       def assign_default_position
-        return unless self.position.nil? || self.parent_id_changed?
+        return unless self.position.nil?
 
         if #{class_name}.all.empty? || #{class_name}.all.collect(&:position).compact.empty?
           self.position = 0

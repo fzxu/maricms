@@ -36,8 +36,40 @@ class D
 
     klass = Object.const_set(class_name,Class.new)
 
-    meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n "
+    meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n"
+    meta_string += <<-ORDER
+      field :position, :type => Integer
+      
+      def move_up
+        return if #{class_name}.where(:position.lt => self.position).empty?
+        #{class_name}.where(:position => self.position - 1).first.inc(:position, 1)
+        inc(:position, -1)
+      end
+      
+      def move_down
+        return if #{class_name}.where(:position.gt => self.position).empty?
+        #{class_name}.where(:position => self.position + 1).first.inc(:position, -1)
+        inc(:position, 1)
+      end
+      
+      before_save :assign_default_position
+      after_destroy :move_lower_siblings_up
+      
+      def assign_default_position
+        return unless self.position.nil? || self.parent_id_changed?
 
+        if #{class_name}.all.empty? || #{class_name}.all.collect(&:position).compact.empty?
+          self.position = 0
+        else
+          self.position = #{class_name}.max(:position) + 1
+        end
+      end
+
+      def move_lower_siblings_up
+        #{class_name}.where(:position.gt => self.position).each { |s| s.inc(:position, -1) }
+      end            
+    ORDER
+    
     if self.time_log
       meta_string += "\n include Mongoid::Timestamps \n"
     end

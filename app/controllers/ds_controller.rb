@@ -130,7 +130,7 @@ class DsController < ApplicationController
 
   def manage
     @d = D.find(params[:id])
-    @records = @d.get_klass.all
+    @records = @d.get_klass.all.asc(:position)
 
     respond_to do |format|
       format.html
@@ -207,6 +207,27 @@ class DsController < ApplicationController
       format.html 
       format.xml  { render :xml => @record }
     end
-  	
+  end
+  
+  def move_up_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
+    @record.move_up
+
+    respond_to do |format|
+      format.html { redirect_to(manage_d_path(@d)) }
+      format.xml  { head :ok }
+    end    
+  end
+  
+  def move_down_record
+    @d = D.find(params[:id])
+    @record = @d.get_klass.find(params[:rec_id])
+    @record.move_down
+
+    respond_to do |format|
+      format.html { redirect_to(manage_d_path(@d)) }
+      format.xml  { head :ok }
+    end    
   end
 end

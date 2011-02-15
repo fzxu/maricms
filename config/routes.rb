@@ -18,6 +18,8 @@ TianTing::Application.routes.draw do
   		post 'create_record'
   		delete 'destroy_record'
   		get 'show_record'
+  		post 'move_up_record'
+  		post 'move_down_record'
   	end
   end
 

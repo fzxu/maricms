@@ -7,13 +7,13 @@ defaults: &defaults
       :geometry: 1920x1680>
       :format: jpg
     :large: 
-      :geometry: 100x100#
+      :geometry: 500x500>
       :format: jpg
     :medium: 
-      :geometry: 250x250
+      :geometry: 250x250#
       :format: jpg
     :small: 
-      :geometry: 500x500>
+      :geometry: 80x80#
       :format: jpg
   date_format: "%Y-%m-%d"
   time_format: "%H:%M"

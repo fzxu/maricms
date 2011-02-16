@@ -19,6 +19,7 @@ gem "themes_for_rails"
 gem "mongoid-paperclip", :require => "mongoid_paperclip"
 
 gem "liquid", :git => "https://github.com/arkxu/liquid.git"
+#gem "liquid", :path => "/Users/arkxu/r/liquid"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

@@ -54,7 +54,7 @@ class PagesController < ApplicationController
           if q[r_page_d.d.key].nil?
           render_params[r_page_d.d.key] = r_page_d.d.get_klass.all
           else
-          render_params[r_page_d.d.key] = r_page_d.d.get_klass.where(q[d.key])
+          render_params[r_page_d.d.key] = r_page_d.d.get_klass.where(q[r_page_d.d.key])
           end
         end
       end

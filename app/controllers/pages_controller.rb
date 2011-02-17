@@ -18,7 +18,7 @@ class PagesController < ApplicationController
     begin
       @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
 
-      ds = @page.ds
+      
       begin
         template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
       rescue
@@ -48,12 +48,13 @@ class PagesController < ApplicationController
         end
       end
 
-      if ds
-        for d in ds
-          if q[d.key].nil?
-          render_params[d.key] = d.get_klass.all
+      r_page_ds = @page.r_page_ds
+      if r_page_ds && r_page_ds.size > 0
+        for r_page_d in r_page_ds
+          if q[r_page_d.d.key].nil?
+          render_params[r_page_d.d.key] = r_page_d.d.get_klass.all
           else
-          render_params[d.key] = d.get_klass.where(q[d.key])
+          render_params[r_page_d.d.key] = r_page_d.d.get_klass.where(q[d.key])
           end
         end
       end
@@ -86,21 +87,20 @@ class PagesController < ApplicationController
   # POST /pages
   # POST /pages.xml
   def create
+    r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.new(params[:page])
-    ds = []
-    if params[:ds]
-      #this should be a bug of mongoid
-
-      @page.ds.each do |d|
-        @page.ds.delete(d)
-      end
-
-      params[:ds].each do |d|
-        unless d.blank?
-        ds << D.find(d)
+    
+    if r_page_ds.size > 0
+    
+      rpd = []
+      r_page_ds.each do |rd|
+        unless rd[:d_id].blank?
+          r_page_d = RPageD.new(:query_hash => rd[:query_hash])
+          r_page_d.d = D.find(rd[:d_id])
+          rpd << r_page_d
         end
       end
-    @page.ds = ds
+      @page.r_page_ds = rpd
     end
 
     respond_to do |format|
@@ -117,25 +117,27 @@ class PagesController < ApplicationController
   # PUT /pages/1
   # PUT /pages/1.xml
   def update
+    r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-    ds = []
-    if params[:ds]
-      #this should be a bug of mongoid
 
-      @page.ds.each do |d|
-        @page.ds.delete(d)
-      end
-
-      params[:ds].each do |d|
-        unless d.blank?
-        ds << D.find(d)
+    if r_page_ds.size > 0
+    
+      #remove the old ones
+      @page.r_page_ds.destroy_all
+      # end remove
+      
+      rpd = []
+      r_page_ds.each do |rd|
+        unless rd[:d_id].blank?
+          r_page_d = RPageD.new(:query_hash => rd[:query_hash])
+          r_page_d.d = D.find(rd[:d_id])
+          rpd << r_page_d
         end
       end
-    @page.ds = ds
     end
 
     respond_to do |format|
-      if @page.save && @page.update_attributes(params[:page])
+      if @page.update_attributes(params[:page].merge({:r_page_ds => rpd}))
         format.html { redirect_to(@page, :notice => 'Page was successfully updated.') }
         format.xml  { head :ok }
       else

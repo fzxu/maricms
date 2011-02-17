@@ -10,7 +10,7 @@ class Page
   
   index :slug, :unique => true
   
-  references_and_referenced_in_many :ds
+  embeds_many :r_page_ds
   embeds_many :page_metas
   
   #references_many :tabs, :autosave => true

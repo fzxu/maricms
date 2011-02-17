@@ -1,8 +1,6 @@
 class TabsController < ApplicationController
   before_filter :get_setting
   theme :get_theme
-  
-  
   # GET /tabs
   # GET /tabs.xml
   def index
@@ -21,13 +19,12 @@ class TabsController < ApplicationController
       if params[:id]
         @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
       else
-      	@tab = Tab.root
+      @tab = Tab.root
       end
 
       @page = @tab.page
 
       if @page
-        ds = @page.ds
         begin
           template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
         rescue
@@ -63,16 +60,17 @@ class TabsController < ApplicationController
             s = k.split(".")
             if s && s.size > 2 && s[0] == "ds"
               q[s[1]] = {s[2] => v}
-            end  
+            end
           end
         end
-          
-        if ds
-          for d in ds
-            if q[d.key].nil?
-              render_params[d.key] = d.get_klass.all
+
+        r_page_ds = @page.r_page_ds
+        if r_page_ds && r_page_ds.size > 0
+          for r_page_d in r_page_ds
+            if q[r_page_d.d.key].nil?
+            render_params[r_page_d.d.key] = r_page_d.d.get_klass.all
             else
-              render_params[d.key] = d.get_klass.where(q[d.key])
+              render_params[r_page_d.d.key] = r_page_d.d.get_klass.where(q[d.key])
             end
           end
         end
@@ -109,17 +107,16 @@ class TabsController < ApplicationController
   # POST /tabs
   # POST /tabs.xml
   def create
-    parent_id = params[:tab].delete(:parent)
-    page_id = params[:tab].delete(:page)
-    
+    parent_id = params[:tab].delete(:parent_id)
+    page_id = params[:tab].delete(:page_id)
+
     @tab = Tab.new(params[:tab])
-    
+
     if page_id && !page_id.blank?
-      @page = Page.find(page_id)
-      @tab.page = @page
+    @page = Page.find(page_id)
+    @tab.page = @page
     end
 
-    
     unless parent_id.blank?
     @tab.parent = Tab.find(parent_id)
     end
@@ -139,21 +136,21 @@ class TabsController < ApplicationController
   # PUT /tabs/1
   # PUT /tabs/1.xml
   def update
-    parent_id = params[:tab].delete(:parent)
-    page_id = params[:tab].delete(:page)
+    parent_id = params[:tab].delete(:parent_id)
+    page_id = params[:tab].delete(:page_id)
     @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
     unless page_id.blank?
-      @page = Page.find(page_id)
-    
-      # should be mongoid bug, remove the old page's tab id
-#      if @tab.page
-        # old_page_id = @tab.page.id
-        # old_page = Page.find(old_page_id)
-        # old_page.tabs.delete(@tab)
-        # old_page.save
-#      end
-      # end
-      @tab.page = @page
+    @page = Page.find(page_id)
+
+    # should be mongoid bug, remove the old page's tab id
+    #      if @tab.page
+    # old_page_id = @tab.page.id
+    # old_page = Page.find(old_page_id)
+    # old_page.tabs.delete(@tab)
+    # old_page.save
+    #      end
+    # end
+    @tab.page = @page
     end
     unless parent_id.blank?
     @tab.parent = Tab.find(parent_id)

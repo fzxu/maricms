@@ -7,7 +7,7 @@ class D
   field :time_log, :type => Boolean
 
   embeds_many :ds_elements
-  references_and_referenced_in_many :pages
+  references_one :r_page_d
 
   index :key, :unique => true
   index "ds_elements.key"
@@ -74,8 +74,8 @@ class D
     if self.time_log
       #TODO need to add the global time format here
       liquid_string += <<-TIMELOG
-        'created_at' => self.created_at.nil? ? "" : self.created_at.strftime("#{setting.date_format}"), 
-        'updated_at' => self.updated_at.nil? ? "" : self.updated_at.strftime("#{setting.date_format}"),
+        'created_at' => self.created_at, 
+        'updated_at' => self.updated_at,
       TIMELOG
     end
 

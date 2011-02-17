@@ -67,10 +67,28 @@
     </legend>
     <p>
       <% D.all.each do |ds| %>
-      <%= fields_for "ds" do |form| %>
-      <%= "#{ds.name}(#{ds.key})" %>:<%= form.check_box nil,{:checked => @page.ds.nil? ? false : @page.ds.include?(ds)},ds.id,""%>
+      <%
+        has_ds = false
+        r_page_d = nil
+        unless @page.r_page_ds.nil? || @page.r_page_ds.size == 0
+          @page.r_page_ds.each do |r|
+            if r.d.id == ds.id
+              has_ds = true
+              r_page_d = r
+              break
+            end
+          end
+        end
+      %>
+        <%= "#{ds.name}(#{ds.key})" %>:
+        <%= check_box_tag "page[r_page_ds][][d_id]","",has_ds,{:type=>"hidden"}%> 
+        <%= check_box_tag "page[r_page_ds][][d_id]",ds.id,has_ds,{}%> |
+        Limit: <%= text_field_tag "page[r_page_ds][][query_hash][limit]", r_page_d.nil? ? "100" : r_page_d.query_hash["limit"] %> |
+        Ascending:<%= text_field_tag "page[r_page_ds][][query_hash][ascending]", r_page_d.nil? ? "" : r_page_d.query_hash["ascending"] %> | 
+        Descending: <%= text_field_tag "page[r_page_ds][][query_hash][descending]", r_page_d.nil? ? "" : r_page_d.query_hash["descending"] %> |
+        Where: <%= text_field_tag "page[r_page_ds][][query_hash][where]", r_page_d.nil? ? "" : r_page_d.query_hash["where"] %> |
+        Excludes: <%= text_field_tag "page[r_page_ds][][query_hash][excludes]", r_page_d.nil? ? "" : r_page_d.query_hash["excludes"] %>
       <br/>
-      <% end %>
       <% end %>
     </p>
   </fieldset>

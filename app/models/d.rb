@@ -7,7 +7,7 @@ class D
   field :time_log, :type => Boolean
 
   embeds_many :ds_elements
-  references_one :r_page_d
+  # references_one :r_page_d
 
   index :key, :unique => true
   index "ds_elements.key"

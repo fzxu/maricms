@@ -6,6 +6,7 @@ class DTest < ActiveSupport::TestCase
     D.find(:all).each do |d|
       d.destroy
     end
+    @setting = Setting.first || Setting.create(APP_CONFIG)
   end
 
   def teardown

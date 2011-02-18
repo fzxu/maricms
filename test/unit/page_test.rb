@@ -2,27 +2,28 @@ require 'test_helper'
 
 class PageTest < ActiveSupport::TestCase
 
-	teardown do
-		Page.all.each do |page|
-			page.destroy
-		end
-		D.all.each do |d|
-			d.destroy
-		end
-	end
-	
+  teardown do
+    Page.all.each do |page|
+      page.destroy
+    end
+    D.all.each do |d|
+      d.destroy
+      Mongoid.database.collection(d.get_klass.collection_name).drop
+    end
+  end
+
   test "create a normal page" do
     page = Page.new(:slug => "home", :title => "Home", :theme_path=> "home.liquid",
-                    :js_paths => ["accordion.js", "event/cool.js"],
-                    :page_metas => [
-                      {
-                        :http_equiv => "Content-Type",
-                        :content => "text/html; charset=utf-8"
-                      },
-                      {
-                        :http_equiv => "Pragma",
-                        :content => "no-cache"
-                      }
+    :js_paths => ["accordion.js", "event/cool.js"],
+    :page_metas => [
+      {
+        :http_equiv => "Content-Type",
+        :content => "text/html; charset=utf-8"
+      },
+      {
+        :http_equiv => "Pragma",
+        :content => "no-cache"
+      }
     ])
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
     page.save
@@ -52,40 +53,65 @@ class PageTest < ActiveSupport::TestCase
 
   test "create a page with two data sources" do
     ds_blog = D.create(:key => "blog", :name => "Blog", :ds_elements => [
-                      {
-                        :key => "title",
-                        :name => "Title"
-                      },
-                      {
-                        :key => "description",
-                        :name => "Description"
-                      }
+      {
+        :key => "title",
+        :name => "Title"
+      },
+      {
+        :key => "description",
+        :name => "Description"
+      }
     ])
     assert ds_blog.valid?, ds_blog.errors.full_messages.map { |msg| msg + ".\n" }.join
 
     ds_event = D.create(:key => "event", :name => "Event", :ds_elements => [
-                       {
-                         :key => "name",
-                         :name => "Name"
-                       },
-                       {
-                         :key => "when",
-                         :name => "When",
-                         :type => "Date"
-                       }
+      {
+        :key => "name",
+        :name => "Name"
+      },
+      {
+        :key => "when",
+        :name => "When",
+        :type => "Date"
+      }
     ])
     assert ds_event.valid?, ds_event.errors.full_messages.map { |msg| msg + ".\n" }.join
 
+    r_page_blog = RPageD.new(:query_hash => {:limit => "2",})
+    r_page_blog.d = ds_blog
+
+    r_page_event = RPageD.new(:query_hash =>{:ascending => "when", :descending => "name", :excludes => "name = Event4"})
+    r_page_event.d = ds_event
+
     page = Page.new(:slug => "home2", :title => "Home2")
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
-    page.ds = [ds_blog, ds_event]
+    page.r_page_ds = [r_page_blog, r_page_event]
 
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
     page.save
 
     page_ret = Page.find(:all).first
     assert_equal page_ret.slug, "home2"
-    assert_equal page_ret.ds.first, ds_blog
-    assert_equal page_ret.ds.second, ds_event
+    assert_equal page_ret.r_page_ds.size, 2
+    assert_equal page_ret.r_page_ds.first.d, ds_blog
+    assert_equal page_ret.r_page_ds.last.d, ds_event
+    
+    # create fixtures
+    ds_blog.get_klass.create(:title => "Blog1", :description => "Description1")
+    ds_blog.get_klass.create(:title => "Blog2", :description => "Description2")
+    ds_blog.get_klass.create(:title => "Blog3", :description => "Description3")
+    
+    ds_event.get_klass.create(:name => "Event2", :when => "2011-02-15")
+    ds_event.get_klass.create(:name => "Event1", :when => "2011-02-14")
+    ds_event.get_klass.create(:name => "Event3", :when => "2011-02-14")
+    ds_event.get_klass.create(:name => "Event4", :when => "2011-02-14")
+    
+    blogs = page_ret.r_page_ds.first.default_query
+    assert_equal blogs.size, 2
+    
+    events = page_ret.r_page_ds.last.default_query
+    assert_equal events.first.name, "Event3"
+    assert_equal events.size, 3
   end
+  
 end

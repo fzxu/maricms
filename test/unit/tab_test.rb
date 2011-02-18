@@ -57,6 +57,5 @@ class TabTest < ActiveSupport::TestCase
     tab.save
     
     assert_equal page, tab.page
-    assert_equal tab, page.tab
   end
 end

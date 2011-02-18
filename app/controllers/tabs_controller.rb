@@ -68,9 +68,9 @@ class TabsController < ApplicationController
         if r_page_ds && r_page_ds.size > 0
           for r_page_d in r_page_ds
             if q[r_page_d.d.key].nil?
-            render_params[r_page_d.d.key] = r_page_d.d.get_klass.all
+              render_params[r_page_d.d.key] = r_page_d.default_query
             else
-              render_params[r_page_d.d.key] = r_page_d.d.get_klass.where(q[r_page_d.d.key])
+              render_params[r_page_d.d.key] = r_page_d.default_query.where(q[r_page_d.d.key])
             end
           end
         end

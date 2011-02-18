@@ -8,7 +8,7 @@
         File Name: <%= @record.send("#{element.key}_file_name")%>
       <% elsif element.ftype == "Image" %>
         <%= form_record_element.file_field element.key %><br/>
-        <%= image_tag @record.send(element.key).url %>
+        <%= image_tag @record.send(element.key).url if @record.send(element.key)%>
       <% elsif element.ftype == "Text" %>
         <%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
         <script>
@@ -36,9 +36,13 @@
       <% end %>
     </p>
   <% end %>
+
+</fieldset>
+<fieldset>
+  <legend>Advanced</legend>
   <p>
     <%= form_record_element.label :position %>
     <%= form_record_element.text_field :position %>(Do not change it unless you know what you are doing!)
   </p>
-
+  
 </fieldset>

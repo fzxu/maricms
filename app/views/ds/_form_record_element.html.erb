@@ -5,10 +5,10 @@
       <%= form_record_element.label element.name %>
       <% if element.ftype == "File" %>
         <%= form_record_element.file_field element.key %><br/>
-        File Name: <%= @record.send("#{element.key}_file_name")%>
+        File Name: <%= @record.send("#{element.key}_file_name") %>
       <% elsif element.ftype == "Image" %>
         <%= form_record_element.file_field element.key %><br/>
-        <%= image_tag @record.send(element.key).url if @record.send(element.key)%>
+        <%= image_tag @record.send(element.key).url %>
       <% elsif element.ftype == "Text" %>
         <%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
         <script>

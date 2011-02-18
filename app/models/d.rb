@@ -50,7 +50,7 @@ class D
         meta_string = meta_string + <<-IMAGEMETA
           has_mongoid_attached_file :#{ds_element.key},
           :styles => #{image_style.inspect},
-          :default_url => '/images/missing.png'
+          :default_url => '/images/missing.png',
           :convert_options => {:all => '-quality 100'} \n
         IMAGEMETA
         image_style.each do |key, style|

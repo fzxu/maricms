@@ -7,6 +7,7 @@ class Page
   field :css_paths, :type => Array
   field :theme_path
   field :head_yield
+  field :per_page, :type => Integer
   
   index :slug, :unique => true
   

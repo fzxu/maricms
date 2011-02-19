@@ -11,7 +11,7 @@ class PageTest < ActiveSupport::TestCase
       Mongoid.database.collection(d.get_klass.collection_name).drop
     end
   end
-
+  
   test "create a normal page" do
     page = Page.new(:slug => "home", :title => "Home", :theme_path=> "home.liquid",
     :js_paths => ["accordion.js", "event/cool.js"],
@@ -27,7 +27,7 @@ class PageTest < ActiveSupport::TestCase
     ])
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
     page.save
-
+  
     page_ret = Page.find(:all).first
     assert_equal "Home", page_ret.title
     assert_equal "accordion.js", page_ret.js_paths.first
@@ -36,13 +36,13 @@ class PageTest < ActiveSupport::TestCase
     assert_equal "Pragma", page_ret.page_metas.second.http_equiv
     assert_equal "home.liquid", page_ret.theme_path
   end
-
+  
   test "create an abnormal page, without slug" do
     page = Page.new(:title => "About")
     assert page.invalid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
     assert page.errors[:slug].any?, "should have error message about the missing slug"
   end
-
+  
   test "create an abnormal page, with duplicated slug" do
     page = Page.new(:slug => "home", :title => "Home")
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
@@ -95,23 +95,29 @@ class PageTest < ActiveSupport::TestCase
     assert_equal page_ret.r_page_ds.size, 2
     assert_equal page_ret.r_page_ds.first.d, ds_blog
     assert_equal page_ret.r_page_ds.last.d, ds_event
-    
+
     # create fixtures
     ds_blog.get_klass.create(:title => "Blog1", :description => "Description1")
     ds_blog.get_klass.create(:title => "Blog2", :description => "Description2")
     ds_blog.get_klass.create(:title => "Blog3", :description => "Description3")
-    
+
     ds_event.get_klass.create(:name => "Event2", :when => "2011-02-15")
     ds_event.get_klass.create(:name => "Event1", :when => "2011-02-14")
     ds_event.get_klass.create(:name => "Event3", :when => "2011-02-14")
     ds_event.get_klass.create(:name => "Event4", :when => "2011-02-14")
-    
+
     blogs = page_ret.r_page_ds.first.default_query
     assert_equal blogs.size, 2
-    
+
     events = page_ret.r_page_ds.last.default_query
     assert_equal events.first.name, "Event3"
     assert_equal events.size, 3
+    
+    # delet the ds should also delete the related ref
+    assert_equal page_ret.r_page_ds.size, 2
+    ds_blog.destroy
+    page_ret.reload
+    assert_equal page_ret.r_page_ds.size, 1
   end
-  
+
 end

@@ -58,4 +58,5 @@ class TabTest < ActiveSupport::TestCase
     
     assert_equal page, tab.page
   end
+  
 end

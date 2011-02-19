@@ -16,6 +16,8 @@ class D
   validates_uniqueness_of :key
 
   after_save :gen_klass
+  before_destroy :remove_page_relation
+  
   def gen_klass
     # convert all the key to symbol due to the paperclip need
     setting = Setting.first
@@ -37,7 +39,7 @@ class D
     klass = Object.const_set(class_name,Class.new)
 
     meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n include Mongoid::Orderable\n"
-    
+
     if self.time_log
       meta_string += "\n include Mongoid::Timestamps \n"
     end
@@ -75,7 +77,7 @@ class D
     if self.time_log
       #TODO need to add the global time format here
       liquid_string += <<-TIMELOG
-        'created_at' => self.created_at, 
+        'created_at' => self.created_at,
         'updated_at' => self.updated_at,
       TIMELOG
     end
@@ -114,7 +116,7 @@ class D
 
   private
 
-  def  convert_symbol(inhash)
+  def convert_symbol(inhash)
     inhash.inject({}) do |memo,(k,v)|
       if v.is_a?(Hash)
         v = convert_symbol(v)
@@ -123,4 +125,16 @@ class D
     end
   end
 
+  def remove_page_relation
+    # loop all the pages and delete the related refs
+    Page.all.each do |p|
+      if p.r_page_ds
+        p.r_page_ds.each do |r_page_d|
+          if r_page_d.d.id == self.id
+            r_page_d.destroy
+          end
+        end
+      end
+    end
+  end
 end

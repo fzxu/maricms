@@ -18,7 +18,6 @@ class PagesController < ApplicationController
     begin
       @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
 
-      
       begin
         template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
       rescue
@@ -51,11 +50,13 @@ class PagesController < ApplicationController
       r_page_ds = @page.r_page_ds
       if r_page_ds && r_page_ds.size > 0
         for r_page_d in r_page_ds
+
           if q[r_page_d.d.key].nil?
           render_params[r_page_d.d.key] = r_page_d.default_query
           else
           render_params[r_page_d.d.key] = r_page_d.default_query.where(q[r_page_d.d.key])
           end
+
         end
       end
 
@@ -89,9 +90,9 @@ class PagesController < ApplicationController
   def create
     r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.new(params[:page])
-    
+
     if r_page_ds.size > 0
-    
+
       rpd = []
       r_page_ds.each do |rd|
         unless rd[:d_id].blank?
@@ -100,7 +101,7 @@ class PagesController < ApplicationController
           rpd << r_page_d
         end
       end
-      @page.r_page_ds = rpd
+    @page.r_page_ds = rpd
     end
 
     respond_to do |format|
@@ -121,11 +122,11 @@ class PagesController < ApplicationController
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
 
     if r_page_ds.size > 0
-    
+
       #remove the old ones
       @page.r_page_ds.destroy_all
       # end remove
-      
+
       rpd = []
       r_page_ds.each do |rd|
         unless rd[:d_id].blank?

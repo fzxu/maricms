@@ -72,7 +72,7 @@
         r_page_d = nil
         unless @page.r_page_ds.nil? || @page.r_page_ds.size == 0
           @page.r_page_ds.each do |r|
-            if r.d.id == ds.id
+            if r.d && r.d.id == ds.id
               has_ds = true
               r_page_d = r
               break

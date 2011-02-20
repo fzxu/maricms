@@ -46,6 +46,8 @@ class D
 
     liquid_string = ""
     self.ds_elements.each do |ds_element|
+      
+      # assemble the model based on the ftype
       if ds_element.ftype == "File"
         meta_string = meta_string + "has_mongoid_attached_file :#{ds_element.key} \n"
       elsif ds_element.ftype == "Image"
@@ -68,8 +70,15 @@ class D
       else
         meta_string += "field :#{ds_element.key}, :type => #{ds_element.ftype} \n"
       end
+      
+      # add date to liquid output
       unless ds_element.ftype == "Date" || ds_element.ftype == "DateTime" || ds_element.ftype == "Time"
         liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
+      end
+      
+      # handle the unique attribute
+      if ds_element.unique
+        meta_string += "validates_uniqueness_of :#{ds_element.key} \n"
       end
     end
 

@@ -2,7 +2,7 @@
 
 <%= form_for(:record, :url => update_record_d_path(@d, :rec_id => @record.id), :html => {:method => :put, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
-<div id="error_explanation">
+<div id="error_explanation" class="error">
   <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
   <ul>
     <% @record.errors.full_messages.each do |msg| %>

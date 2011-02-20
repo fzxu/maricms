@@ -28,6 +28,10 @@
       <%= f.label :theme_path %>
       <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|tf| File.basename(tf)}, :to_s, :to_s %>
     </p>
+    <p>
+      <%= f.label :per_page %>
+      <%= f.text_field :per_page %>
+    </p>
   </fieldset>
   <fieldset>
     <legend>

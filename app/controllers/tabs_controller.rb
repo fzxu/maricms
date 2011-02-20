@@ -76,7 +76,7 @@ class TabsController < ApplicationController
         end
 
         respond_to do |format|
-          format.html { render :layout => "front", :text => template.send(:render, render_params)}
+          format.html { render :layout => "front", :text => template.render(render_params, :registers => {:controller => self})}
           format.xml  { render :xml => @page }
         end
       else

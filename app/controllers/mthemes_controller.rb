@@ -21,7 +21,7 @@ class MthemesController < ApplicationController
     notice += `svn commit #{File.join(Rails.root, "themes", theme_name)} -m "init"`
 
     respond_to do |format|
-      format.html { redirect_to '/setting', :notice => notice}
+      format.html { redirect_to '/manage/setting', :notice => notice}
       format.xml { head :ok}
     end
   end
@@ -34,7 +34,7 @@ class MthemesController < ApplicationController
     notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; /usr/local/ruby/bin/rake themes:update_cache`
 
     respond_to do |format|
-      format.html { redirect_to '/setting', :notice => notice}
+      format.html { redirect_to '/manage/setting', :notice => notice}
       format.xml { head :ok}
     end
 

@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   	@setting = Setting.first
   	
   	unless @setting
-  		redirect_to "/setting"
+  		redirect_to "/manage/setting"
   	end
   end
   

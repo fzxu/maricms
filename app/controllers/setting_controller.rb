@@ -25,10 +25,10 @@ class SettingController < ApplicationController
           d.gen_klass
         end
         
-        format.html { redirect_to :action => "index" }
+        format.html { redirect_to :action => "setting" }
         format.xml  { head :ok }
       else
-        format.html { redirect_to :action => "index" }
+        format.html { redirect_to :action => "setting" }
         format.xml  { render :xml => @setting.errors, :status => :unprocessable_entity }
       end
     end
@@ -39,10 +39,10 @@ class SettingController < ApplicationController
 
     respond_to do |format|
       if @setting.update_attributes(APP_CONFIG)
-      	format.html { redirect_to :action => "index" }
+      	format.html { redirect_to :action => "setting" }
       	format.xml { head :ok}
       else
-      	format.html { redirect_to :action => "index" }
+      	format.html { redirect_to :action => "setting" }
       	format.xml  { render :xml => @setting.errors, :status => :unprocessable_entity }
       end
     end

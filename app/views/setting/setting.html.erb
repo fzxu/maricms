@@ -1,5 +1,5 @@
 <h2>Setting</h2>
-<%= form_for(@setting, :url => "/setting/update") do |f| %>
+<%= form_for(@setting, :url => "/manage/update") do |f| %>
 <fieldset>
   <legend>
     Application
@@ -31,6 +31,10 @@
     <%= f.label :attachment_max_size %>
     <%= f.text_field :attachment_max_size %>
   </p>
+  <p>
+    <%= f.label :per_page %>
+    <%= f.text_field :per_page %>
+  </p>  
 </fieldset>
 <fieldset>
   <legend>
@@ -75,7 +79,7 @@
   </p>
 </fieldset>
 <div class="actions">
-  <%= f.submit %> | <%= link_to "Reset all to default", "/setting/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
+  <%= f.submit %> | <%= link_to "Reset all to default", "/manage/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
 </div>
 <% end %>
 

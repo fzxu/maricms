@@ -3,12 +3,12 @@ require 'test_helper'
 class PageTest < ActiveSupport::TestCase
 
   teardown do
-    Page.all.each do |page|
-      page.destroy
-    end
     D.all.each do |d|
       d.destroy
-      Mongoid.database.collection(d.get_klass.collection_name).drop
+    end
+
+    Page.all.each do |page|
+      page.destroy
     end
   end
   
@@ -77,6 +77,8 @@ class PageTest < ActiveSupport::TestCase
     ])
     assert ds_event.valid?, ds_event.errors.full_messages.map { |msg| msg + ".\n" }.join
 
+    assert_equal D.all.size, 2
+    
     r_page_blog = RPageD.new(:query_hash => {:limit => "2",})
     r_page_blog.d = ds_blog
 

@@ -2,14 +2,13 @@ require 'test_helper'
 
 class DTest < ActiveSupport::TestCase
   def setup
-    D.find(:all).each do |d|
-      d.destroy
-    end
     @setting = Setting.first || Setting.create(APP_CONFIG)
   end
 
-  def teardown
-
+  teardown do
+    D.find(:all).each do |d|
+      d.destroy
+    end
   end
 
   test "create a blog data source" do
@@ -69,7 +68,7 @@ class DTest < ActiveSupport::TestCase
   end
 
   test "test the ds_element unique attribute" do
-    blog_meta = D.new(:key => "blog", :name => "Blog", :ds_elements => [
+    blog_meta = D.create(:key => "blog", :name => "Blog", :ds_elements => [
       { :key => "slug",
         :name => "Slug",
         :unique => true
@@ -105,5 +104,36 @@ class DTest < ActiveSupport::TestCase
     assert blog4.invalid?, blog4.errors.full_messages.map { |msg| msg + ".\n" }.join
     
     assert_equal klass.all.size, 2
+  end
+  
+  test "test the ds_element notnull attribute" do
+    blog_meta = D.create(:key => "blog", :name => "Blog", :ds_elements => [
+      { :key => "slug",
+        :name => "Slug",
+        :unique => true,
+        :notnull=> true
+      },
+      {
+        :key => "title",
+        :name => "Title"
+      },
+      {
+        :key => "number",
+        :name => "Number",
+        :ftype => "Integer",
+        :unique => true
+      }
+    ])
+    
+    klass = blog_meta.gen_klass
+
+    blog1 = klass.create(:slug => "blog1", :title => "Noah's ARK", :number => 2)
+    assert blog1.valid?, blog1.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog2 = klass.create(:slug => "", :title => "Noah's ARK2", :number => 3)
+    assert blog2.invalid?, blog2.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    assert_equal klass.all.size, 1
+
   end
 end

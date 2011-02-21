@@ -5,6 +5,7 @@ class DsElement
   field :name
   field :ftype, :default => "String"
   field :unique, :type => Boolean, :default => false
+  field :notnull, :type => Boolean, :default => false
   
   embedded_in :d
   

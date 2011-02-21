@@ -83,8 +83,6 @@ class DsController < ApplicationController
   # DELETE /ds/1.xml
   def destroy
     @d = D.find(params[:id])
-    Mongoid.database.collection(@d.get_klass.collection_name).drop
-    
     @d.destroy
     
     respond_to do |format|

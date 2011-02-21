@@ -16,7 +16,7 @@ class D
   validates_uniqueness_of :key
 
   after_save :gen_klass
-  before_destroy :remove_page_relation
+  before_destroy :remove_page_relation, :remove_collection
   
   def gen_klass
     # convert all the key to symbol due to the paperclip need
@@ -79,6 +79,11 @@ class D
       # handle the unique attribute
       if ds_element.unique
         meta_string += "validates_uniqueness_of :#{ds_element.key} \n"
+      end
+      
+      # handle the notnull attribute
+      if ds_element.notnull
+        meta_string += "validates_presence_of :#{ds_element.key} \n"
       end
     end
 
@@ -145,5 +150,9 @@ class D
         end
       end
     end
+  end
+  
+  def remove_collection
+    Mongoid.database.collection(self.get_klass.collection_name).drop
   end
 end

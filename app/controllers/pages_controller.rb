@@ -50,17 +50,21 @@ class PagesController < ApplicationController
       r_page_ds = @page.r_page_ds
       if r_page_ds && r_page_ds.size > 0
         for r_page_d in r_page_ds
-
-          if q[r_page_d.d.key].nil?
-          render_params[r_page_d.d.key] = r_page_d.default_query.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+          d_key = r_page_d.d.key
+          unless r_page_d.new_d_name.blank?
+            d_key = r_page_d.new_d_name
+          end
+          if q[d_key].nil?
+          render_params[d_key] = r_page_d.default_query.paginate(:page => params[:page], :per_page => @page.per_page || 20)
           else
-          render_params[r_page_d.d.key] = r_page_d.default_query.where(q[r_page_d.d.key]).paginate(:page => params[:page], :per_page => @page.per_page || 20)
+          render_params[d_key] = r_page_d.default_query.where(q[d_key]).paginate(:page => params[:page], :per_page => @page.per_page || 20)
           end
 
         end
       end
 
       respond_to do |format|
+        puts render_params
         format.html { render :layout => "front", :text => template.render(render_params, :registers => {:controller => self})}
         format.xml  { render :xml => @page }
       end
@@ -98,6 +102,7 @@ class PagesController < ApplicationController
         unless rd[:d_id].blank?
           r_page_d = RPageD.new(:query_hash => rd[:query_hash])
           r_page_d.d = D.find(rd[:d_id])
+          r_page_d.new_d_name = rd[:new_d_name]
           rpd << r_page_d
         end
       end
@@ -132,6 +137,7 @@ class PagesController < ApplicationController
         unless rd[:d_id].blank?
           r_page_d = RPageD.new(:query_hash => rd[:query_hash])
           r_page_d.d = D.find(rd[:d_id])
+          r_page_d.new_d_name = rd[:new_d_name]
           rpd << r_page_d
         end
       end

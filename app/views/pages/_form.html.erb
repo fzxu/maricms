@@ -87,11 +87,13 @@
         <%= "#{ds.name}(#{ds.key})" %>:
         <%= check_box_tag "page[r_page_ds][][d_id]","",has_ds,{:type=>"hidden"}%> 
         <%= check_box_tag "page[r_page_ds][][d_id]",ds.id,has_ds,{}%> |
+        Rename(Optional) <%= text_field_tag "page[r_page_ds][][new_d_name]", r_page_d.nil? ? "": r_page_d.new_d_name %><br/>
         Limit: <%= text_field_tag "page[r_page_ds][][query_hash][limit]", r_page_d.nil? ? "100" : r_page_d.query_hash["limit"] %> |
         Ascending:<%= text_field_tag "page[r_page_ds][][query_hash][ascending]", r_page_d.nil? ? "" : r_page_d.query_hash["ascending"] %> | 
         Descending: <%= text_field_tag "page[r_page_ds][][query_hash][descending]", r_page_d.nil? ? "" : r_page_d.query_hash["descending"] %> |
         Excludes: <%= text_field_tag "page[r_page_ds][][query_hash][excludes]", r_page_d.nil? ? "" : r_page_d.query_hash["excludes"] %>
       <br/>
+      <hr/>
       <% end %>
     </p>
   </fieldset>

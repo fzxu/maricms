@@ -12,6 +12,11 @@
     <%= javascript_include_tag "rails.js" %>
     <%= javascript_include_tag "application.js" %>
     <%= csrf_meta_tag %>
+    <script type="text/javascript">
+      $(function(){
+        $( "#userview" ).button();
+      });
+    </script>
   </head>
   <body>
     <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -28,6 +33,7 @@
         <li class="ui-state-default ui-corner-top">
           <a title="Setting" href="/manage/setting">Setting</a>
         </li>
+        <a class="right" id="userview" href="/manage">User View</a>
       </ul>      
       <%= yield %>
     </div>

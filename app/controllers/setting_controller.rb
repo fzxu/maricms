@@ -1,10 +1,14 @@
 class SettingController < ApplicationController
-  before_filter :get_all_ds
+  before_filter :get_all_ds, :only => :index
   
   def index
     @d = D.first
     
-    redirect_to manage_d_path(@d)
+    if @d
+      redirect_to manage_d_path(@d)
+    else
+      redirect_to ds_path
+    end
   end
   
   def setting

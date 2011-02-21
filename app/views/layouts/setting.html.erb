@@ -15,11 +15,15 @@
   <body>
     <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
       <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-        <% @ds.each do |d|%>
-          <li class="ui-state-default ui-corner-top">
-            <a title="<%= d.key %>" href="<%= manage_d_path(d) %>"><%= d.name %></a>
-          </li>
-        <% end %>
+        <li class="ui-state-default ui-corner-top">
+          <a title="Datasource" href="<%= ds_path %>">Datasource</a>
+        </li>
+        <li class="ui-state-default ui-corner-top">
+          <a title="Tabs" href="<%= tabs_path %>">Tabs</a>
+        </li>
+        <li class="ui-state-default ui-corner-top">
+          <a title="Pages" href="<%= pages_path %>">Pages</a>
+        </li>
         <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
           <a title="Setting" href="/manage/setting">Setting</a>
         </li>

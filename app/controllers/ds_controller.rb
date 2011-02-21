@@ -1,13 +1,15 @@
 class DsController < ApplicationController
   before_filter :get_setting
-
+  before_filter :get_all_ds, :only => [:manage, :edit_record, :update_record, :new_record, :create_record, 
+    :destroy_record, :show_record, :move_up_record, :move_down_record]
+  
   # GET /ds
   # GET /ds.xml
   def index
     @ds = D.all
-
+    
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.xml  { render :xml => @ds }
     end
   end
@@ -132,7 +134,7 @@ class DsController < ApplicationController
     @records = @d.get_klass.all.asc(:position)
 
     respond_to do |format|
-      format.html
+      format.html { render :layout => "edit_record" }
       format.xml  { render :xml => @records }
     end
   end
@@ -203,7 +205,7 @@ class DsController < ApplicationController
     @record = @d.get_klass.find(params[:rec_id])
 
     respond_to do |format|
-      format.html 
+      format.html { render :layout => "edit_record" }
       format.xml  { render :xml => @record }
     end
   end

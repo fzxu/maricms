@@ -13,4 +13,8 @@ class ApplicationController < ActionController::Base
   		redirect_to "/setting"
   	end
   end
+  
+  def get_all_ds
+    @ds = D.all
+  end
 end

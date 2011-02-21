@@ -41,7 +41,9 @@ TianTing::Application.routes.draw do
   
   match 'editor_attachments/:action', :controller => :editor_attachments
 
-	match 'setting(/:action)', :controller => :setting
+	match 'manage(/:action)', :controller => :setting
+	
+	match 'dock(/:action)', :controller => :dock
 	  
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,6 +1,13 @@
 class SettingController < ApplicationController
-      
+  before_filter :get_all_ds
+  
   def index
+    @d = D.first
+    
+    redirect_to manage_d_path(@d)
+  end
+  
+  def setting
     @setting = Setting.first || Setting.create(APP_CONFIG)
   end
 

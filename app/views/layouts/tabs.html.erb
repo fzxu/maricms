@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TianTing</title>
+    <title><%= @setting.application_title if @setting %></title>
     <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print">
     <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+
     <%= stylesheet_link_tag "flick/jquery-ui-1.8.9.css" %>
     <%= javascript_include_tag "jquery.min.js" %>
     <%= javascript_include_tag "jquery-ui.min.js" %>
     <%= javascript_include_tag "rails.js" %>
     <%= javascript_include_tag "application.js" %>
-    <%= javascript_include_tag "kindeditor/kindeditor-min.js" %>
     <%= csrf_meta_tag %>
   </head>
   <body>
     <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
       <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-        <% @ds.each do |d|%>
-          <% if d.id == @d.id %>
-            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-              <a title="<%= d.key %>" href="<%= manage_d_path(d)%>"><%= d.name %></a>
-            </li>
-          <% else %>
-            <li class="ui-state-default ui-corner-top">
-              <a title="<%= d.key %>" href="<%= manage_d_path(d) %>"><%= d.name %></a>
-            </li>
-          <% end %>
-        <% end %>
         <li class="ui-state-default ui-corner-top">
-          <a title="Setting" href="/manage/setting">Setting</a>
+          <a title="Datasource" href="<%= ds_path %>">Datasource</a>
+        </li>
+        <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+          <a title="Tabs" href="<%= tabs_path %>">Tabs</a>
+        </li>
+        <li class="ui-state-default ui-corner-top">
+          <a title="Pages" href="<%= pages_path %>">Pages</a>
         </li>
       </ul>
+      
       <%= yield %>
     </div>
   </body>

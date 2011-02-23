@@ -131,7 +131,7 @@ class DsController < ApplicationController
 
   def manage
     @d = D.find(params[:id])
-    @records = @d.get_klass.all.asc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
+    @records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
       format.html { render :layout => "edit_record" }

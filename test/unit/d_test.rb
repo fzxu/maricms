@@ -136,4 +136,24 @@ class DTest < ActiveSupport::TestCase
     assert_equal klass.all.size, 1
 
   end
+  
+  test "test the datasource key format" do
+    blog_meta0 = D.create(:key => "0blog", :name => "Blog")
+    assert blog_meta0.invalid?, blog_meta0.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog_meta1 = D.create(:key => "blog%", :name => "Blog")
+    assert blog_meta1.invalid?, blog_meta1.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog_meta2 = D.create(:key => "blog/", :name => "Blog")
+    assert blog_meta2.invalid?, blog_meta2.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog_meta3 = D.create(:key => "blog_1", :name => "Blog")
+    assert blog_meta3.invalid?, blog_meta3.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog_meta4 = D.create(:key => "blog_true", :name => "Blog")
+    assert blog_meta4.invalid?, blog_meta4.errors.full_messages.map { |msg| msg + ".\n" }.join
+
+    blog_meta5 = D.create(:key => "blog_365_good", :name => "Blog")
+    assert blog_meta5.invalid?, blog_meta5.errors.full_messages.map { |msg| msg + ".\n" }.join
+  end
 end

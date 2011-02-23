@@ -18,7 +18,7 @@
     </legend>
     <p>
       <%= f.label :key %>
-      <%= f.text_field :key %>
+      <%= f.text_field :key %>([A-Za-z])
     </p>
     <p>
       <%= f.label :name %>
@@ -71,7 +71,7 @@
   </legend>
   <table>
     <tr>
-      <th>Key(Unique)</th>
+      <th>Key(Unique)[Chars, numbers, "_"]</th>
       <th>Name</th>
       <th>Type</th>
       <th>Unique</th>

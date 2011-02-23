@@ -14,6 +14,7 @@ class D
 
   validates_presence_of :key
   validates_uniqueness_of :key
+  validates_format_of :key, :with => /\A([A-Za-z]+)\z/
 
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection

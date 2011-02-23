@@ -10,27 +10,25 @@
         <%= form_record_element.file_field element.key %><br/>
         <%= image_tag @record.send(element.key).url %>
       <% elsif element.ftype == "Text" %>
-        <%= form_record_element.text_area element.key, :style => "width:700px;height:300px;" %>
+        <%= form_record_element.text_area element.key, :id => element.key %>
         <script>
           KE.show({
-            id : "record_<%=element.key%>",
+            id : "<%=element.key%>",
+            width : "760px", //编辑器的宽度为70%
+            height : "300px", //编辑器的高度为100px
             allowFileManager : true,
             imageUploadJson:'/editor_attachments/upload'
-            //cssPath : './index.css',
-            // afterCreate : function(id) {
-            //   KE.event.ctrl(document, 13, function() {
-            //     KE.util.setData(id);
-            //     document.forms['example'].submit();
-            //   });
-            //   KE.event.ctrl(KE.g[id].iframeDoc, 13, function() {
-            //     KE.util.setData(id);
-            //     document.forms['example'].submit();
-            //   });
-            //}
           });
         </script>
       <% elsif element.ftype == "Boolean" %>
         <%= form_record_element.check_box element.key %>
+      <% elsif element.ftype == "DateTime" %>
+        <%= form_record_element.text_field element.key, :id => element.key %>
+        <script>
+          $(function() {
+            $( "#<%= element.key %>" ).datepicker({ dateFormat: 'yy-mm-dd' });
+          });
+        </script>
       <% else %>
         <%= form_record_element.text_field element.key %>
       <% end %>
@@ -38,11 +36,11 @@
   <% end %>
 
 </fieldset>
-<fieldset>
+<!-- <fieldset>
   <legend>Advanced</legend>
   <p>
     <%= form_record_element.label :position %>
     <%= form_record_element.text_field :position %>(Do not change it unless you know what you are doing!)
   </p>
   
-</fieldset>
+</fieldset> -->

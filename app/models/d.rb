@@ -5,6 +5,7 @@ class D
   field :key
   field :name
   field :time_log, :type => Boolean
+  field :ds_type, :default => "Custom"
 
   embeds_many :ds_elements
   # references_one :r_page_d
@@ -13,8 +14,9 @@ class D
   index "ds_elements.key"
 
   validates_presence_of :key
+  validates_presence_of :ds_type
   validates_uniqueness_of :key
-  validates_format_of :key, :with => /\A([A-Za-z]+)\z/
+  validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/
 
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection
@@ -37,9 +39,10 @@ class D
     end
     GC.start
 
-    klass = Object.const_set(class_name,Class.new)
+    # generate the class const and inherit the class with the name = ds_type
+    klass = Object.const_set(class_name,Object.const_get(self.ds_type))
 
-    meta_string = "include Mongoid::Document \n include Mongoid::Paperclip \n include Mongoid::Orderable\n"
+    meta_string = ""
 
     if self.time_log
       meta_string += "\n include Mongoid::Timestamps \n"

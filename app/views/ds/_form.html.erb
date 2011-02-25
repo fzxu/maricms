@@ -25,6 +25,10 @@
       <%= f.text_field :name %>
     </p>
     <p>
+      <%= f.label :ds_type %>
+      <%= f.collection_select :ds_type, DS_TYPES, :to_s, :to_s %>(Do not change it unless you want what it means)
+    </p>
+    <p>
       <%= f.label :time_log %>
       <%= f.check_box :time_log %>(When enabled, you can use the 'created_at' and 'updated_at' method)
     </p>
@@ -48,7 +52,7 @@
       <tr>
         <td><%= ds_element_field.text_field :key %></td>
         <td><%= ds_element_field.text_field :name %></td>
-        <td><%= ds_element_field.collection_select :ftype, SUPPORTED_TYPES, :to_s, :to_s %></td>
+        <td><%= ds_element_field.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
         <td><%= ds_element_field.check_box :unique %></td>
         <td><%= ds_element_field.check_box :notnull %></td>
         <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
@@ -81,7 +85,7 @@
     <tr>
       <td><%= f.text_field :key %></td>
       <td><%= f.text_field :name %></td>
-      <td><%= f.collection_select :ftype, SUPPORTED_TYPES, :to_s, :to_s %></td>
+      <td><%= f.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
       <td><%= f.check_box :unique %></td>
       <td><%= f.check_box :notnull %></td>
       <td><%= f.submit "Add Field" %></td>

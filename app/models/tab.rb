@@ -6,11 +6,6 @@ class Tab
 
   field :slug
   field :name
-  field :description
-  field :param_string
-  field :hidden, :type => Boolean
-  field :ref_url
-  field :open_in_new_window, :type => Boolean
 
 	index :slug, :unique => true
 	
@@ -30,11 +25,6 @@ class Tab
 		{
 			"slug" => self.slug,
 			"name" => self.name,
-			"description" => self.description,
-			"param_string" => self.param_string,
-			"hidden" => self.hidden,
-			"ref_url" => self.ref_url,
-			"open_in_new_window" => self.open_in_new_window,
 			"root?" => self.root?,
 			"leaf?" => self.leaf?,
 			"parent" => self.parent,

@@ -40,7 +40,7 @@ class D
     GC.start
 
     # generate the class const and inherit the class with the name = ds_type
-    klass = Object.const_set(class_name,Object.const_get(self.ds_type))
+    klass = Object.const_set(class_name,Class.new(Object.const_get(self.ds_type) || Object))
 
     meta_string = ""
 
@@ -105,7 +105,7 @@ class D
     liquidinj = <<-LIQUIDINJ
       def to_liquid
         {
-          #{liquid_string}
+          #{liquid_string}.merge super
         }
       end
   	LIQUIDINJ

@@ -1,8 +1,8 @@
 class SettingController < ApplicationController
-  before_filter :get_all_ds, :only => :index
+  before_filter :get_all_ds, :only => [:index, :setting]
   
   def index
-    @d = D.first
+    @d = D.where(:ds_type => "Custom").first
     
     if @d
       redirect_to manage_d_path(@d)

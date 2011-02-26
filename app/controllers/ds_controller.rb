@@ -134,7 +134,7 @@ class DsController < ApplicationController
     @records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
-      format.html { render :layout => "edit_record" }
+      render_html(@d, format)
       format.xml  { render :xml => @records }
     end
   end
@@ -144,21 +144,35 @@ class DsController < ApplicationController
     @record = @d.get_klass.find(params[:rec_id])
 
     respond_to do |format|
-      format.html { render :layout => "edit_record" }
+      render_html(@d, format)
       format.xml  { render :xml => @record }
     end
   end
 
   def update_record
+    # tab ds type specific
+    parent_id = params[:record].delete(:parent_id)
+    page_id = params[:record].delete(:page_id)
+
     @d = D.find(params[:id])
     @record = @d.get_klass.find(params[:rec_id])
+
+    # tab ds type specific
+    unless page_id.blank?
+      @page = Page.find(page_id)
+      @record.page = @page
+    end
+
+    unless parent_id.blank?
+      @record.parent = Tab.find(parent_id)
+    end
 
     respond_to do |format|
       if @record.update_attributes(params[:record])
         format.html { redirect_to(manage_d_path(@d)) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit_record" }
+        render_html(@d, format)
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
     end
@@ -169,21 +183,35 @@ class DsController < ApplicationController
     @record = @d.get_klass.new
 
     respond_to do |format|
-      format.html { render :layout => "edit_record" }
+      render_html(@d, format)
       format.xml  { render :xml => @record }
     end
   end
 
   def create_record
+    # tab ds type specific
+    parent_id = params[:record].delete(:parent_id)
+    page_id = params[:record].delete(:page_id)
+
     @d = D.find(params[:id])
     @record = @d.get_klass.new(params[:record])
+    
+    # tab ds type specific
+    unless page_id.blank?
+      @page = Page.find(page_id)
+      @record.page = @page
+    end
+
+    unless parent_id.blank?
+      @record.parent = Tab.find(parent_id)
+    end
 
     respond_to do |format|
       if @record.save
         format.html { redirect_to(manage_d_path(@d))}
         format.xml { head :ok}
       else
-        format.html { render :action => "new_record"}
+        render_html(@d, format)
         format.xml { render :xml => @record.erros, :status => :unprocessable_entity}
       end
     end
@@ -205,7 +233,7 @@ class DsController < ApplicationController
     @record = @d.get_klass.find(params[:rec_id])
 
     respond_to do |format|
-      format.html { render :layout => "edit_record" }
+      render_html(@d, format)
       format.xml  { render :xml => @record }
     end
   end
@@ -230,5 +258,15 @@ class DsController < ApplicationController
       format.html { redirect_to(manage_d_path(@d)) }
       format.xml  { head :ok }
     end    
+  end
+  
+  private
+  
+  def render_html(d, format)
+    if d && d.ds_type == "Custom"
+      format.html { render :layout => "edit_record"}
+    else
+      format.html { render :layout => "tabs"}
+    end 
   end
 end

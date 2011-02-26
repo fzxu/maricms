@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  before_filter :get_all_ds, :only => [:index, :new, :edit]
   before_filter :get_setting
   theme :get_theme
   # GET /pages
@@ -31,12 +32,12 @@ class PagesController < ApplicationController
       render_params["params"] = params
 
       #add the tabs to the template
-      tabs = Array.new
-      Tab.traverse(:depth_first) do |tab|
-        tabs << tab
-      end
-      render_params["tabs"] = tabs
-      render_params["current_tab"] = @tab
+      # tabs = Array.new
+      # Tab.traverse(:depth_first) do |tab|
+      #   tabs << tab
+      # end
+      # render_params["tabs"] = tabs
+      # render_params["current_tab"] = @tab
 
       # Query the datasource based on the parameters
       q = {}

@@ -3,23 +3,35 @@ class TabsController < ApplicationController
   theme :get_theme
   # GET /tabs
   # GET /tabs.xml
-  def index
-    #@tabs = Tab.roots
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @tabs }
-    end
-  end
+  # def index
+  #   #@tabs = Tab.roots
+  # 
+  #   respond_to do |format|
+  #     format.html # index.html.erb
+  #     format.xml  { render :xml => @tabs }
+  #   end
+  # end
 
   # GET /tabs/1
   # GET /tabs/1.xml
   def show
     begin
+      @tab = nil
+      
       if params[:id]
-        @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-      else
-      @tab = Tab.root
+      # loop all the tab datasource and find the first one has the specific slug
+        tab_ds = D.where(:ds_type => "Tab")
+        tab_ds.each do |d|
+          @tab = d.get_klass.find(:first, :conditions => {:slug => params[:id]}) || d.get_klass.find(params[:id])
+          if @tab
+            break
+          end
+        end
+      end
+      
+      # get the first tab datasource's root
+      unless @tab
+        @tab = D.where(:ds_type => "Tab").first.get_klass.root
       end
 
       @page = @tab.page
@@ -38,19 +50,19 @@ class TabsController < ApplicationController
 
         #add the parameters to the template
         param_hash = params
-        unless @tab.param_string.blank?
-          @tab.param_string.split('&').each do |p_str|
-            pair = p_str.strip.split('=')
-            param_hash[pair.first] = pair.last
-          end
-        end
+        # unless @tab.param_string.blank?
+        #   @tab.param_string.split('&').each do |p_str|
+        #     pair = p_str.strip.split('=')
+        #     param_hash[pair.first] = pair.last
+        #   end
+        # end
         render_params["params"] = param_hash
         #add the tabs to the template
-        tabs = Array.new
-        Tab.traverse(:depth_first) do |tab|
-          tabs << tab
-        end
-        render_params["tabs"] = tabs
+        # tabs = Array.new
+        # Tab.traverse(:depth_first) do |tab|
+        #   tabs << tab
+        # end
+        # render_params["tabs"] = tabs
         render_params["current_tab"] = @tab
 
         # Query the datasource based on the parameters
@@ -85,8 +97,7 @@ class TabsController < ApplicationController
           format.xml  { render :xml => @page }
         end
       else
-        redirect_to "http://" + @tab.ref_url
-      #TODO actually it is not necessary, should be processed in the browser side
+        render :text => "no page binds to this #{@tab.slug} tab!"
       end
     rescue BSON::InvalidObjectId => e
       render :text => "page not found" + e.to_s
@@ -95,112 +106,112 @@ class TabsController < ApplicationController
 
   # GET /tabs/new
   # GET /tabs/new.xml
-  def new
-    @tab = Tab.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @tab }
-    end
-  end
-
-  # GET /tabs/1/edit
-  def edit
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-  end
-
-  # POST /tabs
-  # POST /tabs.xml
-  def create
-    parent_id = params[:tab].delete(:parent_id)
-    page_id = params[:tab].delete(:page_id)
-
-    @tab = Tab.new(params[:tab])
-
-    if page_id && !page_id.blank?
-    @page = Page.find(page_id)
-    @tab.page = @page
-    end
-
-    unless parent_id.blank?
-    @tab.parent = Tab.find(parent_id)
-    end
-
-    respond_to do |format|
-      if @tab.save
-        #@tab.move_to_bottom
-        format.html { redirect_to(tabs_url, :notice => 'Tab was successfully created.') }
-        format.xml  { render :xml => @tab, :status => :created, :location => @tab }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @tab.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /tabs/1
-  # PUT /tabs/1.xml
-  def update
-    parent_id = params[:tab].delete(:parent_id)
-    page_id = params[:tab].delete(:page_id)
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-    unless page_id.blank?
-    @page = Page.find(page_id)
-
-    # should be mongoid bug, remove the old page's tab id
-    #      if @tab.page
-    # old_page_id = @tab.page.id
-    # old_page = Page.find(old_page_id)
-    # old_page.tabs.delete(@tab)
-    # old_page.save
-    #      end
-    # end
-    @tab.page = @page
-    end
-    unless parent_id.blank?
-    @tab.parent = Tab.find(parent_id)
-    end
-
-    respond_to do |format|
-      if @tab.save && @tab.update_attributes(params[:tab])
-        format.html { redirect_to(@tab, :notice => 'Tab was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @tab.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /tabs/1
-  # DELETE /tabs/1.xml
-  def destroy
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-    @tab.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(tabs_url) }
-      format.xml  { head :ok }
-    end
-  end
-
-  def move_up
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-    @tab.move_up
-
-    respond_to do |format|
-      format.html {redirect_to(tabs_url)}
-      format.xml  { head :ok }
-    end
-  end
-
-  def move_down
-    @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
-    @tab.move_down
-
-    respond_to do |format|
-      format.html { redirect_to(tabs_url)}
-      format.xml  { head :ok }
-    end
-  end
+  # def new
+  #   @tab = Tab.new
+  # 
+  #   respond_to do |format|
+  #     format.html # new.html.erb
+  #     format.xml  { render :xml => @tab }
+  #   end
+  # end
+  # 
+  # # GET /tabs/1/edit
+  # def edit
+  #   @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+  # end
+  # 
+  # # POST /tabs
+  # # POST /tabs.xml
+  # def create
+  #   parent_id = params[:tab].delete(:parent_id)
+  #   page_id = params[:tab].delete(:page_id)
+  # 
+  #   @tab = Tab.new(params[:tab])
+  # 
+  #   if page_id && !page_id.blank?
+  #   @page = Page.find(page_id)
+  #   @tab.page = @page
+  #   end
+  # 
+  #   unless parent_id.blank?
+  #   @tab.parent = Tab.find(parent_id)
+  #   end
+  # 
+  #   respond_to do |format|
+  #     if @tab.save
+  #       #@tab.move_to_bottom
+  #       format.html { redirect_to(tabs_url, :notice => 'Tab was successfully created.') }
+  #       format.xml  { render :xml => @tab, :status => :created, :location => @tab }
+  #     else
+  #       format.html { render :action => "new" }
+  #       format.xml  { render :xml => @tab.errors, :status => :unprocessable_entity }
+  #     end
+  #   end
+  # end
+  # 
+  # # PUT /tabs/1
+  # # PUT /tabs/1.xml
+  # def update
+  #   parent_id = params[:tab].delete(:parent_id)
+  #   page_id = params[:tab].delete(:page_id)
+  #   @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+  #   unless page_id.blank?
+  #   @page = Page.find(page_id)
+  # 
+  #   # should be mongoid bug, remove the old page's tab id
+  #   #      if @tab.page
+  #   # old_page_id = @tab.page.id
+  #   # old_page = Page.find(old_page_id)
+  #   # old_page.tabs.delete(@tab)
+  #   # old_page.save
+  #   #      end
+  #   # end
+  #   @tab.page = @page
+  #   end
+  #   unless parent_id.blank?
+  #   @tab.parent = Tab.find(parent_id)
+  #   end
+  # 
+  #   respond_to do |format|
+  #     if @tab.save && @tab.update_attributes(params[:tab])
+  #       format.html { redirect_to(@tab, :notice => 'Tab was successfully updated.') }
+  #       format.xml  { head :ok }
+  #     else
+  #       format.html { render :action => "edit" }
+  #       format.xml  { render :xml => @tab.errors, :status => :unprocessable_entity }
+  #     end
+  #   end
+  # end
+  # 
+  # # DELETE /tabs/1
+  # # DELETE /tabs/1.xml
+  # def destroy
+  #   @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+  #   @tab.destroy
+  # 
+  #   respond_to do |format|
+  #     format.html { redirect_to(tabs_url) }
+  #     format.xml  { head :ok }
+  #   end
+  # end
+  # 
+  # def move_up
+  #   @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+  #   @tab.move_up
+  # 
+  #   respond_to do |format|
+  #     format.html {redirect_to(tabs_url)}
+  #     format.xml  { head :ok }
+  #   end
+  # end
+  # 
+  # def move_down
+  #   @tab = Tab.find(:first, :conditions => {:slug => params[:id]}) || Tab.find(params[:id])
+  #   @tab.move_down
+  # 
+  #   respond_to do |format|
+  #     format.html { redirect_to(tabs_url)}
+  #     format.xml  { head :ok }
+  #   end
+  # end
 end

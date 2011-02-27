@@ -14,7 +14,4 @@ class ApplicationController < ActionController::Base
   	end
   end
   
-  def get_all_ds
-    @ds = D.all
-  end
 end

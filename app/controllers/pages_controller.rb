@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-  before_filter :get_all_ds, :only => [:index, :new, :edit]
   before_filter :get_setting
   theme :get_theme
   # GET /pages

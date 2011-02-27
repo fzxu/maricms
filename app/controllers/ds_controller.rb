@@ -1,7 +1,5 @@
 class DsController < ApplicationController
   before_filter :get_setting
-  before_filter :get_all_ds, :only => [:manage, :edit_record, :update_record, :new_record, :create_record, 
-    :destroy_record, :show_record, :move_up_record, :move_down_record]
   
   # GET /ds
   # GET /ds.xml

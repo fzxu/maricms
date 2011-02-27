@@ -1,5 +1,4 @@
 class SettingController < ApplicationController
-  before_filter :get_all_ds, :only => [:index, :setting]
   
   def index
     @d = D.where(:ds_type => "Custom").first

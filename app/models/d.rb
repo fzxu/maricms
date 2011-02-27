@@ -107,9 +107,11 @@ class D
 
     liquidinj = <<-LIQUIDINJ
       def to_liquid
-        {
-          #{liquid_string}
-        }.merge super
+        ret = { #{liquid_string} }
+        if self.class.superclass.method_defined?("to_liquid")
+          ret = ret.merge super
+        end
+        ret
       end
   	LIQUIDINJ
     meta_string = meta_string + liquidinj

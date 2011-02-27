@@ -119,7 +119,7 @@ class D
   end
 
   def get_klass
-    class_name = "Data" + self.key.capitalize
+    class_name = self.key.capitalize
 
     #check whether the class is already eval
     begin

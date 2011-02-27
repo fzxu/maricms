@@ -18,6 +18,9 @@ class D
   validates_uniqueness_of :key
   validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/
 
+  scope :custom, :where => {:ds_type => "Custom"}
+  scope :tab, :where => {:ds_type => "Tab"}
+  
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection
   
@@ -105,8 +108,8 @@ class D
     liquidinj = <<-LIQUIDINJ
       def to_liquid
         {
-          #{liquid_string}.merge super
-        }
+          #{liquid_string}
+        }.merge super
       end
   	LIQUIDINJ
     meta_string = meta_string + liquidinj

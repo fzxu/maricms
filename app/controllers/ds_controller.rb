@@ -71,7 +71,7 @@ class DsController < ApplicationController
     end
 
     respond_to do |format|
-      if @d.save && @d.update_attributes(params[:d])
+      if @d.update_attributes(params[:d]) && @d.save
         format.html { redirect_to(edit_d_path(@d)) }
         format.xml  { head :ok }
       else

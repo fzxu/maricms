@@ -31,7 +31,7 @@ class D
 
     # Need to recreate the klass even it is exist, because it has been changed
 
-    class_name = "Data" + self.key.capitalize
+    class_name = self.key.capitalize
 
     Object.class_eval do
       begin

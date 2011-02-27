@@ -17,9 +17,9 @@ class Tab
 
   before_destroy :move_children_to_parent
 
-  def to_param
-    self.slug
-  end
+  # def to_param
+  #   self.slug
+  # end
 
 	def to_liquid
 		{

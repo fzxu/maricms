@@ -7,19 +7,18 @@ TianTing::Application.routes.draw do
   	end
   end
 
+  resources :customs do
+    member do
+      post 'move_up'
+      post 'move_down'
+    end
+  end
+
   resources :ds do
   	member do
   		post 'create_ds_element'
   		delete 'destroy_ds_element'
   		get 'manage'
-  		get 'edit_record'
-  		put 'update_record'
-  		get 'new_record'
-  		post 'create_record'
-  		delete 'destroy_record'
-  		get 'show_record'
-  		post 'move_up_record'
-  		post 'move_down_record'
   	end
   end
 

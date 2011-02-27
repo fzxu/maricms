@@ -1,0 +1,23 @@
+<h2>Add <%= @d.name %> record</h2>
+<%= form_for(:record, :url => customs_path(:d => @d.id), :html => {:method => :post, :multipart => true}) do |f| %>
+<% if @record.errors.any? %>
+  <div id="error_explanation" class="error">
+    <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
+    <ul>
+      <% @record.errors.full_messages.each do |msg| %>
+      <li>
+        <%= msg %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render :partial => "form_element", :object => f %>
+
+<div class="actions">
+  <%= f.submit %>
+</div>
+<% end %>
+
+<%= link_to "Back", manage_d_path(@d)%>

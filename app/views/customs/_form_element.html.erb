@@ -1,0 +1,46 @@
+<fieldset>
+  <legend>Record</legend>
+  <% @d.ds_elements.each do |element| %>
+    <p>
+      <%= form_element.label element.name %>
+      <% if element.ftype == "File" %>
+        <%= form_element.file_field element.key %><br/>
+        File Name: <%= @record.send("#{element.key}_file_name") %>
+      <% elsif element.ftype == "Image" %>
+        <%= form_element.file_field element.key %><br/>
+        <%= image_tag @record.send(element.key).url %>
+      <% elsif element.ftype == "Text" %>
+        <%= form_element.text_area element.key, :id => element.key %>
+        <script>
+          KE.show({
+            id : "<%=element.key%>",
+            width : "760px", //编辑器的宽度为70%
+            height : "300px", //编辑器的高度为100px
+            allowFileManager : true,
+            imageUploadJson:'/editor_attachments/upload'
+          });
+        </script>
+      <% elsif element.ftype == "Boolean" %>
+        <%= form_element.check_box element.key %>
+      <% elsif element.ftype == "DateTime" %>
+        <%= form_element.text_field element.key, :id => element.key %>
+        <script>
+          $(function() {
+            $( "#<%= element.key %>" ).datepicker({ dateFormat: 'yy-mm-dd' });
+          });
+        </script>
+      <% else %>
+        <%= form_element.text_field element.key %>
+      <% end %>
+    </p>
+  <% end %>
+
+</fieldset>
+<!-- <fieldset>
+  <legend>Advanced</legend>
+  <p>
+    <%= form_element.label :position %>
+    <%= form_element.text_field :position %>(Do not change it unless you know what you are doing!)
+  </p>
+  
+</fieldset> -->

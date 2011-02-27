@@ -11,7 +11,11 @@ class SettingController < ApplicationController
   end
   
   def setting
-    @setting = Setting.first || Setting.create(APP_CONFIG)
+    @setting = Setting.first
+    unless @setting
+      @setting = Setting.create(APP_CONFIG)
+      @setting.reload
+    end
   end
 
   def update

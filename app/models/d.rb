@@ -31,7 +31,7 @@ class D
 
     # Need to recreate the klass even it is exist, because it has been changed
 
-    class_name = self.key.capitalize
+    class_name = EXT_MODEL_PREFIX + self.key.capitalize
 
     Object.class_eval do
       begin
@@ -121,7 +121,7 @@ class D
   end
 
   def get_klass
-    class_name = self.key.capitalize
+    class_name = EXT_MODEL_PREFIX + self.key.capitalize
 
     #check whether the class is already eval
     begin

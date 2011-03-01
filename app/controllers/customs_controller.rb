@@ -148,9 +148,12 @@ class CustomsController < ApplicationController
 
   def conditions
     cond = []
+    sSearch = params[:sSearch]
     @d.ds_elements.each do |ds_element|
       if ds_element.ftype == "String" || ds_element.ftype == "Text"
-        cond << {"#{ds_element.key}".to_sym => /#{params[:sSearch]}/}
+        cond << {"#{ds_element.key}".to_sym => /#{sSearch}/}
+      elsif ds_element.ftype == "Integer" && sSearch.to_i.to_s == sSearch
+        cond << {"#{ds_element.key}".to_sym => sSearch.to_i}
       end
     end
     return cond

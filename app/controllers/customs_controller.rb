@@ -153,7 +153,6 @@ class CustomsController < ApplicationController
         cond << {"#{ds_element.key}".to_sym => /#{params[:sSearch]}/}
       end
     end
-    logger.info cond.inspect
     return cond
   end
 end

@@ -1,5 +1,12 @@
 <h2>Manage <%= @d.name %> Records</h2>
-<table>
+
+<%# columns = [{:type => 'html', :class => "first"}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => nil, :class => "last"}] %>
+<%= link_to "Add Record", new_custom_path(:d => @d.id)%>
+
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_customs_path(:d => @d.id)}", :processing => image_tag("datatable_spinner.gif") }) %>
+
+<table id="<%= @d.id %>" class="datatable">
+  <thead>
   <tr>
     <% @d.ds_elements.each do |ds_element|%>
     <th><%= ds_element.name %></th>
@@ -11,7 +18,9 @@
     <th></th>
     <th></th>
   </tr>
-  <% @records.each do |rec| %>
+  </thead>
+  <tbody></tbody>
+  <!-- <% @records.each do |rec| %>
   <tr>
     <% @d.ds_elements.each do |ds_element|%>
     <td>
@@ -33,9 +42,8 @@
     <td><%= link_to "Edit", edit_custom_path(rec, :d => @d.id) %></td>
     <td><%= link_to "Destroy", custom_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete %></td>    
   </tr>
-  <% end %>
+  <% end %> -->
 </table>
 
-<%= will_paginate @records, :renderer => WillPaginate::ViewHelpers::LinkRenderer, :class => "right" %>
+<%#= will_paginate @records, :renderer => WillPaginate::ViewHelpers::LinkRenderer, :class => "right" %>
 
-<%= link_to "Add Record", new_custom_path(:d => @d.id)%>

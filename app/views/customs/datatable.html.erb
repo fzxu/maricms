@@ -1,0 +1,28 @@
+{
+  "sEcho": <%= params[:sEcho] || -1 %>,
+  "iTotalRecords": <%= @total_records %>,
+  "iTotalDisplayRecords": <%= @total_disp_records_size %>,
+  "aaData": [
+  <% @records.each do |rec| %>
+    [
+      <% @d.ds_elements.each do |ds_element|%>
+        <% if ds_element.ftype == "Text"%>
+          "<%= truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) %>",
+        <% elsif ds_element.ftype == "Image" %>
+          "<%= (image_tag rec.send(ds_element.key).url(:small)).gsub(/\"/, "'") %>",
+        <% elsif ds_element.ftype == "DateTime" %>
+          "<%= rec.send(ds_element.key).strftime(@setting.date_format) if rec.send(ds_element.key) %>",
+        <% else %>
+          "<%= rec.send(ds_element.key)%>",
+        <% end %>
+      <% end %>
+      "<%= rec.position.to_i %></td>",
+      "<%= (button_to "Up", move_down_custom_path(rec, :d => @d.id)).gsub(/\"/, "'")%>",
+      "<%= (button_to "Down", move_up_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (link_to "Show", custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (link_to "Edit", edit_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (link_to "Destroy", custom_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+    ],
+  <% end %>
+  ]
+}

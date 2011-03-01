@@ -1,13 +1,22 @@
 class CustomsController < ApplicationController
   before_filter :get_setting
-
   def index
     @d = D.find(params[:d])
     @records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tabs }
+    end
+  end
+
+  def datatable
+    @d = D.find(params[:d])
+    @records = current_records(params)
+    @total_records = total_records(params)
+    
+    respond_to do |format|
+      format.js {render :layout => false}
     end
   end
 
@@ -49,7 +58,7 @@ class CustomsController < ApplicationController
   def create
     @d = D.find(params[:d])
     @record = @d.get_klass.new(params[:record])
-    
+
     respond_to do |format|
       if @record.save
         format.html { redirect_to(customs_path(:d => @d.id))}
@@ -71,7 +80,7 @@ class CustomsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   def show
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
@@ -81,7 +90,7 @@ class CustomsController < ApplicationController
       format.xml  { render :xml => @record }
     end
   end
-  
+
   def move_up
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
@@ -90,9 +99,9 @@ class CustomsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(customs_path(:d => @d.id)) }
       format.xml  { head :ok }
-    end    
+    end
   end
-  
+
   def move_down
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
@@ -101,7 +110,50 @@ class CustomsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(customs_path(:d => @d.id)) }
       format.xml  { head :ok }
-    end    
+    end
   end
-  
+
+  private
+
+  def current_records(params={})
+    current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
+    
+    if params[:sSearch]
+      result = @d.get_klass.any_of(conditions)
+    else
+      result = @d.get_klass.all
+    end
+    @total_disp_records_size = result.size
+
+    result.desc(:position).paginate :page => current_page,
+    #:include => [:user],
+    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
+    :per_page => params[:iDisplayLength]
+  end
+
+  def total_records(params={})
+    @d.get_klass.all.size# :include => [:user], :conditions => conditions
+  end
+
+  # def datatable_columns(column_id)
+  #   case column_id.to_i
+  #   when 1
+  #     return "objects.description"
+  #   when 2
+  #     return "objects.created_at"
+  #   else
+  #   return "users.name"
+  #   end
+  # end
+
+  def conditions
+    cond = []
+    @d.ds_elements.each do |ds_element|
+      if ds_element.ftype == "String" || ds_element.ftype == "Text"
+        cond << {"#{ds_element.key}".to_sym => /#{params[:sSearch]}/}
+      end
+    end
+    logger.info cond.inspect
+    return cond
+  end
 end

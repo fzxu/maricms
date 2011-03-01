@@ -20,29 +20,6 @@
   </tr>
   </thead>
   <tbody></tbody>
-  <!-- <% @records.each do |rec| %>
-  <tr>
-    <% @d.ds_elements.each do |ds_element|%>
-    <td>
-      <% if ds_element.ftype == "Text"%>
-        <%= truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) %>
-      <% elsif ds_element.ftype == "Image" %>
-        <%= image_tag rec.send(ds_element.key).url(:small) %>
-      <% elsif ds_element.ftype == "DateTime" %>
-        <%= rec.send(ds_element.key).strftime(@setting.date_format) if rec.send(ds_element.key) %>
-      <% else %>
-        <%= rec.send(ds_element.key)%>
-      <% end %>
-    </td>
-    <% end %>
-    <td><%= rec.position.to_i %></td>
-    <td><%= button_to "Up", move_down_custom_path(rec, :d => @d.id)%></td>
-    <td><%= button_to "Down", move_up_custom_path(rec, :d => @d.id)%></td>
-    <td><%= link_to "Show", custom_path(rec, :d => @d.id) %></td>
-    <td><%= link_to "Edit", edit_custom_path(rec, :d => @d.id) %></td>
-    <td><%= link_to "Destroy", custom_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete %></td>    
-  </tr>
-  <% end %> -->
 </table>
 
 <%#= will_paginate @records, :renderer => WillPaginate::ViewHelpers::LinkRenderer, :class => "right" %>

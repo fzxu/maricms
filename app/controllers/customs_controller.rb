@@ -2,7 +2,7 @@ class CustomsController < ApplicationController
   before_filter :get_setting
   def index
     @d = D.find(params[:d])
-    @records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
+    #@records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
       format.html # index.html.erb

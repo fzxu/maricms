@@ -37,7 +37,7 @@ module ApplicationHelper
           "bProcessing": true,
           "bServerSide": #{server_side},
           "bLengthChange": true,
-          "aLengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
+          "aLengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
           "bStateSave": #{persist_state},
           "bFilter": #{search},
           "bAutoWidth": #{auto_width},

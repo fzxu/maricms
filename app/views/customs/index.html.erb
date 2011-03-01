@@ -1,7 +1,24 @@
 <h2>Manage <%= @d.name %> Records</h2>
-
+<style>
+  #toolbar {
+    padding: 10px 4px;
+  }
+</style>
 <%# columns = [{:type => 'html', :class => "first"}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => nil, :class => "last"}] %>
-<%= link_to "Add Record", new_custom_path(:d => @d.id)%>
+<script>
+  $(function() {
+    $( "#new_record" ).button({
+      text: false,
+      icons: {
+        primary: "ui-icon-circle-plus"
+      }
+    });
+  });
+</script>
+<span id="toolbar" class="ui-widget-header ui-corner-all">
+  <%= link_to "Add Record", new_custom_path(:d => @d.id), :id => "new_record"%>
+</span>
+
 
 <%= render :inline => datatable(nil, {:ajax_source => "#{datatable_customs_path(:d => @d.id)}", :processing => image_tag("datatable_spinner.gif") }) %>
 

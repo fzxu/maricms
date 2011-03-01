@@ -118,7 +118,7 @@ class CustomsController < ApplicationController
   def current_records(params={})
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
     
-    if params[:sSearch]
+    if params[:sSearch] && !params[:sSearch].blank? 
       result = @d.get_klass.any_of(conditions)
     else
       result = @d.get_klass.all

@@ -17,11 +17,8 @@
         <% end %>
       <% end %>
       "<%= rec.position.to_i %></td>",
-      "<%= (button_to "Up", move_down_custom_path(rec, :d => @d.id)).gsub(/\"/, "'")%>",
-      "<%= (button_to "Down", move_up_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
-      "<%= (link_to "Show", custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
-      "<%= (link_to "Edit", edit_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
-      "<%= (link_to "Destroy", custom_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+      "<%= (button_to "Up", move_down_custom_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_up_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (link_to "Show", custom_path(rec, :d => @d.id), :class=>"show").gsub(/\"/, "'") %> <%= (link_to "Edit", edit_custom_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", custom_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>
     ,

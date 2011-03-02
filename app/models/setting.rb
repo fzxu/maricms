@@ -24,7 +24,6 @@ class Setting
 	field :date_format
 	field :time_format
 	field :attachment_max_size, :type => Integer
-	field :per_page, :type => Integer
 	field :host_name
 
 

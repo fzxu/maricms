@@ -270,14 +270,14 @@ table.display tr.even.gradeU {
 }
 
 
-/*
+
 tr.odd {
-	background-color: #E2E4FF;
+	background-color: white;
 }
 
 tr.even {
-	background-color: white;
-}*/
+	background-color: #E5ECF9;
+}
 
 
 

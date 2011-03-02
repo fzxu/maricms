@@ -1,5 +1,34 @@
 <h2>Edit the datasource record</h2>
 
+<script>
+  $(function() {
+    $( "#show_record" ).button({
+      text: true,
+      icons: {
+        primary: "ui-icon-search"
+      }
+    });
+    $( "#back" ).button({
+      text: true,
+      icons: {
+        primary: "ui-icon-arrowreturnthick-1-w"
+      }
+    });
+    $( "#record_submit" ).button({
+      text: true,
+      icons: {
+        primary: "ui-icon-disk"
+      }
+    });
+    
+  });
+</script>
+
+<span id="toolbar" class="ui-widget-header ui-corner-all">
+  <%= link_to "Show", custom_path(@record, :d => @d.id ), :id => "show_record" %>
+  <%= link_to "Back", customs_path(:d => @d.id), :id => "back" %>
+</span>
+
 <%= form_for(:record, :url => custom_path(@record, :d => @d.id), :html => {:method => :put, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
 <div id="error_explanation" class="error">
@@ -23,7 +52,3 @@
 </div>
 
 <% end %>
-
-<%= link_to "Show", custom_path(@record, :d => @d.id ) %> |
-<%= link_to "Back", customs_path(:d => @d.id) %>
-

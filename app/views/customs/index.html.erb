@@ -1,18 +1,14 @@
 <h2>Manage <%= @d.name %> Records</h2>
-<style>
-  #toolbar {
-    padding: 10px 4px;
-  }
-</style>
 <%# columns = [{:type => 'html', :class => "first"}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => 'html'},{:type => nil, :class => "last"}] %>
 <script>
   $(function() {
     $( "#new_record" ).button({
-      text: false,
+      text: true,
       icons: {
         primary: "ui-icon-circle-plus"
       }
     });
+    
   });
 </script>
 <span id="toolbar" class="ui-widget-header ui-corner-all">
@@ -29,11 +25,8 @@
     <th><%= ds_element.name %></th>
     <% end %>
     <th>Position</th>
-    <th>Move Up</th>
-    <th>Move Down</th>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th style="width:5%;">Move</th>
+    <th style="width:5%;">Op.</th>
   </tr>
   </thead>
   <tbody></tbody>

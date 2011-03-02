@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/stylesheets/blueprint/screen.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="/stylesheets/blueprint/print.css" type="text/css" media="print">
     <!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-    <%= stylesheet_link_tag "flick/jquery-ui-1.8.9.css" %>
+    <%= stylesheet_link_tag "flick/jquery-ui.css" %>
     <%= javascript_include_tag "jquery.min.js" %>
     <%= javascript_include_tag "jquery-ui.min.js" %>
     <%= javascript_include_tag "rails.js" %>
@@ -33,11 +33,11 @@
         <% D.tab.each do |d|%>
           <% if @d && d.id == @d.id %>
             <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-              <a title="<%= d.key %>" href="<%= manage_d_path(d)%>"><%= d.name %></a>
+              <a title="<%= d.key %>" href="<%= tabs_path(:d => d.id)%>"><%= d.name %></a>
             </li>
           <% else %>
             <li class="ui-state-default ui-corner-top">
-              <a title="<%= d.key %>" href="<%= manage_d_path(d) %>"><%= d.name %></a>
+              <a title="<%= d.key %>" href="<%= tabs_path(:d => d.id) %>"><%= d.name %></a>
             </li>
           <% end %>
         <% end %>

@@ -7,7 +7,7 @@ module ApplicationHelper
     processing = opts[:processing] || "Processing"
     persist_state = opts[:persist_state].present? ? opts[:persist_state].to_s : "true"
     table_dom_id = opts[:table_dom_id] ? "##{opts[:table_dom_id]}" : ".datatable"
-    per_page = opts[:per_page] || opts[:display_length]|| 25
+    per_page = opts[:per_page] || opts[:display_length]|| 5
     no_records_message = opts[:no_records_message] || nil
     auto_width = opts[:auto_width].present? ? opts[:auto_width].to_s : "true"
     row_callback = opts[:row_callback] || nil

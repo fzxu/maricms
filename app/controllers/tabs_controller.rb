@@ -1,6 +1,9 @@
 class TabsController < ApplicationController
   before_filter :get_setting
   theme :get_theme
+  
+  caches_action :show, :cache_path => Proc.new { |c| "tabs_#{params[:id]}" + c.params.to_s }
+  
   # GET /tabs
   # GET /tabs.xml
   def index
@@ -147,7 +150,7 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       if @tab.save
-        #@tab.move_to_bottom
+        expire_action_cache(@tab)
         format.html { redirect_to(tabs_path(:d => @d.id), :notice => 'Tab was successfully created.') }
         format.xml  { render :xml => @tab, :status => :created, :location => @tab }
       else
@@ -183,6 +186,7 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       if @tab.update_attributes(params[:tab]) && @tab.save
+        expire_action_cache(@tab)
         format.html { redirect_to(tabs_path(:d => @d.id), :notice => 'Tab was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -200,6 +204,7 @@ class TabsController < ApplicationController
     @tab.destroy
 
     respond_to do |format|
+      expire_action_cache(@tab)
       format.html { redirect_to(tabs_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
@@ -211,6 +216,7 @@ class TabsController < ApplicationController
     @tab.move_up
 
     respond_to do |format|
+      expire_action_cache(@tab)
       format.html {redirect_to(tabs_path(:d => @d.id))}
       format.xml  { head :ok }
     end
@@ -223,6 +229,7 @@ class TabsController < ApplicationController
     @tab.move_down
 
     respond_to do |format|
+      expire_action_cache(@tab)
       format.html { redirect_to(tabs_path(:d => @d.id))}
       format.xml  { head :ok }
     end

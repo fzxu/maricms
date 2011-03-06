@@ -36,6 +36,7 @@ class CustomsController < ApplicationController
 
     respond_to do |format|
       if @record.update_attributes(params[:record])
+        expire_action_cache(@record)
         format.html { redirect_to(customs_path(:d => @d.id)) }
         format.xml  { head :ok }
       else
@@ -61,6 +62,7 @@ class CustomsController < ApplicationController
 
     respond_to do |format|
       if @record.save
+        expire_action_cache(@record)
         format.html { redirect_to(customs_path(:d => @d.id))}
         format.xml { head :ok}
       else
@@ -76,6 +78,7 @@ class CustomsController < ApplicationController
     @record.destroy
 
     respond_to do |format|
+      expire_action_cache(@record)
       format.html { redirect_to(customs_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
@@ -97,6 +100,7 @@ class CustomsController < ApplicationController
     @record.move_up
 
     respond_to do |format|
+      expire_action_cache(@record)
       format.html { redirect_to(customs_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
@@ -108,6 +112,7 @@ class CustomsController < ApplicationController
     @record.move_down
 
     respond_to do |format|
+      expire_action_cache(@record)
       format.html { redirect_to(customs_path(:d => @d.id)) }
       format.xml  { head :ok }
     end

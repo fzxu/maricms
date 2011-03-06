@@ -1,6 +1,9 @@
 class PagesController < ApplicationController
   before_filter :get_setting
   theme :get_theme
+  
+  caches_action :show, :cache_path => Proc.new { |c| c.params }
+  
   # GET /pages
   # GET /pages.xml
   def index
@@ -111,6 +114,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.save
+        expire_cache_for_page(@page)
         format.html { redirect_to(@page, :notice => 'Page was successfully created.') }
         format.xml  { render :xml => @page, :status => :created, :location => @page }
       else
@@ -145,6 +149,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       if @page.update_attributes(params[:page].merge({:r_page_ds => rpd}))
+        expire_cache_for_page(@page)
         format.html { redirect_to(@page, :notice => 'Page was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -161,6 +166,7 @@ class PagesController < ApplicationController
     @page.destroy
 
     respond_to do |format|
+      expire_cache_for_page(@page)
       format.html { redirect_to(pages_url) }
       format.xml  { head :ok }
     end

@@ -1,4 +1,4 @@
-class Tab
+class DsTab
   include Mongoid::Document
   include Mongoid::Tree
   include Mongoid::Tree::Ordering

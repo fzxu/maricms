@@ -1,6 +1,6 @@
-<h2>Editing tab</h2>
+<h2>New tab</h2>
 
-<%= form_for(:tab, :url => tab_path(@tab, :d => @d.id), :html => {:method => :put}) do |f| %>
+<%= form_for(:tab, :url => ds_tabs_path( :d => @d.id), :html => {:method => :post}) do |f| %>
   <% if @tab.errors.any? %>
     <div id="error_explanation" class="error">
       <h2><%= pluralize(@tab.errors.count, "error") %> prohibited this tab from being saved:</h2>
@@ -41,7 +41,7 @@
     </p>
   </fieldset>
 
-  <%= render :partial => 'standards/form_element', :object => f%>
+  <%= render :partial => 'ds_standards/form_element', :object => f%>
 
   <div class="actions">
     <%= f.submit %>
@@ -49,5 +49,4 @@
 <% end %>
 
 
-<%= link_to 'Show', tab_path(@tab) %> |
-<%= link_to 'Back', tabs_path(:d => @d.id) %>
+<%= link_to 'Back', ds_tabs_path(:d => @d.id) %>

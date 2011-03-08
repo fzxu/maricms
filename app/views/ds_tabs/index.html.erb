@@ -18,14 +18,14 @@
     <td><%= tab.name %></td>
     <td><%= tab.parent.name if tab.parent %></td>
     <td><%= tab.position.to_i %></td>
-    <td><%= button_to 'Move Up', move_up_tab_path(tab, :d => @d.id) %></td>
-    <td><%= button_to 'Move Down', move_down_tab_path(tab, :d => @d.id) %></td>
-    <td><%= link_to 'Show', tab_path(tab, :d => @d.id) %></td>
-    <td><%= link_to 'Edit', edit_tab_path(tab, :d => @d.id) %></td>
-    <td><%= link_to 'Destroy', tab_path(tab, :d => @d.id), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= button_to 'Move Up', move_up_ds_tab_path(tab, :d => @d.id) %></td>
+    <td><%= button_to 'Move Down', move_down_ds_tab_path(tab, :d => @d.id) %></td>
+    <td><%= link_to 'Show', ds_tab_path(tab, :d => @d.id) %></td>
+    <td><%= link_to 'Edit', edit_ds_tab_path(tab, :d => @d.id) %></td>
+    <td><%= link_to 'Destroy', ds_tab_path(tab, :d => @d.id), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
   <% end %>
 </table>
 <br />
 
-<%= link_to 'New Tab', new_tab_path(:d => @d.id) %>
+<%= link_to 'New Tab', new_ds_tab_path(:d => @d.id) %>

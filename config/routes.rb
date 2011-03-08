@@ -1,6 +1,6 @@
 TianTing::Application.routes.draw do
   
-  resources :tabs do
+  resources :ds_tabs do
   	member do
   		post 'move_up'
   		post 'move_down'

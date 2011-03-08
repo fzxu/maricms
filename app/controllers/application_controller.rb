@@ -23,9 +23,11 @@ class ApplicationController < ActionController::Base
             expire_fragment(/pages\S+#{p.id}/)
 
             # remove related tab cache
-            Tab.where(:page_id => p.id).each do |tab|
-              expire_fragment(/tabs\S+#{tab.slug}/)
-              expire_fragment(/tabs\S+#{tab.id}/)
+            D.where(:ds_type => "Tab").each do |d|
+              d.get_klass.where(:page_id => p.id).each do |tab|
+                expire_fragment(/tabs\S+#{tab.slug}/)
+                expire_fragment(/tabs\S+#{tab.id}/)
+              end
             end
           end
         end
@@ -37,10 +39,12 @@ class ApplicationController < ActionController::Base
     expire_fragment(/pages\S+#{record.slug}/)
     expire_fragment(/pages\S+#{record.id}/)
     # remove related tab cache
-    Tab.where(:page_id => record.id).each do |tab|
-    #expire_action :controller => :tabs, :action => :show, :cache_path => Proc.new { |c| "tab_#{tab.slug}*" }
-      expire_fragment(/tabs\S+#{tab.slug}/)
-      expire_fragment(/tabs\S+#{tab.id}/)
+    D.where(:ds_type => "Tab").each do |d|
+      d.get_klass.where(:page_id => record.id).each do |tab|
+      #expire_action :controller => :tabs, :action => :show, :cache_path => Proc.new { |c| "tab_#{tab.slug}*" }
+        expire_fragment(/tabs\S+#{tab.slug}/)
+        expire_fragment(/tabs\S+#{tab.id}/)
+      end
     end
   end
 

@@ -1,4 +1,4 @@
-class TabsController < ApplicationController
+class DsTabsController < ApplicationController
   before_filter :get_setting
   theme :get_theme
   
@@ -151,7 +151,7 @@ class TabsController < ApplicationController
     respond_to do |format|
       if @tab.save
         expire_action_cache(@tab)
-        format.html { redirect_to(tabs_path(:d => @d.id), :notice => 'Tab was successfully created.') }
+        format.html { redirect_to(ds_tabs_path(:d => @d.id), :notice => 'Tab was successfully created.') }
         format.xml  { render :xml => @tab, :status => :created, :location => @tab }
       else
         format.html { render :action => "new" }
@@ -187,7 +187,7 @@ class TabsController < ApplicationController
     respond_to do |format|
       if @tab.update_attributes(params[:tab]) && @tab.save
         expire_action_cache(@tab)
-        format.html { redirect_to(tabs_path(:d => @d.id), :notice => 'Tab was successfully updated.') }
+        format.html { redirect_to(ds_tabs_path(:d => @d.id), :notice => 'Tab was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -205,7 +205,7 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@tab)
-      format.html { redirect_to(tabs_path(:d => @d.id)) }
+      format.html { redirect_to(ds_tabs_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
   end
@@ -217,7 +217,7 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@tab)
-      format.html {redirect_to(tabs_path(:d => @d.id))}
+      format.html {redirect_to(ds_tabs_path(:d => @d.id))}
       format.xml  { head :ok }
     end
   end
@@ -230,7 +230,7 @@ class TabsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@tab)
-      format.html { redirect_to(tabs_path(:d => @d.id))}
+      format.html { redirect_to(ds_tabs_path(:d => @d.id))}
       format.xml  { head :ok }
     end
   end

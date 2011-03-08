@@ -1,0 +1,2 @@
+module DsTabsHelper
+end

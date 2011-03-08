@@ -1,7 +1,7 @@
 class SettingController < ApplicationController
   
   def index
-    @d = D.where(:ds_type => "Custom").first
+    @d = D.where(:ds_type => "Standard").first
     
     if @d
       redirect_to manage_d_path(@d)

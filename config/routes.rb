@@ -7,7 +7,7 @@ TianTing::Application.routes.draw do
   	end
   end
 
-  resources :customs do
+  resources :standards do
     member do
       post 'move_up'
       post 'move_down'

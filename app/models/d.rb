@@ -5,7 +5,7 @@ class D
   field :key
   field :name
   field :time_log, :type => Boolean
-  field :ds_type, :default => "Custom"
+  field :ds_type, :default => "Standard"
 
   embeds_many :ds_elements
   # references_one :r_page_d
@@ -18,7 +18,7 @@ class D
   validates_uniqueness_of :key
   validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/
 
-  scope :custom, :where => {:ds_type => "Custom"}
+  scope :standard, :where => {:ds_type => "Standard"}
   scope :tab, :where => {:ds_type => "Tab"}
   
   after_save :gen_klass

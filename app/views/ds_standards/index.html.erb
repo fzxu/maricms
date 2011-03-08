@@ -12,11 +12,11 @@
   });
 </script>
 <span id="toolbar" class="ui-widget-header ui-corner-all">
-  <%= link_to "Add Record", new_standard_path(:d => @d.id), :id => "new_record"%>
+  <%= link_to "Add Record", new_ds_standard_path(:d => @d.id), :id => "new_record"%>
 </span>
 
 
-<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_standards_path(:d => @d.id)}", :processing => image_tag("datatable_spinner.gif") }) %>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_standards_path(:d => @d.id)}", :processing => image_tag("datatable_spinner.gif") }) %>
 
 <table id="<%= @d.id %>" class="datatable">
   <thead>

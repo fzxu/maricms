@@ -43,7 +43,7 @@ class D
     GC.start
 
     # generate the class const and inherit the class with the name = ds_type
-    klass = Object.const_set(class_name,Class.new(Object.const_get(self.ds_type) || Object))
+    klass = Object.const_set(class_name,Class.new(Object.const_get("Ds" + self.ds_type) || Object))
 
     meta_string = ""
 

@@ -28,11 +28,11 @@
         <% D.standard.each do |d|%>
           <% if d.id == @d.id %>
             <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-              <a title="<%= d.key %>" href="<%= standards_path(:d => d.id)%>"><%= d.name %></a>
+              <a title="<%= d.key %>" href="<%= ds_standards_path(:d => d.id)%>"><%= d.name %></a>
             </li>
           <% else %>
             <li class="ui-state-default ui-corner-top">
-              <a title="<%= d.key %>" href="<%= standards_path(:d => d.id) %>"><%= d.name %></a>
+              <a title="<%= d.key %>" href="<%= ds_standards_path(:d => d.id) %>"><%= d.name %></a>
             </li>
           <% end %>
         <% end %>

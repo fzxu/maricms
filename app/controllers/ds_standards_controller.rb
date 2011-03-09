@@ -10,16 +10,6 @@ class DsStandardsController < ApplicationController
     end
   end
 
-  def datatable
-    @d = D.find(params[:d])
-    @records = current_records(params)
-    @total_records = total_records(params)
-
-    respond_to do |format|
-      format.js {render :layout => false}
-    end
-  end
-
   def edit
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
@@ -118,15 +108,13 @@ class DsStandardsController < ApplicationController
     end
   end
 
-  private
-
-  def current_records(params={})
+  def current_records(d, params={})
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
 
     unless params[:sSearch].blank?
-      result = @d.get_klass.any_of(conditions)
+      result = d.get_klass.any_of(conditions(d))
     else
-    result = @d.get_klass.all
+    result = d.get_klass.all
     end
     @total_disp_records_size = result.size
 
@@ -136,31 +124,4 @@ class DsStandardsController < ApplicationController
     :per_page => params[:iDisplayLength]
   end
 
-  def total_records(params={})
-    @d.get_klass.all.size# :include => [:user], :conditions => conditions
-  end
-
-  # def datatable_columns(column_id)
-  #   case column_id.to_i
-  #   when 1
-  #     return "objects.description"
-  #   when 2
-  #     return "objects.created_at"
-  #   else
-  #   return "users.name"
-  #   end
-  # end
-
-  def conditions
-    cond = []
-    sSearch = params[:sSearch]
-    @d.get_klass.fields.each do |field|
-      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
-        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
-      elsif
-        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
-      end
-    end
-    return cond
-  end
 end

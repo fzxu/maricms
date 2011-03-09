@@ -5,6 +5,9 @@ TianTing::Application.routes.draw do
   		post 'move_up'
   		post 'move_down'
   	end
+    collection do
+      get 'datatable'
+    end
   end
 
   resources :ds_standards do

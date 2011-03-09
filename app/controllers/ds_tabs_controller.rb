@@ -1,9 +1,8 @@
 class DsTabsController < ApplicationController
   before_filter :get_setting
   theme :get_theme
-  
+
   caches_action :show, :cache_path => Proc.new { |c| "tabs_#{params[:id]}" + c.params.to_s }
-  
   # GET /tabs
   # GET /tabs.xml
   def index
@@ -234,4 +233,46 @@ class DsTabsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  def current_records(d, params={})
+    result = []
+
+    if params[:sSearch].blank?
+      pointer = 0
+      counter = 0
+      d.get_klass.traverse(:depth_first) do |rec|
+        if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+        result << rec
+        counter += 1
+        end
+        pointer += 1
+      end
+      @total_disp_records_size = d.get_klass.all.count
+      return result
+    else
+      pointer = 0
+      counter = 0
+      d.get_klass.traverse(:depth_first) do |rec|
+        found = false
+        rec.fields.each do |field|
+          if (rec.send(field.last.name).is_a?(String) && rec.send(field.last.name) =~ /#{params[:sSearch]}/) ||
+            ((rec.send(field.last.name).is_a?(Fixnum) || rec.send(field.last.name).is_a?(Float)) && rec.send(field.last.name).to_i.to_s == params[:sSearch])
+            found = true
+            
+          end
+        end
+        if found
+          if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+            result << rec
+            counter += 1
+          end
+          pointer += 1
+        end
+      end
+      @total_disp_records_size = pointer
+      return result
+    end
+
+  end
+
 end

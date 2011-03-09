@@ -1,6 +1,6 @@
 # config/config.yml
 defaults: &defaults
-  application_title: "TianTing"
+  application_title: "MariCMS"
   current_theme: "default"
   image_style: 
     :original: 

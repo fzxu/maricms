@@ -37,7 +37,7 @@ TianTing::Application.routes.draw do
   #resource :users, :only => [:new, :create, :edit, :update]
    
   # root
-  root :controller => :tabs, :action => :show
+  root :controller => :ds_tabs, :action => :show
 
   themes_for_rails
   

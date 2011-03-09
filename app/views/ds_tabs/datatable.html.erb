@@ -21,8 +21,8 @@
         <% end %>
       <% end %>
       "<%= rec.position.to_i %>",
-      "<%= (button_to "Up", move_down_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_up_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
-      "<%= (link_to "Show", ds_standard_path(rec, :d => @d.id), :class=>"show").gsub(/\"/, "'") %> <%= (link_to "Edit", edit_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", ds_standard_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+      "<%= (button_to "Up", move_up_ds_tab_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_down_ds_tab_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (link_to "Show", ds_tab_path(rec, :d => @d.id), :class=>"show").gsub(/\"/, "'") %> <%= (link_to "Edit", edit_ds_tab_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", ds_tab_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>
     ,

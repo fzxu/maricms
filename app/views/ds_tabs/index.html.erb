@@ -9,6 +9,9 @@
     <th>Slug</th>
     <th>Name</th>
     <th>Parent Tab</th>
+    <% @d.ds_elements.each do |ds_element|%>
+      <th><%= ds_element.name %></th>
+    <% end %>
     <th>Position</th>
     <th style="width:5%;">Move</th>
     <th style="width:5%;">Op.</th>

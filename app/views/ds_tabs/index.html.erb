@@ -11,7 +11,7 @@
     <th></th>
     <th></th>
   </tr>
-  <% @d.get_klass.traverse(:depth_first) do |tab| %>
+  <% @d.get_klass.traverse(:depth_first, :asc) do |tab| %>
   <% indentation = '>' * tab.depth %>
   <tr>
     <td><%= indentation + tab.slug %></td>

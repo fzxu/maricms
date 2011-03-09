@@ -7,7 +7,7 @@ class PagesController < ApplicationController
   # GET /pages
   # GET /pages.xml
   def index
-    @pages = Page.all
+    @pages = Page.all.asc(:position)
 
     respond_to do |format|
       format.html # index.html.erb

@@ -24,9 +24,12 @@ class DsTabsController < ApplicationController
         # loop all the tab datasource and find the first one has the specific slug
         tab_ds = D.where(:ds_type => "Tab")
         tab_ds.each do |d|
-          @tab = d.get_klass.find(:first, :conditions => {:slug => params[:id]}) || d.get_klass.find(params[:id])
+          begin
+            @tab = d.get_klass.find(:first, :conditions => {:slug => params[:id]}) || d.get_klass.find(params[:id])
+          rescue Mongoid::Errors::DocumentNotFound
+          end
           if @tab
-          break
+            break
           end
         end
       end

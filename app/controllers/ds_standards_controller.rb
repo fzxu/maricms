@@ -14,7 +14,7 @@ class DsStandardsController < ApplicationController
     @d = D.find(params[:d])
     @records = current_records(params)
     @total_records = total_records(params)
-    
+
     respond_to do |format|
       format.js {render :layout => false}
     end
@@ -122,11 +122,11 @@ class DsStandardsController < ApplicationController
 
   def current_records(params={})
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
-    
-    if params[:sSearch] && !params[:sSearch].blank? 
+
+    unless params[:sSearch].blank?
       result = @d.get_klass.any_of(conditions)
     else
-      result = @d.get_klass.all
+    result = @d.get_klass.all
     end
     @total_disp_records_size = result.size
 
@@ -154,11 +154,11 @@ class DsStandardsController < ApplicationController
   def conditions
     cond = []
     sSearch = params[:sSearch]
-    @d.ds_elements.each do |ds_element|
-      if ds_element.ftype == "String" || ds_element.ftype == "Text"
-        cond << {"#{ds_element.key}".to_sym => /#{sSearch}/}
-      elsif ds_element.ftype == "Integer" && sSearch.to_i.to_s == sSearch
-        cond << {"#{ds_element.key}".to_sym => sSearch.to_i}
+    @d.get_klass.fields.each do |field|
+      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
+        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
+      elsif
+        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
       end
     end
     return cond

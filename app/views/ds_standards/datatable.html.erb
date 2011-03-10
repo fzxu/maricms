@@ -13,7 +13,7 @@
         <% elsif ds_element.ftype == "DateTime" %>
           "<%= rec.send(ds_element.key).strftime(@setting.date_format) if rec.send(ds_element.key) %>",
         <% else %>
-          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key)%>",
+          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) if rec.send(ds_element.key) %>",
         <% end %>
       <% end %>
       "<%= rec.position.to_i %>",

@@ -6,7 +6,7 @@
   <% @records.each_with_index do |rec,ind| %>
     [
       "<%= rec.key %>",
-      "<%= ActiveSupport::JSON.encode rec.name %>",
+      "<%= ActiveSupport::JSON.encode rec.name unless rec.name.blank? %>",
       "<%= rec.ds_type %>",
       "<%= rec.time_log %>",
       "<%= rec.ds_elements.size %>",

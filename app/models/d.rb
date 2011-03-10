@@ -14,6 +14,7 @@ class D
   index "ds_elements.key"
 
   validates_presence_of :key
+  validates_presence_of :name
   validates_presence_of :ds_type
   validates_uniqueness_of :key
   validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/

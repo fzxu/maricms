@@ -28,7 +28,11 @@ TianTing::Application.routes.draw do
   	end
   end
 
-  resources :pages
+  resources :pages do
+    collection do
+      get 'datatable'
+    end    
+  end
   
   resources :mthemes do
     member do

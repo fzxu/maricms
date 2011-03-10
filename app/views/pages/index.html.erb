@@ -1,23 +1,21 @@
 <h2>Listing pages</h2>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Slug</th>
-    <th>Show</th>
-    <th>Edit</th>
-    <th>Destroy</th>
-  </tr>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_pages_path()}"}) %>
 
-<% @pages.each do |page| %>
-  <tr>
-    <td><%= page.title %></td>
-    <td><%= page.slug %></td>
-    <td><%= link_to 'Show', page %></td>
-    <td><%= link_to 'Edit', edit_page_path(page) %></td>
-    <td><%= link_to 'Destroy', page, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+<table id="pages" class="datatable">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Slug</th>
+      <th>Template</th>
+      <th>PerPage</th>
+      <th>JS</th>
+      <th>CSS</th>
+      <th>DataSource</th>
+      <th>Op.</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 
 <br />

@@ -7,11 +7,20 @@ class PagesController < ApplicationController
   # GET /pages
   # GET /pages.xml
   def index
-    @pages = Page.all.asc(:position)
+    #@pages = Page.all.asc(:position)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @pages }
+    end
+  end
+
+  def datatable
+    @records = current_records(params)
+    @total_records = total_records()
+
+    respond_to do |format|
+      format.js {render :layout => false}
     end
   end
 
@@ -171,4 +180,40 @@ class PagesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  private
+  
+  def current_records(params={})
+    current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
+
+    unless params[:sSearch].blank?
+      result = Page.any_of(conditions(d))
+    else
+    result = Page.all
+    end
+    @total_disp_records_size = result.size
+
+    result.desc(:position).paginate :page => current_page,
+    #:include => [:user],
+    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
+    :per_page => params[:iDisplayLength]
+  end
+  
+  def total_records
+    Page.all.count
+  end
+
+  def conditions(d, params={})
+    cond = []
+    sSearch = params[:sSearch]
+    Page.fields.each do |field|
+      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
+        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
+      elsif
+        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
+      end
+    end
+    return cond
+  end
+  
 end

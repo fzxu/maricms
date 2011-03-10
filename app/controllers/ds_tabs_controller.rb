@@ -14,6 +14,16 @@ class DsTabsController < ApplicationController
     end
   end
 
+  def datatable
+    @d = D.find(params[:d])
+    @records = current_records(@d, params)
+    @total_records = total_records(@d)
+
+    respond_to do |format|
+      format.js {render :layout => false}
+    end
+  end
+
   # GET /tabs/1
   # GET /tabs/1.xml
   def show
@@ -237,6 +247,8 @@ class DsTabsController < ApplicationController
     end
   end
 
+  private
+  
   def current_records(d, params={})
     result = []
 
@@ -287,4 +299,8 @@ class DsTabsController < ApplicationController
 
   end
 
+  def total_records(d)
+    d.get_klass.all.size
+  end
+  
 end

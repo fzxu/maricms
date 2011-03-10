@@ -10,6 +10,16 @@ class DsStandardsController < ApplicationController
     end
   end
 
+  def datatable
+    @d = D.find(params[:d])
+    @records = current_records(@d, params)
+    @total_records = total_records(@d)
+
+    respond_to do |format|
+      format.js {render :layout => false}
+    end
+  end
+
   def edit
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
@@ -108,6 +118,8 @@ class DsStandardsController < ApplicationController
     end
   end
 
+  private
+  
   def current_records(d, params={})
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
 
@@ -122,6 +134,23 @@ class DsStandardsController < ApplicationController
     #:include => [:user],
     #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
     :per_page => params[:iDisplayLength]
+  end
+  
+  def total_records(d)
+    d.get_klass.all.size
+  end
+
+  def conditions(d, params={})
+    cond = []
+    sSearch = params[:sSearch]
+    d.get_klass.fields.each do |field|
+      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
+        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
+      elsif
+        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
+      end
+    end
+    return cond
   end
 
 end

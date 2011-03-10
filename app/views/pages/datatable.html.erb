@@ -1,0 +1,22 @@
+{
+  "sEcho": <%= params[:sEcho] || -1 %>,
+  "iTotalRecords": <%= @total_records %>,
+  "iTotalDisplayRecords": <%= @total_disp_records_size %>,
+  "aaData": [
+  <% @records.each_with_index do |rec,ind| %>
+    [
+      "<%= ActiveSupport::JSON.encode rec.title %>",
+      "<%= ActiveSupport::JSON.encode rec.slug %>",
+      "<%= rec.theme_path %>",
+      "<%= rec.per_page %>",
+      "<%= rec.js_paths{|x| } %>",
+      "<%= rec.css_paths %>",
+      "<%= rec.r_page_ds.map{|r| r.d.name}.join(",") %>",
+      "<%= (link_to "Show", page_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_page_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", page_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+    ]
+    <% if ind < @records.size - 1%>
+    ,
+    <% end %>
+  <% end %>
+  ]
+}

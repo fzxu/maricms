@@ -46,7 +46,7 @@ class DsTabsController < ApplicationController
 
       # get the first tab datasource's root
       unless @tab
-        @tab = D.where(:ds_type => "Tab").first.get_klass.root
+        @tab = D.where(:ds_type => "Tab").first.get_klass.root if D.where(:ds_type => "Tab").count > 0 
       end
 
       if @tab

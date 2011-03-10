@@ -26,6 +26,9 @@ MariCMS::Application.routes.draw do
   		delete 'destroy_ds_element'
   		get 'manage'
   	end
+    collection do
+      get 'datatable'
+    end
   end
 
   resources :pages do

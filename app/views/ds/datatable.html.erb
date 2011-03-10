@@ -1,0 +1,20 @@
+{
+  "sEcho": <%= params[:sEcho] || -1 %>,
+  "iTotalRecords": <%= @total_records %>,
+  "iTotalDisplayRecords": <%= @total_disp_records_size %>,
+  "aaData": [
+  <% @records.each_with_index do |rec,ind| %>
+    [
+      "<%= rec.key %>",
+      "<%= ActiveSupport::JSON.encode rec.name %>",
+      "<%= rec.ds_type %>",
+      "<%= rec.time_log %>",
+      "<%= rec.ds_elements.size %>",
+      "<%= (link_to "Show", d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", d_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+    ]
+    <% if ind < @records.size - 1%>
+    ,
+    <% end %>
+  <% end %>
+  ]
+}

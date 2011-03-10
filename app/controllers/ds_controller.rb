@@ -4,11 +4,20 @@ class DsController < ApplicationController
   # GET /ds
   # GET /ds.xml
   def index
-    @ds = D.all
+    #@ds = D.all
     
     respond_to do |format|
       format.html
       format.xml  { render :xml => @ds }
+    end
+  end
+
+  def datatable
+    @records = current_records(params)
+    @total_records = total_records()
+
+    respond_to do |format|
+      format.js {render :layout => false}
     end
   end
 
@@ -136,6 +145,41 @@ class DsController < ApplicationController
       format.html { redirect_to :controller => "ds_#{@d.ds_type.pluralize.downcase}", :action => "index", :d => @d.id}
       format.xml  { render :xml => @d }
     end
+  end
+
+  private
+  
+  def current_records(params={})
+    current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
+
+    unless params[:sSearch].blank?
+      result = D.any_of(conditions(params))
+    else
+    result = D.all
+    end
+    @total_disp_records_size = result.size
+
+    result.desc(:position).paginate :page => current_page,
+    #:include => [:user],
+    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
+    :per_page => params[:iDisplayLength]
+  end
+  
+  def total_records
+    D.all.count
+  end
+
+  def conditions(params={})
+    cond = []
+    sSearch = params[:sSearch]
+    Page.fields.each do |field|
+      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
+        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
+      elsif
+        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
+      end
+    end
+    return cond
   end
   
 end

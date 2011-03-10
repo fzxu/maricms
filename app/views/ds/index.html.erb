@@ -1,25 +1,19 @@
 <h2>Listing DataSource</h2>
 
-<table>
-  <tr>
-  	<th>Key(Unique)</th>
-  	<th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_path}"}) %>
 
-<% @ds.each do |d| %>
-  <tr>
-  	<td><%= d.key %></td>
-  	<td><%= d.name %></td>
-    <td><%= link_to 'Show', d %></td>
-    <td><%= link_to 'Edit', edit_d_path(d) %></td>
-    <td><%= link_to 'Manage', manage_d_path(d) %></td>
-    <td><%= link_to 'Destroy', d, :confirm => 'Are you sure? All the records in this datasource will be removed!!', :method => :delete %></td>
-  </tr>
-<% end %>
+<table id="datasource" class="datatable">
+  <thead>
+    <tr>
+    	<th>Key(Unique)</th>
+    	<th>Name</th>
+      <th>DataSource Type</th>
+      <th>Log Time</th>
+      <th>Field Count</th>
+      <th>Op.</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 
 <br />

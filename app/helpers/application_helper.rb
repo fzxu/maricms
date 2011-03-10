@@ -4,7 +4,7 @@ module ApplicationHelper
     additional_data = opts[:additional_data] || {}
     search = opts[:search].present? ? opts[:search].to_s : "true"
     search_label = opts[:search_label] || "Search"
-    processing = opts[:processing] || "Processing"
+    processing = image_tag("datatable_spinner.gif") || "Processing"
     persist_state = opts[:persist_state].present? ? opts[:persist_state].to_s : "true"
     table_dom_id = opts[:table_dom_id] ? "##{opts[:table_dom_id]}" : ".datatable"
     per_page = opts[:per_page] || opts[:display_length]|| 5

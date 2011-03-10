@@ -16,7 +16,7 @@
 </span>
 
 
-<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_standards_path(:d => @d.id)}", :processing => image_tag("datatable_spinner.gif") }) %>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_standards_path(:d => @d.id)}"}) %>
 
 <table id="<%= @d.id %>" class="datatable">
   <thead>

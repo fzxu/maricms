@@ -264,6 +264,10 @@ class DsTabsController < ApplicationController
             
           end
         end
+        # support parent
+        if rec.parent && rec.parent.name =~ /#{params[:sSearch]}/
+          found = true
+        end  
         if found
           if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
             result << rec

@@ -162,6 +162,7 @@ class D
   end
   
   def remove_collection
-    Mongoid.database.collection(self.get_klass.collection_name).drop
+    #Mongoid.database.collection(self.get_klass.collection_name).drop
+    self.get_klass.delete_all
   end
 end

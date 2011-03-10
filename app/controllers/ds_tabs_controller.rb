@@ -243,37 +243,42 @@ class DsTabsController < ApplicationController
     if params[:sSearch].blank?
       pointer = 0
       counter = 0
-      d.get_klass.traverse(:depth_first) do |rec|
-        if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
-        result << rec
-        counter += 1
+      
+      d.get_klass.with_scope(d.get_klass.asc(:position)) do
+        d.get_klass.traverse(:depth_first) do |rec|
+          if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+          result << rec
+          counter += 1
+          end
+          pointer += 1
         end
-        pointer += 1
       end
       @total_disp_records_size = d.get_klass.all.count
       return result
     else
       pointer = 0
       counter = 0
-      d.get_klass.traverse(:depth_first) do |rec|
-        found = false
-        rec.fields.each do |field|
-          if (rec.send(field.last.name).is_a?(String) && rec.send(field.last.name) =~ /#{params[:sSearch]}/) ||
-            ((rec.send(field.last.name).is_a?(Fixnum) || rec.send(field.last.name).is_a?(Float)) && rec.send(field.last.name).to_i.to_s == params[:sSearch])
+      d.get_klass.with_scope(d.get_klass.asc(:position)) do
+        d.get_klass.traverse(:depth_first) do |rec|
+          found = false
+          rec.fields.each do |field|
+            if (rec.send(field.last.name).is_a?(String) && rec.send(field.last.name) =~ /#{params[:sSearch]}/) ||
+              ((rec.send(field.last.name).is_a?(Fixnum) || rec.send(field.last.name).is_a?(Float)) && rec.send(field.last.name).to_i.to_s == params[:sSearch])
+              found = true
+              
+            end
+          end
+          # support parent
+          if rec.parent && rec.parent.name =~ /#{params[:sSearch]}/
             found = true
-            
+          end  
+          if found
+            if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+              result << rec
+              counter += 1
+            end
+            pointer += 1
           end
-        end
-        # support parent
-        if rec.parent && rec.parent.name =~ /#{params[:sSearch]}/
-          found = true
-        end  
-        if found
-          if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
-            result << rec
-            counter += 1
-          end
-          pointer += 1
         end
       end
       @total_disp_records_size = pointer

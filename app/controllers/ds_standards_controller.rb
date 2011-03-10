@@ -123,10 +123,10 @@ class DsStandardsController < ApplicationController
   def current_records(d, params={})
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
 
-    unless params[:sSearch].blank?
-      result = d.get_klass.any_of(conditions(d))
+    if params[:sSearch].blank?
+      result = d.get_klass.all
     else
-    result = d.get_klass.all
+      result = d.get_klass.any_of(conditions(d, params))
     end
     @total_disp_records_size = result.size
 

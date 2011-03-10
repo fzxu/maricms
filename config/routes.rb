@@ -1,4 +1,4 @@
-TianTing::Application.routes.draw do
+MariCMS::Application.routes.draw do
   
   resources :ds_tabs do
   	member do

@@ -187,7 +187,7 @@ class PagesController < ApplicationController
     current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
 
     unless params[:sSearch].blank?
-      result = Page.any_of(conditions(d))
+      result = Page.any_of(conditions(params))
     else
     result = Page.all
     end
@@ -203,7 +203,7 @@ class PagesController < ApplicationController
     Page.all.count
   end
 
-  def conditions(d, params={})
+  def conditions(params={})
     cond = []
     sSearch = params[:sSearch]
     Page.fields.each do |field|

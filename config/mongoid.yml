@@ -9,15 +9,15 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: tian_ting_development
+  database: mari_cms_development
 
 test:
   <<: *defaults
-  database: tian_ting_test
+  database: mari_cms_test
 
 # set these environment variables on your prod server
 production:
-  database: tian_ting
+  database: mari_cms
   # host: <%= ENV['MONGOID_HOST'] %>
   # port: <%= ENV['MONGOID_PORT'] %>
   # username: <%= ENV['MONGOID_USERNAME'] %>

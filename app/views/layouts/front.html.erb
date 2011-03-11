@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= @page.title if @page %></title>
+    <title><%= @page.name if @page %></title>
     <%= stylesheet_link_tag current_theme_stylesheet_path :global %>
     <%= javascript_include_tag current_theme_javascript_path :global %>
     <% if @page %>

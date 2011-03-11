@@ -17,13 +17,17 @@
       Main
     </legend>
     <p>
-      <%= f.label :title %>
-      <%= f.text_field :title %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
     </p>  
     <p>
       <%= f.label :slug %>
       <%= f.text_field :slug %>
     </p>
+    <p>
+      <%= f.label :parent %>
+      <%= collection_select :page, "parent_id", Page.all - [@page], :id, :name, :prompt => true %>
+    </p>    
     <p>
       <%= f.label :theme_path %>
       <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|tf| File.basename(tf)}, :to_s, :to_s %>

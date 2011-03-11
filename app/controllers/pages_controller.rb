@@ -180,40 +180,65 @@ class PagesController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   private
   
   def current_records(params={})
-    current_page = (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
+    result = []
 
-    unless params[:sSearch].blank?
-      result = Page.any_of(conditions(params))
+    if params[:sSearch].blank?
+      pointer = 0
+      counter = 0
+      
+      Page.with_scope(Page.asc(:position)) do
+        Page.traverse(:depth_first) do |rec|
+          if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+          result << rec
+          counter += 1
+          end
+          pointer += 1
+        end
+      end
+      @total_disp_records_size = Page.all.count
+      return result
     else
-    result = Page.all
+      pointer = 0
+      counter = 0
+      Page.with_scope(Page.asc(:position)) do
+        Page.traverse(:depth_first) do |rec|
+          found = false
+          rec.fields.each do |field|
+            if (rec.send(field.last.name).is_a?(String) && rec.send(field.last.name) =~ /#{params[:sSearch]}/) ||
+              ((rec.send(field.last.name).is_a?(Fixnum) || rec.send(field.last.name).is_a?(Float)) && rec.send(field.last.name).to_i.to_s == params[:sSearch])
+              found = true
+              
+            end
+          end
+          # support parent
+          par = rec.parent
+          while par
+            if  par.name =~ /#{params[:sSearch]}/
+              found = true
+            end
+            par = par.parent
+          end  
+          if found
+            if pointer >= params[:iDisplayStart].to_i && counter < params[:iDisplayLength].to_i
+              result << rec
+              counter += 1
+            end
+            pointer += 1
+          end
+        end
+      end
+      @total_disp_records_size = pointer
+      return result
     end
-    @total_disp_records_size = result.size
 
-    result.desc(:position).paginate :page => current_page,
-    #:include => [:user],
-    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
-    :per_page => params[:iDisplayLength]
   end
-  
-  def total_records
+
+  def total_records()
     Page.all.count
   end
-
-  def conditions(params={})
-    cond = []
-    sSearch = params[:sSearch]
-    Page.fields.each do |field|
-      if  field.last.type == "Integer" && sSearch.to_i.to_s == sSearch
-        cond << {"#{field.last.name}".to_sym => sSearch.to_i}
-      elsif
-        cond << {"#{field.last.name}".to_sym => /#{sSearch}/}
-      end
-    end
-    return cond
-  end
-  
+    
 end

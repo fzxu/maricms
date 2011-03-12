@@ -4,9 +4,9 @@
   "iTotalDisplayRecords": <%= @total_disp_records_size %>,
   "aaData": [
   <% @records.each_with_index do |rec,ind| %>
-    <% indentation = '>' * rec.depth %>
+    <% indentation = '-' * rec.depth %>
     [
-      "<%= ActiveSupport::JSON.encode (indentation + rec.name) %>",
+      "<%= indentation + ActiveSupport::JSON.encode (rec.name) %>",
       "<%= ActiveSupport::JSON.encode rec.slug %>",
       "<%= rec.parent.name if rec.parent%>",
       "<%= rec.theme_path %>",

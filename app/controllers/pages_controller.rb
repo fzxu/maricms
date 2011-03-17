@@ -28,8 +28,17 @@ class PagesController < ApplicationController
   # GET /pages/1.xml
   def show
     begin
-      @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+      if params[:id]
+        @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+      else
+        @page = Page.root
+      end
 
+      unless @page
+        render :text => "Please create at least one page"
+        return  
+      end
+      
       begin
         template_content = IO.read(File.join(theme_path, "theme", @page.theme_path ))
       rescue
@@ -38,6 +47,38 @@ class PagesController < ApplicationController
       template = Liquid::Template.parse(template_content)  # Parses and compiles the template
       #TODO need to cache the template somewhere in future
 
+      p_mg_alias = params.delete(:alias)
+      if p_mg_alias
+        mg_alias = MgAlias.where(:mg_alias => p_mg_alias)
+        if mg_alias.count == 1
+          @mg_alias = mg_alias.first
+        else
+          render :text => "no such alias!"
+          return
+        end
+      end
+      
+      q = {}
+      param_hash = params
+      
+      if @mg_alias
+        if !@mg_alias.d.blank? && !@mg_alias.record_id.blank?
+          unless q[@mg_alias.d.key]
+            q[@mg_alias.d.key] = []
+          end
+          q[@mg_alias.d.key] << {"_id" => @mg_alias.record_id}
+        else
+          unless @mg_alias.param_string.blank?
+            @mg_alias.param_string.split('&').each do |p_str|
+              pair = p_str.strip.split('=')
+              param_hash[pair.first] = pair.last
+            end
+          end
+        end
+      else
+        
+      end
+      
       #Assemble the variable and it's content, and then pass to template
       render_params = Hash.new
       render_params["params"] = params
@@ -51,11 +92,14 @@ class PagesController < ApplicationController
       # render_params["current_tab"] = @tab
 
       # Query the datasource based on the parameters
-      q = {}
-      params.each do |k,v|
+      
+      param_hash.each do |k,v|
         s = k.split(".")
         if s && s.size > 2 && s[0] == "ds"
-          q[s[1]] = {s[2] => v}
+          unless q[s[1]]
+            q[s[1]] = []
+          end
+          q[s[1]] << {s[2] => v}
         end
       end
 
@@ -67,9 +111,13 @@ class PagesController < ApplicationController
             d_key = r_page_d.new_d_name
           end
           if q[d_key].nil?
-          render_params[d_key] = r_page_d.default_query.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+            render_params[d_key] = r_page_d.default_query.paginate(:page => params[:page], :per_page => @page.per_page || 20)
           else
-          render_params[d_key] = r_page_d.default_query.where(q[d_key]).paginate(:page => params[:page], :per_page => @page.per_page || 20)
+            result = r_page_d.default_query
+            q[d_key].each do |condition|
+              result = result.where(condition)
+            end
+            render_params[d_key] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
           end
 
         end
@@ -107,7 +155,7 @@ class PagesController < ApplicationController
     r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.new(params[:page])
 
-    if r_page_ds.size > 0
+    if r_page_ds && r_page_ds.size > 0
 
       rpd = []
       r_page_ds.each do |rd|
@@ -240,5 +288,4 @@ class PagesController < ApplicationController
   def total_records()
     Page.all.count
   end
-    
 end

@@ -1,0 +1,33 @@
+<%= form_for(@mg_alias) do |f| %>
+  <% if @mg_alias.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@mg_alias.errors.count, "error") %> prohibited this mg_alias from being saved:</h2>
+
+      <ul>
+      <% @mg_alias.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :mg_alias %>
+    <%= f.text_field :mg_alias %>
+  </p>
+  <p>
+    <%= f.label :record_id %>
+    <%= f.text_field :record_id %>
+  </p>
+  <p>
+    <%= f.label :d_id %>
+    <%= f.collection_select :d_id, D.all, :id, :key, :prompt => true%>
+  </p>
+  <p>
+    <%= f.label :param_string %>
+    <%= f.text_field :param_string %>
+  </p>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

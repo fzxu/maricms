@@ -1,0 +1,20 @@
+{
+  "sEcho": <%= params[:sEcho] || -1 %>,
+  "iTotalRecords": <%= @total_records %>,
+  "iTotalDisplayRecords": <%= @total_disp_records_size %>,
+  "aaData": [
+  <% @records.each_with_index do |rec,ind| %>
+    [
+      "<%= ActiveSupport::JSON.encode (rec.mg_alias) %>",
+      "<%= rec.d.key if rec.d %>",
+      "<%= rec.d.name if rec.d %>",
+      "<%= (link_to "Edit", "#{rec.d.get_klass.superclass.name.tableize}/#{rec.record_id}/edit?d=#{rec.d.id}").gsub(/\"/, "'") if !rec.record_id.blank? %>",
+      "<%= ActiveSupport::JSON.encode rec.param_string if !rec.param_string.blank? %>",
+      "<%#= (link_to "Show", mg_alias_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_mg_alias_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", mg_alias_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+    ]
+    <% if ind < @records.size - 1%>
+    ,
+    <% end %>
+  <% end %>
+  ]
+}

@@ -1,5 +1,11 @@
 MariCMS::Application.routes.draw do
   
+  resources :mg_aliases do
+    collection do
+      get 'datatable'
+    end
+  end
+
   resources :ds_tabs do
   	member do
   		post 'move_up'
@@ -47,7 +53,7 @@ MariCMS::Application.routes.draw do
   #resource :users, :only => [:new, :create, :edit, :update]
    
   # root
-  root :controller => :ds_tabs, :action => :show
+  root :controller => :pages, :action => :show
 
   themes_for_rails
   
@@ -113,5 +119,5 @@ MariCMS::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
-  match ':id' => 'tabs#show'
+  match ':id(/:alias)' => 'pages#show'
 end

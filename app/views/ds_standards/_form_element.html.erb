@@ -36,11 +36,16 @@
   <% end %>
 
 </fieldset>
-<!-- <fieldset>
+
+<fieldset>
   <legend>Advanced</legend>
   <p>
+    <label>Alias</label>
+    <%= text_field_tag "mg_alias", @mg_alias ? @mg_alias.mg_alias : "" %>
+  </p>
+  <!-- <p>
     <%= form_element.label :position %>
     <%= form_element.text_field :position %>(Do not change it unless you know what you are doing!)
-  </p>
+  </p> -->
   
-</fieldset> -->
+</fieldset>

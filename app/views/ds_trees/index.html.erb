@@ -1,17 +1,16 @@
-<h2>Listing tabs</h2>
+<h2>Listing <%= @d.name %></h2>
 
-
-<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_tabs_path(:d => @d.id)}"}) %>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_ds_trees_path(:d => @d.id)}"}) %>
 
 <table id="<%= @d.id %>" class="datatable">
   <thead>
   <tr>
-    <th>Slug</th>
-    <th>Name</th>
-    <th>Parent Tab</th>
+    <th style="width:2%;"></th>
     <% @d.ds_elements.each do |ds_element|%>
       <th><%= ds_element.name %></th>
     <% end %>
+    <th>Parent Tab</th>
+    <th>Alias</th>
     <th>Position</th>
     <th style="width:5%;">Move</th>
     <th style="width:5%;">Op.</th>
@@ -21,4 +20,4 @@
 </table>
 <br />
 
-<%= link_to 'New Tab', new_ds_tab_path(:d => @d.id) %>
+<%= link_to 'New Ds tree', new_ds_tree_path(:d => @d.id) %>

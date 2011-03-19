@@ -39,10 +39,12 @@
 
 <fieldset>
   <legend>Advanced</legend>
+  <%= form_element.fields_for :mg_url, @mg_url do |m|%>
   <p>
     <label>Alias</label>
-    <%= text_field_tag "mg_alias", @mg_alias ? @mg_alias.mg_alias : "" %>
+    <%= m.text_field :path %>
   </p>
+  <% end %>
   <!-- <p>
     <%= form_element.label :position %>
     <%= form_element.text_field :position %>(Do not change it unless you know what you are doing!)

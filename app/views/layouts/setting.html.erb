@@ -30,19 +30,13 @@
         <li class="ui-state-default ui-corner-top">
           <a title="Pages" href="<%= pages_path %>">Pages</a>
         </li>
-        <% D.tab.each do |d|%>
-          <% if @d && d.id == @d.id %>
-            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
-              <a title="<%= d.key %>" href="<%= ds_tabs_path(:d => d.id)%>"><%= d.name %></a>
-            </li>
-          <% else %>
-            <li class="ui-state-default ui-corner-top">
-              <a title="<%= d.key %>" href="<%= ds_tabs_path(:d => d.id) %>"><%= d.name %></a>
-            </li>
-          <% end %>
+        <% D.tree.each do |d|%>
+          <li class="ui-state-default ui-corner-top">
+            <a title="<%= d.key %>" href="<%= ds_trees_path(:d => d.id) %>"><%= d.name %></a>
+          </li>
         <% end %>
         <li class="ui-state-default ui-corner-top">
-          <%= link_to "Alias", mg_aliases_path %>
+          <%= link_to "Alias", mg_urls_path %>
         </li>
         <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
           <a title="Setting" href="/manage/setting">Setting</a>

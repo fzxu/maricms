@@ -1,6 +1,6 @@
 <h2>Listing Alias</h2>
 
-<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_mg_aliases_path()}"}) %>
+<%= render :inline => datatable(nil, {:ajax_source => "#{datatable_mg_urls_path()}"}) %>
 
 <table id="alias" class="datatable">
   <thead>
@@ -18,4 +18,4 @@
 
 <br />
 
-<%= link_to 'New Alias', new_mg_alias_path %>
+<%= link_to 'New Alias', new_mg_url_path %>

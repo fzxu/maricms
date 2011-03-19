@@ -3,6 +3,11 @@ APP_CONFIG = YAML.load_file(File.join(Rails.root, "config", "config.yml"))[Rails
 
 ELEMENT_TYPES = ["String", "Integer", "DateTime", "Float", "Boolean", "Image", "File", "Text"]
 
-DS_TYPES = ["Standard", "Tab"]
+DS_TYPES = ["Standard", "Tree"]
 
 EXT_MODEL_PREFIX = "MG"
+
+# Initialized all the ds
+D.all.each do |d|
+  d.gen_klass
+end

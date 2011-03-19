@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<% @d.ds_elements.each do |element| %>
+<p>
+  <%= label_tag element.name %><br/>
+  <% if element.ftype == "File" %>
+    <%= link_to "Download", @record.send(element.key).url %>
+  <% elsif element.ftype == "Image"%>
+    <%= image_tag @record.send(element.key).url %>
+  <% elsif element.ftype == "Text" %>
+    <%= render :inline => @record.send(element.key) %>
+  <% elsif element.ftype == "DateTime" %>
+    <%= @record.send(element.key).strftime(@setting.date_format) if @record.send(element.key)%>
+  <% else %>
+    <%= @record.send(element.key) %>
+  <% end %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', edit_ds_tree_path(@record, :d => @d.id) %> |
+<%= link_to 'Back', ds_trees_path(:d => @d.id) %>

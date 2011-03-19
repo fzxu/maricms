@@ -49,9 +49,9 @@ class PagesController < ApplicationController
 
       p_mg_alias = params.delete(:alias)
       if p_mg_alias
-        mg_alias = MgAlias.where(:mg_alias => p_mg_alias)
-        if mg_alias.count == 1
-          @mg_alias = mg_alias.first
+        mg_url = MgUrl.where(:path => p_mg_alias)
+        if mg_url.count == 1
+          @mg_url = mg_url.first
         else
           render :text => "no such alias!"
           return
@@ -61,15 +61,15 @@ class PagesController < ApplicationController
       q = {}
       param_hash = params
       
-      if @mg_alias
-        if !@mg_alias.d.blank? && !@mg_alias.record_id.blank?
-          unless q[@mg_alias.d.key]
-            q[@mg_alias.d.key] = []
+      if @mg_url
+        if !@mg_url.record.blank?
+          unless q[@mg_url.record.class.d.key]
+            q[@mg_url.record.class.d.key] = []
           end
-          q[@mg_alias.d.key] << {"_id" => @mg_alias.record_id}
+          q[@mg_url.record.class.d.key] << {"_id" => @mg_url.record_id}
         else
-          unless @mg_alias.param_string.blank?
-            @mg_alias.param_string.split('&').each do |p_str|
+          unless @mg_url.param_string.blank?
+            @mg_url.param_string.split('&').each do |p_str|
               pair = p_str.strip.split('=')
               param_hash[pair.first] = pair.last
             end

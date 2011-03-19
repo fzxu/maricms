@@ -1,0 +1,38 @@
+<%= form_for(@mg_url) do |f| %>
+  <% if @mg_url.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@mg_url.errors.count, "error") %> prohibited this mg_url from being saved:</h2>
+
+      <ul>
+      <% @mg_url.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= f.label :path %>
+    <%= f.text_field :path %>
+  </p>
+  <p>
+    <%= @mg_url.record_id %>
+  </p>
+  <p>
+    <%= @mg_url.record.class %>
+  </p>
+  <hr/>
+  <p>
+    <%= f.label :param_string %>
+    <%= f.text_field :param_string %>
+  </p>
+  <hr/>
+  <p>
+    <%= f.label :page %>
+    <%= f.collection_select :page_id, Page.all, :id, :name, :prompt => true %>
+  </p>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

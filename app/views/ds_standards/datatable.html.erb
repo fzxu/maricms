@@ -16,6 +16,7 @@
           "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) if rec.send(ds_element.key) %>",
         <% end %>
       <% end %>
+      "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",
       "<%= rec.position.to_i %>",
       "<%= (button_to "Up", move_down_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_up_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
       "<%= (link_to "Show", ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_ds_standard_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", ds_standard_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    

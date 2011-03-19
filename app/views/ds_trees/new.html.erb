@@ -1,0 +1,35 @@
+<h2>New <%= @d.name %></h2>
+
+<%= form_for(:record, :url => ds_trees_path( :d => @d.id), :html => {:method => :post}) do |f| %>
+  <% if @record.errors.any? %>
+    <div id="error_explanation" class="error">
+      <h2><%= pluralize(@record.errors.count, "error") %> prohibited this tab from being saved:</h2>
+      <ul>
+        <% @record.errors.full_messages.each do |msg| %>
+        <li>
+          <%= msg %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <%= render :partial => 'ds_standards/form_element', :object => f%>
+
+  <fieldset>
+    <legend>
+      Attributes
+    </legend>
+    <p>
+      <%= f.label :parent %>
+      <%= collection_select :tab, "parent_id", @d.get_klass.all - [@record], :id, :name, :prompt => true %>
+    </p>
+  </fieldset>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Back', ds_trees_path(:d => @d.id) %>

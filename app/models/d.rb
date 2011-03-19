@@ -20,7 +20,7 @@ class D
   validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/
 
   scope :standard, :where => {:ds_type => "Standard"}
-  scope :tab, :where => {:ds_type => "Tab"}
+  scope :tree, :where => {:ds_type => "Tree"}
   
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection
@@ -45,14 +45,19 @@ class D
 
     # generate the class const and inherit the class with the name = ds_type
     klass = Object.const_set(class_name,Class.new(Object.const_get("Ds" + self.ds_type) || Object))
-
-    meta_string = ""
+    
+    # can find the related d from the ds record
+    meta_string = <<-INIT
+      cattr_accessor :d
+    INIT
 
     if self.time_log
       meta_string += "\n include Mongoid::Timestamps \n"
     end
 
+
     liquid_string = ""
+    
     self.ds_elements.each do |ds_element|
       
       # assemble the model based on the ftype
@@ -117,6 +122,7 @@ class D
   	LIQUIDINJ
     meta_string = meta_string + liquidinj
     klass.class_eval(meta_string)
+    klass.d = self
     klass
 
   end

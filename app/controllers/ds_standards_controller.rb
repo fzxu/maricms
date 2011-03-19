@@ -23,10 +23,7 @@ class DsStandardsController < ApplicationController
   def edit
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
-    mg_alias = MgAlias.where(:d_id => @d.id).and(:record_id => @record.id)
-    if mg_alias.count == 1
-      @mg_alias = mg_alias.first
-    end
+    @mg_url = @record.mg_url
     
     respond_to do |format|
       format.html
@@ -35,28 +32,28 @@ class DsStandardsController < ApplicationController
   end
 
   def update
-    p_mg_alias = params.delete(:mg_alias)
+    mg_url = params[:record].delete(:mg_url)
     
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
 
     respond_to do |format|
       if @record.update_attributes(params[:record])
-        mg_alias = MgAlias.where(:d_id => @d.id).and(:record_id => @record.id)
-        if mg_alias.count == 1
-          @mg_alias = mg_alias.first
-        else
-          @mg_alias = MgAlias.new(:d_id => @d.id, :record_id => @record.id)
+        
+        # update the mg url
+        unless mg_url.blank?
+          if @record.mg_url
+            @record.mg_url.update_attributes(mg_url)
+          else
+            @record.mg_url = MgUrl.new(mg_url)
+            @record.save
+          end
         end
-          
-        @mg_alias.mg_alias = p_mg_alias
-        @mg_alias.save
-
         expire_action_cache(@record)
         format.html { redirect_to(ds_standards_path(:d => @d.id)) }
         format.xml  { head :ok }
       else
-        render_html(@d, format)
+        format.html { render :edit}
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
     end
@@ -65,6 +62,7 @@ class DsStandardsController < ApplicationController
   def new
     @d = D.find(params[:d])
     @record = @d.get_klass.new
+    @mg_url = @record.mg_url
 
     respond_to do |format|
       format.html
@@ -73,21 +71,23 @@ class DsStandardsController < ApplicationController
   end
 
   def create
-    mg_alias = params.delete(:mg_alias)
+    mg_url = params[:record].delete(:mg_url)
     
     @d = D.find(params[:d])
     @record = @d.get_klass.new(params[:record])
 
     respond_to do |format|
       if @record.save
-        if mg_alias
-          MgAlias.create(:mg_alias => mg_alias, :d_id => @d.id, :record_id => @record.id)
+        # update the mg url
+        unless mg_url.blank?
+          @record.mg_url = MgUrl.new(mg_url)
+          @record.save
         end
         expire_action_cache(@record)
         format.html { redirect_to(ds_standards_path(:d => @d.id))}
         format.xml { head :ok}
       else
-        render_html(@d, format)
+        format.html {render :new}
         format.xml { render :xml => @record.erros, :status => :unprocessable_entity}
       end
     end
@@ -96,7 +96,12 @@ class DsStandardsController < ApplicationController
   def destroy
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
+    @mg_url = @record.mg_url
     @record.destroy
+    if @mg_url
+      @mg_url.destroy
+    end
+
 
     respond_to do |format|
       expire_action_cache(@record)

@@ -1,6 +1,16 @@
 MariCMS::Application.routes.draw do
   
-  resources :mg_aliases do
+  resources :ds_trees do
+    member do
+      post 'move_up'
+      post 'move_down'
+    end
+    collection do
+      get 'datatable'
+    end
+  end
+
+  resources :mg_urls do
     collection do
       get 'datatable'
     end

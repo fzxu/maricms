@@ -1,0 +1,17 @@
+<%= form_for(@ds_tree) do |f| %>
+  <% if @ds_tree.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ds_tree.errors.count, "error") %> prohibited this ds_tree from being saved:</h2>
+
+      <ul>
+      <% @ds_tree.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

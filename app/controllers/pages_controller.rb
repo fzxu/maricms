@@ -47,8 +47,16 @@ class PagesController < ApplicationController
           #no page specified, but the page info is stored in the mg_url, that is also ok
           @page = @mg_url.page
         else
-          # no page found, use the very first root instead
-          @page = Page.root
+          # try to find the 'index' alias for index page
+          mg_url = MgUrl.where(:path => 'index')
+          if mg_url.count == 1
+            @mg_url = mg_url.first
+            @page = @mg_url.page
+          else
+            # no page found, use the very first root instead
+            @page = Page.root            
+          end
+          
         end
       end
 

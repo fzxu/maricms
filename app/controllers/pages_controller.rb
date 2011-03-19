@@ -28,14 +28,32 @@ class PagesController < ApplicationController
   # GET /pages/1.xml
   def show
     begin
+      p_mg_alias = params.delete(:alias)
+
+      if p_mg_alias
+        mg_url = MgUrl.where(:path => p_mg_alias)
+        if mg_url.count == 1
+          @mg_url = mg_url.first
+        else
+          render :text => "no such alias!"
+          return
+        end
+      end
+      
       if params[:id]
         @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
       else
-        @page = Page.root
+        if @mg_url
+          #no page specified, but the page info is stored in the mg_url, that is also ok
+          @page = @mg_url.page
+        else
+          # no page found, use the very first root instead
+          @page = Page.root
+        end
       end
 
       unless @page
-        render :text => "Please create at least one page"
+        render :text => "There is no page combined to this alias or there is no any page at all!"
         return  
       end
       
@@ -47,7 +65,7 @@ class PagesController < ApplicationController
       template = Liquid::Template.parse(template_content)  # Parses and compiles the template
       #TODO need to cache the template somewhere in future
 
-      p_mg_alias = params.delete(:alias)
+      
       if p_mg_alias
         mg_url = MgUrl.where(:path => p_mg_alias)
         if mg_url.count == 1

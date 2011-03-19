@@ -9,6 +9,7 @@
       "<%= rec.record.class.d.key if rec.record %>",
       "<%= rec.record.class.d.name if rec.record %>",
       "<%= (link_to "GO", "#{rec.record.class.superclass.name.tableize}/#{rec.record_id}/edit?d=#{rec.record.class.d.id}").gsub(/\"/, "'") if !rec.record.blank? %>",
+      "<%= (link_to rec.page.name, edit_page_path(rec.page)).gsub(/\"/, "'") if rec.page %>",
       "<%= ActiveSupport::JSON.encode rec.param_string if !rec.param_string.blank? %>",
       "<%#= (link_to "Show", mg_url_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_mg_url_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", mg_url_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]

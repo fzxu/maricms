@@ -1,4 +1,6 @@
 class MgUrlsController < ApplicationController
+  before_filter :get_setting
+  
   # GET /mg_aliases
   # GET /mg_aliases.xml
   def index

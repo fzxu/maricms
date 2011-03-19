@@ -5,7 +5,7 @@ class DsStandardsController < ApplicationController
     #@records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
       format.xml  { render :xml => @tabs }
     end
   end
@@ -26,7 +26,7 @@ class DsStandardsController < ApplicationController
     @mg_url = @record.mg_url
     
     respond_to do |format|
-      format.html
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
       format.xml  { render :xml => @record }
     end
   end
@@ -65,7 +65,7 @@ class DsStandardsController < ApplicationController
     @mg_url = @record.mg_url
 
     respond_to do |format|
-      format.html
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
       format.xml  { render :xml => @record }
     end
   end
@@ -115,7 +115,7 @@ class DsStandardsController < ApplicationController
     @record = @d.get_klass.find(params[:id])
 
     respond_to do |format|
-      format.html
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
       format.xml  { render :xml => @record }
     end
   end

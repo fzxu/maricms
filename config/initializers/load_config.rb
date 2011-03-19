@@ -4,6 +4,7 @@ APP_CONFIG = YAML.load_file(File.join(Rails.root, "config", "config.yml"))[Rails
 ELEMENT_TYPES = ["String", "Integer", "DateTime", "Float", "Boolean", "Image", "File", "Text"]
 
 DS_TYPES = ["Standard", "Tree"]
+DS_VIEW_TYPES = ["Developer", "User"]
 
 EXT_MODEL_PREFIX = "MG"
 

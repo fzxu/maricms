@@ -30,9 +30,9 @@
         <li class="ui-state-default ui-corner-top">
           <a title="Pages" href="<%= pages_path %>">Pages</a>
         </li>
-        <% D.tree.each do |d|%>
+        <% D.developer_view.each do |d|%>
           <li class="ui-state-default ui-corner-top">
-            <a title="<%= d.key %>" href="<%= ds_trees_path(:d => d.id) %>"><%= d.name %></a>
+            <a title="<%= d.key %>" href="<%= manage_d_path(d) %>"><%= d.name %></a>
           </li>
         <% end %>
         <li class="ui-state-default ui-corner-top">

@@ -29,6 +29,10 @@
       <%= f.collection_select :ds_type, DS_TYPES, :to_s, :to_s %>(Do not change it unless you want what it means)
     </p>
     <p>
+      <%= f.label :ds_view_type %>
+      <%= f.collection_select :ds_view_type, DS_VIEW_TYPES, :to_s, :to_s %>(You want the datasource is maintained by user or developer)
+    </p>
+    <p>
       <%= f.label :time_log %>
       <%= f.check_box :time_log %>(When enabled, you can use the 'created_at' and 'updated_at' method)
     </p>

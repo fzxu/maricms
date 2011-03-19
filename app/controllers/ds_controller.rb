@@ -138,11 +138,9 @@ class DsController < ApplicationController
 
   def manage
     @d = D.find(params[:id])
-    #@records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
-      #render_html(@d, format)
-      format.html { redirect_to :controller => "ds_#{@d.ds_type.pluralize.downcase}", :action => "index", :d => @d.id}
+      format.html { redirect_to :controller => "ds_#{@d.ds_type.pluralize.downcase}", :action => "index", :d => @d.id }
       format.xml  { render :xml => @d }
     end
   end

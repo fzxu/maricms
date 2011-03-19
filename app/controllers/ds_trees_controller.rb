@@ -1,11 +1,13 @@
 class DsTreesController < ApplicationController
+  before_filter :get_setting
+  
   # GET /ds_trees
   # GET /ds_trees.xml
   def index
     @d = D.find(params[:d])
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
       format.xml  { render :xml => @ds_trees }
     end
   end
@@ -28,8 +30,8 @@ class DsTreesController < ApplicationController
 
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @ds_tree }
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
+      format.xml  { render :xml => @record }
     end
   end
 
@@ -40,8 +42,8 @@ class DsTreesController < ApplicationController
     @record = @d.get_klass.new
 
     respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @ds_tree }
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
+      format.xml  { render :xml => @record }
     end
   end
 
@@ -49,6 +51,11 @@ class DsTreesController < ApplicationController
   def edit
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
+
+    respond_to do |format|
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
+      format.xml  { render :xml => @record }
+    end    
   end
 
   # POST /ds_trees

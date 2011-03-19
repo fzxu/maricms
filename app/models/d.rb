@@ -6,6 +6,7 @@ class D
   field :name
   field :time_log, :type => Boolean
   field :ds_type, :default => "Standard"
+  field :ds_view_type, :default => "User"
 
   embeds_many :ds_elements
   # references_one :r_page_d
@@ -21,6 +22,9 @@ class D
 
   scope :standard, :where => {:ds_type => "Standard"}
   scope :tree, :where => {:ds_type => "Tree"}
+  
+  scope :developer_view, :where => {:ds_view_type => "Developer"}
+  scope :user_view, :where => {:ds_view_type => "User"}
   
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection

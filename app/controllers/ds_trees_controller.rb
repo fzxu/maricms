@@ -79,7 +79,7 @@ class DsTreesController < ApplicationController
           @record.mg_url = MgUrl.new(mg_url)
           @record.save
         end
-        
+        expire_action_cache(@record)
         format.html { redirect_to(ds_trees_path(:d => @d.id), :notice => 'Tree was successfully created.') }
         format.xml  { render :xml => @record, :status => :created, :location => @record }
       else
@@ -113,7 +113,7 @@ class DsTreesController < ApplicationController
             @record.save
           end
         end
-        
+        expire_action_cache(@record)
         format.html { redirect_to(ds_trees_path(:d => @d.id), :notice => 'Tree was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -133,7 +133,7 @@ class DsTreesController < ApplicationController
     if @mg_url
       @mg_url.destroy
     end
-
+    expire_action_cache(@record)
     respond_to do |format|
       format.html { redirect_to(ds_trees_path(:d => @d.id)) }
       format.xml  { head :ok }
@@ -145,6 +145,7 @@ class DsTreesController < ApplicationController
     @record = @d.get_klass.find(params[:id])
     @record.move_up
 
+    expire_action_cache(@record)
     respond_to do |format|
       format.html {redirect_to(ds_trees_path(:d => @d.id))}
       format.xml  { head :ok }
@@ -157,6 +158,7 @@ class DsTreesController < ApplicationController
 
     @record.move_down
 
+    expire_action_cache(@record)
     respond_to do |format|
       format.html { redirect_to(ds_trees_path(:d => @d.id))}
       format.xml  { head :ok }

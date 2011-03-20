@@ -68,9 +68,12 @@ class MgUrlsController < ApplicationController
   # PUT /mg_aliases/1.xml
   def update
     @mg_url = MgUrl.find(params[:id])
-
+    old_path = @mg_url.path
     respond_to do |format|
       if @mg_url.update_attributes(params[:mg_url])
+        #Expire both the old path cache and the new path cache (because it is possible that the new path is already cached before)
+        expire_action_cache(old_path)
+        expire_action_cache(params[:mg_url][:page])
         format.html { redirect_to(mg_urls_path, :notice => 'Mg alias was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -84,8 +87,9 @@ class MgUrlsController < ApplicationController
   # DELETE /mg_aliases/1.xml
   def destroy
     @mg_url = MgUrl.find(params[:id])
+    old_path = @mg_url.path
     @mg_url.destroy
-
+    expire_action_cache(old_path)
     respond_to do |format|
       format.html { redirect_to(mg_urls_url) }
       format.xml  { head :ok }
@@ -127,4 +131,7 @@ class MgUrlsController < ApplicationController
     return cond
   end
 
+  def expire_action_cache(old_path)
+    expire_fragment(/alias\S+#{old_path}/)
+  end
 end

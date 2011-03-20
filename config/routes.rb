@@ -16,16 +16,6 @@ MariCMS::Application.routes.draw do
     end
   end
 
-  resources :ds_tabs do
-  	member do
-  		post 'move_up'
-  		post 'move_down'
-  	end
-    collection do
-      get 'datatable'
-    end
-  end
-
   resources :ds_standards do
     member do
       post 'move_up'
@@ -71,8 +61,6 @@ MariCMS::Application.routes.draw do
 
 	match 'manage(/:action)', :controller => :setting
 	
-	match 'dock(/:action)', :controller => :dock
-	  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

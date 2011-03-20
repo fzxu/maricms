@@ -22,12 +22,9 @@ class ApplicationController < ActionController::Base
             expire_fragment(/pages\S+#{p.slug}/)
             expire_fragment(/pages\S+#{p.id}/)
 
-            # remove related tab cache
-            D.where(:ds_type => "Tab").each do |d|
-              d.get_klass.where(:page_id => p.id).each do |tab|
-                expire_fragment(/tabs\S+#{tab.slug}/)
-                expire_fragment(/tabs\S+#{tab.id}/)
-              end
+            # remove related alias cache
+            MgUrl.where(:page_id => p.id).each do |a|
+              expire_fragment(/alias\S+#{a.path}/)
             end
           end
         end
@@ -35,16 +32,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def expire_cache_for_page(record)
-    expire_fragment(/pages\S+#{record.slug}/)
-    expire_fragment(/pages\S+#{record.id}/)
-    # remove related tab cache
-    D.where(:ds_type => "Tab").each do |d|
-      d.get_klass.where(:page_id => record.id).each do |tab|
-      #expire_action :controller => :tabs, :action => :show, :cache_path => Proc.new { |c| "tab_#{tab.slug}*" }
-        expire_fragment(/tabs\S+#{tab.slug}/)
-        expire_fragment(/tabs\S+#{tab.id}/)
-      end
+  def expire_cache_for_page(page)
+    expire_fragment(/pages\S+#{page.slug}/)
+    expire_fragment(/pages\S+#{page.id}/)
+    # remove related alias cache
+    MgUrl.where(:page_id => page.id).each do |a|
+      expire_fragment(/alias\S+#{a.path}/)
     end
   end
 end

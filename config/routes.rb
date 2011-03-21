@@ -61,6 +61,8 @@ MariCMS::Application.routes.draw do
 
 	match 'manage(/:action)', :controller => :setting
 	
+	match "/gridfs/uploads/*path" => "gridfs#serve"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

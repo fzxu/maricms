@@ -7,9 +7,9 @@
     [
       <% @d.ds_elements.each do |ds_element|%>
         <% if ds_element.ftype == "Text"%>
-          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) %>",
+          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) if rec.send(ds_element.key) %>",
         <% elsif ds_element.ftype == "Image" %>
-          "<%= (image_tag rec.send(ds_element.key).url(:small)).gsub(/\"/, "'") %>",
+          "<%= (image_tag rec.send(ds_element.key).url(:small)).gsub(/\"/, "'") if rec.send(ds_element.key) %>",
         <% elsif ds_element.ftype == "DateTime" %>
           "<%= rec.send(ds_element.key).strftime(@setting.date_format) if rec.send(ds_element.key) %>",
         <% else %>

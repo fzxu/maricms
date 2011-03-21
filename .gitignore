@@ -5,4 +5,4 @@ log/*.log
 tmp/**/*
 themes/**/*
 .DS_Store
-system
+uploads

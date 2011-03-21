@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-source 'http://gemcutter.org'
+#source 'http://gemcutter.org'
 
 gem 'rails', '3.0.5'
 gem 'jquery-rails'
@@ -10,7 +10,6 @@ gem "bson_ext", "~> 1.2"
 gem "mongoid", :git => "git://github.com/mongoid/mongoid.git"
 
 gem 'mongoid-tree', :git => "https://github.com/benedikt/mongoid-tree.git", :branch => "mongoid-2.0.0", :require => 'mongoid/tree'
-#gem 'mongoid-tree', :path => "/Users/axu/r/mongoid-tree", :branch => "mongoid-2.0.0", :require => 'mongoid/tree'
 gem 'mongoid_order'
 
 #gem 'mongoid_order', :git => 'https://github.com/arkxu/mongoid_order.git'
@@ -19,7 +18,9 @@ gem 'mongoid_order'
 gem "devise"
 gem "themes_for_rails"
 
-gem "mongoid-paperclip", :require => "mongoid_paperclip"
+#gem "mongoid-paperclip", :require => "mongoid_paperclip"
+gem 'rmagick'
+gem 'carrierwave'
 
 gem "liquid", :git => "https://github.com/arkxu/liquid.git"
 #gem "liquid", :path => "/Users/arkxu/r/liquid"

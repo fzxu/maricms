@@ -59,9 +59,18 @@ MariCMS::Application.routes.draw do
   
   match 'editor_attachments/:action', :controller => :editor_attachments
 
+  scope 'manage' do
+    resources :image_styles do
+      member do
+        delete 'destroy_version'
+      end
+    end
+  end
+
 	match 'manage(/:action)', :controller => :setting
 	
-	match "/gridfs/uploads/*path" => "gridfs#serve"
+	#match "/gridfs/uploads/*path" => "gridfs#serve"
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

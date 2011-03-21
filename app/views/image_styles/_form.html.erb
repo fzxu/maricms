@@ -1,0 +1,110 @@
+<%= form_for(@image_style) do |f| %>
+  <% if @image_style.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@image_style.errors.count, "error") %> prohibited this image_style from being saved:</h2>
+
+      <ul>
+      <% @image_style.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <legend>Default</legend>
+    <p>
+      <%= f.label :key %>
+      <%= f.text_field :key %>
+    </p>
+    
+    <p>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </p>
+    
+    <p>
+      <%= f.label :width %>
+      <%= f.text_field :width %>
+    </p>
+    <p>
+      <%= f.label :height %>
+      <%= f.text_field :height %>
+    </p>
+    <p>
+      <%= f.label :format %>
+      <%= f.text_field :format %>
+    </p>
+    <p>
+      <%= f.check_box :crop %>
+      <%= f.label :crop %>
+    </p>
+    <% if params[:action] == 'edit' %>
+    <fieldset>
+      <legend>
+        Versions
+      </legend>
+      <table>
+        <tr>
+          <th>Version Key(Unique)</th>
+          <th>Name</th>
+          <th>Width</th>
+          <th>Height</th>
+          <th>Format</th>
+          <th>Crop</th>
+          <th></th>
+        </tr>
+        <% @image_style.child_image_styles.each do |is| %>
+          <%= f.fields_for "versions[]", is do |is_field| %>
+            <tr>
+              <td><%= is_field.text_field :key %></td>
+              <td><%= is_field.text_field :name %></td>
+              <td><%= is_field.text_field :width, :size => 10 %></td>
+              <td><%= is_field.text_field :height, :size => 10 %></td>
+              <td><%= is_field.collection_select :format, ALLOWED_IMAGE_TYPES, :to_s, :to_s  %></td>
+              <td><%= is_field.check_box :crop %></td>
+              <td><%= link_to "Destroy", destroy_version_image_style_path(@image_style, :version_id => is.id), :confirm => 'Are you sure?', :method => :delete %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </fieldset>
+    <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+    
+  </fieldset>
+  
+<% end %>
+
+<% if params[:action] == 'edit' %>
+  <%= form_for(:image_style, :url => image_styles_path(:parent_id => @image_style.id)) do |f| %>
+  <fieldset>
+    <legend>
+      Versions To Add
+    </legend>
+    <table>
+      <tr>
+        <th>Version Key(Unique)[Chars, numbers, "_"]</th>
+        <th>Name</th>
+        <th>Width</th>
+        <th>Height</th>
+        <th>Format</th>
+        <th>Crop</th>
+        <th></th>
+      </tr>
+      <tr>
+        <td><%= text_field_tag "image_style[key]" %></td>
+        <td><%= text_field_tag "image_style[name]" %></td>
+        <td><%= text_field_tag "image_style[width]" %></td>
+        <td><%= text_field_tag "image_style[height]" %></td>
+        <td><%= collection_select "image_style","format", ALLOWED_IMAGE_TYPES, :to_s, :to_s  %></td>
+        <td><%= check_box_tag "image_style[crop]" %></td>
+        <td><%= f.submit "Add Version" %></td>
+      </tr>
+    </table>
+  </fieldset>
+  <% end %>
+<% end %>

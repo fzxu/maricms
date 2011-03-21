@@ -8,6 +8,8 @@ DS_VIEW_TYPES = ["Developer", "User"]
 
 EXT_MODEL_PREFIX = "MG"
 
+ALLOWED_IMAGE_TYPES = ["jpg", "png", "bmp"]
+
 # Initialized all the ds
 D.all.each do |d|
   d.gen_klass

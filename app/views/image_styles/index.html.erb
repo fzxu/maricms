@@ -1,0 +1,35 @@
+<h2>Listing Image Styles</h2>
+
+<table>
+  <tr>
+    <th>Key(Unique)</th>
+    <th>Name</th>
+    <th>Width</th>
+    <th>Height</th>
+    <th>Format</th>
+    <th>Crop</th>
+    <th>Versions</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @image_styles.each do |image_style| %>
+  <tr>
+    <td><%= image_style.key %></td>
+    <td><%= image_style.name %></td>
+    <td><%= image_style.width %></td>
+    <th><%= image_style.height %></th>
+    <th><%= image_style.format %></th>
+    <th><%= image_style.crop %></th>
+    <th><%= image_style.child_image_styles.map{|is| is.name} %></th>
+    <td><%= link_to 'Show', image_style %></td>
+    <td><%= link_to 'Edit', edit_image_style_path(image_style) %></td>
+    <td><%= link_to 'Destroy', image_style, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Image style', new_image_style_path %>

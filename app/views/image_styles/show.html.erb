@@ -1,0 +1,54 @@
+<h2>Show Image Style</h2>
+<p id="notice"><%= notice %></p>
+
+<p>
+  Key:
+  <%= @image_style.key%>
+</p>
+<p>
+  Name:
+  <%= @image_style.name %>
+</p>
+
+<p>
+  Width:
+  <%= @image_style.width %>
+</p>
+
+<p>
+  Height:
+  <%= @image_style.height %>
+</p>
+
+<p>
+  Format:
+  <%= @image_style.format %>
+</p>
+
+<p>
+  Crop:
+  <%= @image_style.crop %>
+</p>
+
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Name</th>
+    <th>Width</th>
+    <th>Height</th>
+    <th>Format</th>
+    <th>Crop</th>
+  </tr>
+  <% @image_style.child_image_styles.each do |is| %>
+    <tr>
+      <td><%= is.key %></td>
+      <td><%= is.name %></td>
+      <td><%= is.width %></td>
+      <td><%= is.height %></td>
+      <td><%= is.format %></td>
+      <td><%= is.crop %></td>
+    </tr>
+  <% end %>
+</table>
+<%= link_to 'Edit', edit_image_style_path(@image_style) %> |
+<%= link_to 'Back', image_styles_path %>

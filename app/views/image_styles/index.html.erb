@@ -22,7 +22,7 @@
     <th><%= image_style.height %></th>
     <th><%= image_style.format %></th>
     <th><%= image_style.crop %></th>
-    <th><%= image_style.child_image_styles.map{|is| is.name} %></th>
+    <th><%= image_style.child_image_styles.map{|is| is.name}.join(",") %></th>
     <td><%= link_to 'Show', image_style %></td>
     <td><%= link_to 'Edit', edit_image_style_path(image_style) %></td>
     <td><%= link_to 'Destroy', image_style, :confirm => 'Are you sure?', :method => :delete %></td>

@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-TianTing::Application.load_tasks
+MariCMS::Application.load_tasks

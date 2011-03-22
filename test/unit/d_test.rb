@@ -148,12 +148,15 @@ class DTest < ActiveSupport::TestCase
     assert blog_meta2.invalid?, blog_meta2.errors.full_messages.map { |msg| msg + ".\n" }.join
 
     blog_meta3 = D.create(:key => "blog_1", :name => "Blog")
-    assert blog_meta3.invalid?, blog_meta3.errors.full_messages.map { |msg| msg + ".\n" }.join
+    assert blog_meta3.valid?
+    assert_not_nil blog_meta3.get_klass
 
     blog_meta4 = D.create(:key => "blog_true", :name => "Blog")
-    assert blog_meta4.invalid?, blog_meta4.errors.full_messages.map { |msg| msg + ".\n" }.join
+    assert blog_meta4.valid?
+    assert_not_nil blog_meta4.get_klass
 
     blog_meta5 = D.create(:key => "blog_365_good", :name => "Blog")
-    assert blog_meta5.invalid?, blog_meta5.errors.full_messages.map { |msg| msg + ".\n" }.join
+    assert blog_meta5.valid?
+    assert_not_nil blog_meta5.get_klass
   end
 end

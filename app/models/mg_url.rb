@@ -4,7 +4,7 @@ class MgUrl
   belongs_to :record, :polymorphic => true
   
   field :path
-  #field :record_id
+  
   field :param_string
   
   referenced_in :d

@@ -109,8 +109,6 @@ class MgUrlsController < ApplicationController
     @total_disp_records_size = result.size
 
     result.desc(:position).paginate :page => current_page,
-    #:include => [:user],
-    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
     :per_page => params[:iDisplayLength]
   end
   

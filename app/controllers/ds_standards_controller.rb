@@ -2,7 +2,6 @@ class DsStandardsController < ApplicationController
   before_filter :get_setting
   def index
     @d = D.find(params[:d])
-    #@records = @d.get_klass.all.desc(:position).paginate(:page => params[:page], :per_page => @setting.per_page || 5)
 
     respond_to do |format|
       format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
@@ -157,8 +156,6 @@ class DsStandardsController < ApplicationController
     @total_disp_records_size = result.size
 
     result.desc(:position).paginate :page => current_page,
-    #:include => [:user],
-    #:order => "#{datatable_columns(params[:iSortCol_0])} #{params[:sSortDir_0] || "DESC"}",
     :per_page => params[:iDisplayLength]
   end
   

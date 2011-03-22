@@ -2,9 +2,7 @@ class PagesController < ApplicationController
   before_filter :get_setting
   theme :get_theme
   
-  caches_action :show, :cache_path => Proc.new {
-    |c| c.params 
-  }
+  caches_action :show, :cache_path => Proc.new {|c| c.params}
   
   # GET /pages
   # GET /pages.xml

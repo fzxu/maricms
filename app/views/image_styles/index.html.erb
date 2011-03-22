@@ -1,4 +1,6 @@
-<h2>Listing Image Styles</h2>
+<%= render :partial => "sub_menu"%>
+
+<h2>Listing Image Styles for Uploader</h2>
 
 <table>
   <tr>
@@ -20,11 +22,11 @@
     <td><%= image_style.key %></td>
     <td><%= image_style.name %></td>
     <td><%= image_style.width %></td>
-    <th><%= image_style.height %></th>
-    <th><%= image_style.format %></th>
-    <th><%= image_style.quality %></th>
-    <th><%= image_style.crop %></th>
-    <th><%= image_style.child_image_styles.map{|is| is.name}.join(",") %></th>
+    <td><%= image_style.height %></td>
+    <td><%= image_style.format %></td>
+    <td><%= image_style.quality %></td>
+    <td><%= image_style.crop %></td>
+    <td><%= image_style.child_image_styles.map{|is| is.name}.join(",") %></td>
     <td><%= link_to 'Show', image_style %></td>
     <td><%= link_to 'Edit', edit_image_style_path(image_style) %></td>
     <td><%= link_to 'Destroy', image_style, :confirm => 'Are you sure?', :method => :delete %></td>

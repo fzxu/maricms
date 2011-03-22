@@ -43,14 +43,15 @@ class ImageStylesController < ApplicationController
   # POST /image_styles.xml
   def create
     parent_id = params.delete(:parent_id)
+    @image_style = ImageStyle.new(params[:image_style])
     if parent_id
       @parent_image_style = ImageStyle.find(parent_id)
+      @parent_image_style.child_image_styles << @image_style
     end
-    @image_style = ImageStyle.new(params[:image_style])
-    @parent_image_style.child_image_styles << @image_style  
+      
     respond_to do |format|
-      if @parent_image_style.save
-        format.html { redirect_to(edit_image_style_path(@parent_image_style), :notice => 'Image style was successfully created.') }
+      if (parent_id && @parent_image_style.save) || @image_style.save
+        format.html { redirect_to(edit_image_style_path(@parent_image_style || @image_style), :notice => 'Image style was successfully created.') }
         format.xml  { render :xml => @image_style, :status => :created, :location => @image_style }
       else
         format.html { render :action => "new" }

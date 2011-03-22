@@ -34,35 +34,6 @@
 </fieldset>
 <fieldset>
   <legend>
-    Image Style
-  </legend>
-  <p>
-    <%= f.label "Image Style Geometry [Original]" %>
-    <%= text_field_tag "setting[image_style][original][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["geometry"] %>
-    <%= f.label "Image Style Format [Original]" %>
-    <%= text_field_tag "setting[image_style][original][format]", @setting.image_style.nil? ? "" : @setting.image_style["original"]["format"] %>
-  </p>
-  <p>
-    <%= f.label "Image Style Geometry [Large]" %>
-    <%= text_field_tag "setting[image_style][large][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["geometry"] %>
-    <%= f.label "Image Style Format [Large]" %>
-    <%= text_field_tag "setting[image_style][large][format]", @setting.image_style.nil? ? "" : @setting.image_style["large"]["format"] %>
-  </p>
-  <p>
-    <%= f.label "Image Style Geometry [Medium]" %>
-    <%= text_field_tag "setting[image_style][medium][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["geometry"] %>
-    <%= f.label "Image Style Format [Medium]" %>
-    <%= text_field_tag "setting[image_style][medium][format]", @setting.image_style.nil? ? "" : @setting.image_style["medium"]["format"] %>
-  </p>
-  <p>
-    <%= f.label "Image Style Geometry [Small]" %>
-    <%= text_field_tag "setting[image_style][small][geometry]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["geometry"] %>
-    <%= f.label "Image Style Format [Small]" %>
-    <%= text_field_tag "setting[image_style][small][format]", @setting.image_style.nil? ? "" : @setting.image_style["small"]["format"] %>
-  </p>
-</fieldset>
-<fieldset>
-  <legend>
     Format
   </legend>
   <p>

@@ -8,6 +8,7 @@
         File Name: <%= @record.send("#{element.key}_file_name") %>
       <% elsif element.ftype == "Image" %>
         <%= form_element.file_field element.key %><br/>
+        <%= form_element.hidden_field "#{element.key}_cache" %><br/>
         <%= image_tag @record.send(element.key).url %>
       <% elsif element.ftype == "Text" %>
         <%= form_element.text_area element.key, :id => element.key %>

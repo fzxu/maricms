@@ -7,6 +7,7 @@
     <th>Width</th>
     <th>Height</th>
     <th>Format</th>
+    <th>Quality</th>
     <th>Crop</th>
     <th>Versions</th>
     <th></th>
@@ -21,6 +22,7 @@
     <td><%= image_style.width %></td>
     <th><%= image_style.height %></th>
     <th><%= image_style.format %></th>
+    <th><%= image_style.quality %></th>
     <th><%= image_style.crop %></th>
     <th><%= image_style.child_image_styles.map{|is| is.name}.join(",") %></th>
     <td><%= link_to 'Show', image_style %></td>

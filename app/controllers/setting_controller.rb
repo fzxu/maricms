@@ -13,7 +13,9 @@ class SettingController < ApplicationController
   def setting
     @setting = Setting.first
     unless @setting
+      default_image_style = APP_CONFIG.delete("image_style")
       @setting = Setting.create(APP_CONFIG)
+      @default_image_style = ImageStyle.create(default_image_style)
       @setting.reload
     end
   end

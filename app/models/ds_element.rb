@@ -6,7 +6,8 @@ class DsElement
   field :ftype, :default => "String"
   field :unique, :type => Boolean, :default => false
   field :notnull, :type => Boolean, :default => false
-  
+  #field :uploader #only if the ftype is image
+  referenced_in :image_style
   embedded_in :d
   
   validates_presence_of :key

@@ -6,9 +6,17 @@ ELEMENT_TYPES = ["String", "Integer", "DateTime", "Float", "Boolean", "Image", "
 DS_TYPES = ["Standard", "Tree"]
 DS_VIEW_TYPES = ["Developer", "User"]
 
-EXT_MODEL_PREFIX = "MG"
+EXT_CLASS_PREFIX = "EMg"
+INT_CLASS_PREFIX = "Mg"
 
-ALLOWED_IMAGE_TYPES = ["jpg", "png", "bmp"]
+ALLOWED_IMAGE_TYPES = ["jpg", "png", "bmp", "tiff"]
+IMAGE_CONVERT_QUALITY = ["100", "90", "80", "70", "60", "50", "40"]
+
+
+# Initialized all the uploader, it should be initialied before the ds
+# ImageStyle.all.each do |is|
+#   is.gen_uploader_klass
+# end
 
 # Initialized all the ds
 D.all.each do |d|

@@ -49,6 +49,7 @@
         <th>Type</th>
         <th>Unique</th>
         <th>Not NULL</th>
+        <th>Uploader</th>
         <th></th>
       </tr>
       <% @d.ds_elements.each do |ds_element| %>
@@ -59,6 +60,7 @@
         <td><%= ds_element_field.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
         <td><%= ds_element_field.check_box :unique %></td>
         <td><%= ds_element_field.check_box :notnull %></td>
+        <td><%= ds_element_field.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></td>
         <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
       </tr>
       <% end %>
@@ -84,6 +86,7 @@
       <th>Type</th>
       <th>Unique</th>
       <th>Not NULL</th>
+      <th>Uploader</th>
       <th></th>
     </tr>
     <tr>
@@ -92,6 +95,7 @@
       <td><%= f.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
       <td><%= f.check_box :unique %></td>
       <td><%= f.check_box :notnull %></td>
+      <td><%= f.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></td>
       <td><%= f.submit "Add Field" %></td>
     </tr>
   </table>

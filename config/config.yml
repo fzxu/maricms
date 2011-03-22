@@ -3,18 +3,21 @@ defaults: &defaults
   application_title: "MariCMS"
   current_theme: "default"
   image_style: 
-    :original: 
-      :geometry: 1920x1680>
-      :format: jpg
-    :large: 
-      :geometry: 500x500>
-      :format: jpg
-    :medium: 
-      :geometry: 250x250#
-      :format: jpg
-    :small: 
-      :geometry: 80x80#
-      :format: jpg
+    key: "default"
+    name: "Default"
+    width: 1920
+    height: 1080
+    format: "jpg" 
+    quality: 90
+    crop: false
+    # child_image_styles:
+    # - key: "small"
+    #   name: "Small"
+    #   width: 80
+    #   height: 80
+    #   format: "jpg" 
+    #   quality: 90
+    #   crop: true
   date_format: "%Y-%m-%d"
   time_format: "%H:%M"
   attachment_max_size: ""

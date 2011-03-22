@@ -20,7 +20,7 @@ class Setting
 
 	field :application_title
   field :current_theme
-  field :image_style, :type => Hash
+  #field :image_style, :type => Hash
 	field :date_format
 	field :time_format
 	field :attachment_max_size, :type => Integer

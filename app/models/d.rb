@@ -30,14 +30,9 @@ class D
   before_destroy :remove_page_relation, :remove_collection
   
   def gen_klass
-    # convert all the key to symbol due to the paperclip need
-    setting = Setting.first
-    image_style = convert_symbol(setting.image_style)
+    class_name = gen_class_name
 
     # Need to recreate the klass even it is exist, because it has been changed
-
-    class_name = EXT_MODEL_PREFIX + self.key.capitalize
-
     Object.class_eval do
       begin
         const_get(class_name)
@@ -63,20 +58,17 @@ class D
     liquid_string = ""
     
     self.ds_elements.each do |ds_element|
+      image_style = ImageStyle.find(ds_element.image_style_id)
       
       # assemble the model based on the ftype
       if ds_element.ftype == "File"
-        meta_string = meta_string + "has_mongoid_attached_file :#{ds_element.key} \n"
+        meta_string += "mount_uploader :#{ds_element.key}, FileUploader \n"
       elsif ds_element.ftype == "Image"
-        meta_string = meta_string + <<-IMAGEMETA
-          has_mongoid_attached_file :#{ds_element.key},
-          :styles => #{image_style.inspect},
-          :default_url => '/images/missing.png',
-          :convert_options => {:all => '-quality 100'} \n
-        IMAGEMETA
-        image_style.each do |key, style|
-          liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
-        end
+        meta_string += "mount_uploader :#{ds_element.key}, #{image_style.get_uploader_klass} \n"
+        
+        # image_style.each do |key, style|
+        #   liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
+        # end
       elsif ds_element.ftype == "Text"
         meta_string += "field :#{ds_element.key}, :type => String \n"
       elsif ds_element.ftype == "Date" || ds_element.ftype == "DateTime" || ds_element.ftype == "Time"
@@ -132,7 +124,7 @@ class D
   end
 
   def get_klass
-    class_name = EXT_MODEL_PREFIX + self.key.capitalize
+    class_name = gen_class_name
 
     #check whether the class is already eval
     begin
@@ -150,6 +142,10 @@ class D
 
   private
 
+  def gen_class_name
+    EXT_CLASS_PREFIX + self.key.capitalize
+  end
+  
   def convert_symbol(inhash)
     inhash.inject({}) do |memo,(k,v)|
       if v.is_a?(Hash)

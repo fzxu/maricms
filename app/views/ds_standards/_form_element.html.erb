@@ -5,7 +5,7 @@
       <%= form_element.label element.name %>
       <% if element.ftype == "File" %>
         <%= form_element.file_field element.key %><br/>
-        File Name: <%= @record.send("#{element.key}_file_name") %>
+        File Name: <%= @record.send("#{element.key}_filename") %>
       <% elsif element.ftype == "Image" %>
         <%= form_element.file_field element.key %><br/>
         <%= form_element.hidden_field "#{element.key}_cache" %><br/>

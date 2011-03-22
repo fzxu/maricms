@@ -58,12 +58,11 @@ class D
     liquid_string = ""
     
     self.ds_elements.each do |ds_element|
-      image_style = ImageStyle.find(ds_element.image_style_id)
-      
       # assemble the model based on the ftype
       if ds_element.ftype == "File"
         meta_string += "mount_uploader :#{ds_element.key}, FileUploader \n"
       elsif ds_element.ftype == "Image"
+        image_style = ImageStyle.find(ds_element.image_style_id)
         meta_string += "mount_uploader :#{ds_element.key}, #{image_style.get_uploader_klass} \n"
         
         # image_style.each do |key, style|

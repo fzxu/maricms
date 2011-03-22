@@ -7,13 +7,15 @@
     [
       <% @d.ds_elements.each do |ds_element|%>
         <% if ds_element.ftype == "Text"%>
-          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) if rec.send(ds_element.key) %>",
+          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "Image" %>
-          "<%= (image_tag rec.send(ds_element.key).mg_small.url).gsub(/\"/, "'") if rec.send(ds_element.key) %>",
+          "<%= (image_tag rec.send(ds_element.key).mg_small.url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "DateTime" %>
-          "<%= rec.send(ds_element.key).strftime(@setting.date_format) if rec.send(ds_element.key) %>",
+          "<%= rec.send(ds_element.key).strftime(@setting.date_format) unless rec.send(ds_element.key).blank? %>",
+        <% elsif ds_element.ftype == "File" %>
+          "<%= (link_to rec.send("#{ds_element.key}_filename"), rec.send(ds_element.key).url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% else %>
-          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) if rec.send(ds_element.key) %>",
+          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>
       <% end %>
       "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",

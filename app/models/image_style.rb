@@ -17,6 +17,11 @@ class ImageStyle
   
   recursively_embeds_many
   
+  # regenerate the Class on the fly when changed
+  after_save :gen_uploader_klass
+  
+  before_destroy :remove_ds_element_relation
+  
   def gen_uploader_klass
     class_name = gen_class_name
     
@@ -96,4 +101,16 @@ class ImageStyle
   def gen_class_name
     EXT_CLASS_PREFIX + self.key.capitalize + "Uploader"
   end
+  
+  def remove_ds_element_relation
+    # loop all the pages and delete the related refs
+    D.all.each do |d|
+      d.ds_elements.each do |ds_element|
+        if ds_element.image_style.id == self.id
+          ds_element.update_attributes(:image_style => nil)
+          break
+        end
+      end
+    end
+  end  
 end

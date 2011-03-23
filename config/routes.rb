@@ -10,17 +10,17 @@ MariCMS::Application.routes.draw do
     end
   end
 
-  resources :mg_urls do
+  resources :ds_lists do
+    member do
+      post 'move_up'
+      post 'move_down'
+    end
     collection do
       get 'datatable'
     end
   end
 
-  resources :ds_standards do
-    member do
-      post 'move_up'
-      post 'move_down'
-    end
+  resources :mg_urls do
     collection do
       get 'datatable'
     end

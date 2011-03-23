@@ -21,7 +21,6 @@ defaults: &defaults
   date_format: "%Y-%m-%d"
   time_format: "%H:%M"
   attachment_max_size: ""
-  per_page: 5
   host_name: "localhost"
 	
 development:

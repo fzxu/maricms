@@ -1,4 +1,4 @@
-class DsStandard
+class DsList
   include Mongoid::Document
   include Mongoid::Orderable
   

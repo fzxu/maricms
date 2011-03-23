@@ -1,4 +1,4 @@
-class DsStandardsController < ApplicationController
+class DsListsController < ApplicationController
   before_filter :get_setting
   def index
     @d = D.find(params[:d])
@@ -49,7 +49,7 @@ class DsStandardsController < ApplicationController
           end
         end
         expire_action_cache(@record)
-        format.html { redirect_to(ds_standards_path(:d => @d.id)) }
+        format.html { redirect_to(ds_lists_path(:d => @d.id)) }
         format.xml  { head :ok }
       else
         format.html { render :edit}
@@ -83,7 +83,7 @@ class DsStandardsController < ApplicationController
           @record.save
         end
         expire_action_cache(@record)
-        format.html { redirect_to(ds_standards_path(:d => @d.id))}
+        format.html { redirect_to(ds_lists_path(:d => @d.id))}
         format.xml { head :ok}
       else
         format.html {render :new}
@@ -104,7 +104,7 @@ class DsStandardsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@record)
-      format.html { redirect_to(ds_standards_path(:d => @d.id)) }
+      format.html { redirect_to(ds_lists_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
   end
@@ -126,7 +126,7 @@ class DsStandardsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@record)
-      format.html { redirect_to(ds_standards_path(:d => @d.id)) }
+      format.html { redirect_to(ds_lists_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
   end
@@ -138,7 +138,7 @@ class DsStandardsController < ApplicationController
 
     respond_to do |format|
       expire_action_cache(@record)
-      format.html { redirect_to(ds_standards_path(:d => @d.id)) }
+      format.html { redirect_to(ds_lists_path(:d => @d.id)) }
       format.xml  { head :ok }
     end
   end

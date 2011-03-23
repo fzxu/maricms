@@ -25,11 +25,11 @@
 </script>
 
 <span id="toolbar" class="ui-widget-header ui-corner-all">
-  <%= link_to "Show", ds_standard_path(@record, :d => @d.id ), :id => "show_record" %>
-  <%= link_to "Back", ds_standards_path(:d => @d.id), :id => "back" %>
+  <%= link_to "Show", ds_list_path(@record, :d => @d.id ), :id => "show_record" %>
+  <%= link_to "Back", ds_lists_path(:d => @d.id), :id => "back" %>
 </span>
 
-<%= form_for(:record, :url => ds_standard_path(@record, :d => @d.id), :html => {:method => :put, :multipart => true}) do |f| %>
+<%= form_for(:record, :url => ds_list_path(@record, :d => @d.id), :html => {:method => :put, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
 <div id="error_explanation" class="error">
   <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>

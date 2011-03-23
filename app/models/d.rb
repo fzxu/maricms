@@ -26,6 +26,7 @@ class D
   scope :developer_view, :where => {:ds_view_type => "Developer"}
   scope :user_view, :where => {:ds_view_type => "User"}
   
+  # regenerate the Class on the fly when changed
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection
   
@@ -62,8 +63,13 @@ class D
       if ds_element.ftype == "File"
         meta_string += "mount_uploader :#{ds_element.key}, FileUploader \n"
       elsif ds_element.ftype == "Image"
-        image_style = ImageStyle.find(ds_element.image_style_id)
-        meta_string += "mount_uploader :#{ds_element.key}, #{image_style.get_uploader_klass} \n"
+        
+        # if the related image style has been deleted
+        begin
+          image_style = ImageStyle.find(ds_element.image_style_id)
+        rescue
+        end
+        meta_string += "mount_uploader :#{ds_element.key}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
         
         # image_style.each do |key, style|
         #   liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"

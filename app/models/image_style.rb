@@ -35,7 +35,7 @@ class ImageStyle
     end
     GC.start
 
-    # generate the class const and inherit the MgStandardUploader class
+    # generate the class const and inherit the ImageUploader class
     klass = Object.const_set(class_name, Class.new(ImageUploader))
 
     # can find the related image style from the uploader

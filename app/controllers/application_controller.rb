@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
         p.r_page_ds.each do |r_page_d|
           if record.is_a?(r_page_d.d.get_klass)
             # remove the binding pages cache
-            expire_fragment(/pages\S+#{p.slug}/)
+            #expire_fragment(/pages\S+#{p.slug}/)
             expire_fragment(/pages\S+#{p.id}/)
 
             # remove related alias cache
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def expire_cache_for_page(page)
-    expire_fragment(/pages\S+#{page.slug}/)
+    #expire_fragment(/pages\S+#{page.slug}/)
     expire_fragment(/pages\S+#{page.id}/)
     # remove related alias cache
     MgUrl.where(:page_id => page.id).each do |a|

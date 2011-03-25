@@ -45,6 +45,7 @@ class DsListsController < ApplicationController
         format.html { redirect_to(ds_lists_path(:d => @d.id)) }
         format.xml  { head :ok }
       else
+        @mg_url = @record.mg_url
         format.html { render :edit, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
@@ -79,6 +80,7 @@ class DsListsController < ApplicationController
         format.html { redirect_to(ds_lists_path(:d => @d.id))}
         format.xml { head :ok}
       else
+        @mg_url = @record.mg_url
         format.html {render :new, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
         format.xml { render :xml => @record.erros, :status => :unprocessable_entity}
       end

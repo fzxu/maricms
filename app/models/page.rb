@@ -17,6 +17,7 @@ class Page
   embeds_many :r_page_ds
   embeds_many :page_metas
   
+  references_one :mg_url, :as => :record, :autosave => true
   
   # validates_presence_of :slug
   # validates_uniqueness_of :slug

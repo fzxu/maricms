@@ -16,10 +16,12 @@
     <legend>
       Main
     </legend>
-    <p>
-      <%= f.label :slug %>
-      <%= f.text_field :slug %>
-    </p>
+    <%= f.fields_for :mg_url, @mg_url do |m|%>
+      <p>
+        <label>Alias</label>
+        <%= m.text_field :path %>
+      </p>
+    <% end %>
     <p>
       <%= f.label :name %>
       <%= f.text_field :name %>

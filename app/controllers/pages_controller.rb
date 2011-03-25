@@ -29,7 +29,7 @@ class PagesController < ApplicationController
   def show
     begin
       p_mg_alias = params.delete(:alias)
-
+      
       if p_mg_alias
         mg_url = MgUrl.where(:path => p_mg_alias)
         if mg_url.count == 1
@@ -173,11 +173,13 @@ class PagesController < ApplicationController
   # GET /pages/1/edit
   def edit
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+    @mg_url = @page.mg_url
   end
 
   # POST /pages
   # POST /pages.xml
   def create
+    mg_url = params[:page].delete(:mg_url)
     r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.new(params[:page])
 
@@ -192,7 +194,12 @@ class PagesController < ApplicationController
           rpd << r_page_d
         end
       end
-    @page.r_page_ds = rpd
+      @page.r_page_ds = rpd
+    end
+
+    # update the mg url
+    unless mg_url[:path].blank?
+      @page.mg_url = MgUrl.new(mg_url.merge(:page_id => @page.id))
     end
 
     respond_to do |format|
@@ -210,9 +217,11 @@ class PagesController < ApplicationController
   # PUT /pages/1
   # PUT /pages/1.xml
   def update
+    
     r_page_ds = params[:page].delete(:r_page_ds)
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-
+    mg_url = params[:page].delete(:mg_url).merge(:page_id => @page.id)
+    
     if r_page_ds.size > 0
 
       #remove the old ones
@@ -230,8 +239,12 @@ class PagesController < ApplicationController
       end
     end
 
+    unless mg_url[:path].blank?
+      @page.mg_url = MgUrl.new(mg_url) unless @page.mg_url
+    end
+
     respond_to do |format|
-      if @page.update_attributes(params[:page].merge({:r_page_ds => rpd}))
+      if @page.update_attributes(params[:page].merge({:r_page_ds => rpd})) && (@page.mg_url.update_attributes(mg_url) if @page.mg_url)
         expire_cache_for_page(@page)
         format.html { redirect_to(pages_url, :notice => 'Page was successfully updated.') }
         format.xml  { head :ok }

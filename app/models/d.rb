@@ -5,7 +5,7 @@ class D
   field :key
   field :name
   field :time_log, :type => Boolean
-  field :ds_type, :default => "Standard"
+  field :ds_type, :default => "List"
   field :ds_view_type, :default => "User"
 
   embeds_many :ds_elements
@@ -20,7 +20,7 @@ class D
   validates_uniqueness_of :key
   validates_format_of :key, :with => /\A([A-Za-z][\w]+)\z/
 
-  scope :standard, :where => {:ds_type => "Standard"}
+  scope :list, :where => {:ds_type => "List"}
   scope :tree, :where => {:ds_type => "Tree"}
   
   scope :developer_view, :where => {:ds_view_type => "Developer"}

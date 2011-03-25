@@ -66,14 +66,16 @@ class ImageStylesController < ApplicationController
     @image_style = ImageStyle.find(params[:id])
     new_versions = params[:image_style].delete(:versions)
     unless new_versions.blank?
-      @image_style.child_image_styles.destroy_all
+      #@image_style.child_image_styles.destroy_all
       new_versions.each do |key, value|
-        @image_style.child_image_styles << ImageStyle.new(value)
+        #@image_style.child_image_styles << ImageStyle.new(value)
+        is = @image_style.child_image_styles.find(key) 
+        is.update_attributes(value)
       end
     end
 
     respond_to do |format|
-      if @image_style.update_attributes(params[:image_style]) && @image_style
+      if @image_style.update_attributes(params[:image_style])# && @image_style
         format.html { redirect_to(edit_image_style_path(@image_style), :notice => 'Image style was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -99,12 +101,8 @@ class ImageStylesController < ApplicationController
     version_id = params[:version_id]
     @image_style = ImageStyle.find(params[:id])
     
-    @image_style.child_image_styles.each do |is|
-      if is.id.to_s == version_id
-        is.destroy
-      end
-    end
-    @image_style.save
+    is = @image_style.child_image_styles.find(version_id)
+    is.destroy
     
     respond_to do |format|
       format.html { redirect_to(edit_image_style_path(@image_style)) }

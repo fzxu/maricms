@@ -18,9 +18,9 @@ class ImageStyle
   recursively_embeds_many
   
   # regenerate the Class on the fly when changed
-  after_save :gen_uploader_klass
+  after_save :gen_uploader_klass, :regenerate_related_d_klass
   
-  before_destroy :remove_ds_element_relation
+  before_destroy :remove_ds_element_relation, :regenerate_related_d_klass
   
   def gen_uploader_klass
     class_name = gen_class_name
@@ -40,7 +40,8 @@ class ImageStyle
 
     # can find the related image style from the uploader
     meta_string = ""
-
+    liquid_string = ""
+    
     # add the parent image style    
     meta_string += <<-PARENT_STYLE          
       process :#{get_resize_string(self.crop)} => [#{self.width}, #{self.height}]
@@ -55,6 +56,8 @@ class ImageStyle
       end      
     PARENT_STYLE
     
+    liquid_string += " 'url' => self.url, \n"
+    
     # add all the versions
     self.child_image_styles.each do |version|
       meta_string += <<-VERSION
@@ -64,9 +67,21 @@ class ImageStyle
           process :convert => '#{version.format}'
         end      
       VERSION
+      liquid_string += " '#{version.key}_url' => self.#{version.key}.url, \n"
     end
     
+    liquidinj = <<-LIQUIDINJ
+      def to_liquid
+        ret = { #{liquid_string} }
+        if self.class.superclass.method_defined?("to_liquid")
+          ret = ret.merge super
+        end
+        ret
+      end
+    LIQUIDINJ
+    meta_string = meta_string + liquidinj
     klass.class_eval(meta_string)
+    
     klass.image_style = self
     klass
   end
@@ -91,7 +106,7 @@ class ImageStyle
   private
   
   def get_resize_string(crop = false)
-    resize_string = "resize_to_fit"
+    resize_string = "resize_to_limit"
     if crop
       resize_string = "resize_to_fill"
     end
@@ -106,11 +121,23 @@ class ImageStyle
     # loop all the pages and delete the related refs
     D.all.each do |d|
       d.ds_elements.each do |ds_element|
-        if ds_element.image_style.id == self.id
+        if ds_element.image_style && ds_element.image_style.id == self.id
           ds_element.update_attributes(:image_style => nil)
           break
         end
       end
     end
-  end  
+  end
+  
+  # in case the image style is changed, force the d to regenerate
+  def regenerate_related_d_klass
+    D.all.each do |d|
+      d.ds_elements.each do |ds_element|
+        if ds_element.image_style && ds_element.image_style.id == self.id
+          d.gen_klass
+          break
+        end
+      end
+    end    
+  end
 end

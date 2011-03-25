@@ -36,7 +36,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   
   # default one used by datatable
   version :mg_small do
-    process :resize_to_fill => [60, 60]
+    process :resize_to_fill => [80, 55]
     #process :convert => 'jpg'
     process :quality => 90
   end

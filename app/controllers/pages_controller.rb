@@ -40,26 +40,33 @@ class PagesController < ApplicationController
         end
       end
       
+      if @mg_url && @mg_url.page
+        # if there is page bind to alias, use that page
+        @page = @mg_url.page
+      end
+      
       if params[:id]
-        @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-      else
-        if @mg_url
-          #no page specified, but the page info is stored in the mg_url, that is also ok
-          @page = @mg_url.page
-        else
-          # try to find the 'index' alias for index page
-          mg_url = MgUrl.where(:path => 'index')
-          if mg_url.count == 1
-            @mg_url = mg_url.first
-            @page = @mg_url.page
-          else
-            # no page found, use the very first root instead
-            @page = Page.root            
-          end
-          
+        page_alias = MgUrl.where(:path => params[:id])
+        if page_alias.count == 1 && page_alias.first.page
+          # if there is id also, this page binding should have higher priority
+          @page = page_alias.first.page
         end
       end
-
+      
+      # still no page?
+      unless @page
+        # try to find the 'index' alias for index page
+        mg_url = MgUrl.where(:path => 'index')
+        if mg_url.count == 1
+          @mg_url = mg_url.first
+          @page = @mg_url.page
+        else
+          # no page found, use the very first root instead
+          @page = Page.root            
+        end
+      end
+      
+      # still still no page??
       unless @page
         render :text => "There is no page combined to this alias or there is no any page at all!"
         return  
@@ -87,7 +94,8 @@ class PagesController < ApplicationController
       q = {}
       param_hash = params
       
-      if @mg_url
+      # try to convert the ds record which bind to the mg_url to query hash
+      if @mg_url && !@mg_url.record.is_a?(Page)
         if !@mg_url.record.blank?
           unless q[@mg_url.record.class.d.key]
             q[@mg_url.record.class.d.key] = []
@@ -109,13 +117,6 @@ class PagesController < ApplicationController
       render_params = Hash.new
       render_params["params"] = params
 
-      #add the tabs to the template
-      # tabs = Array.new
-      # Tab.traverse(:depth_first) do |tab|
-      #   tabs << tab
-      # end
-      # render_params["tabs"] = tabs
-      # render_params["current_tab"] = @tab
 
       # Query the datasource based on the parameters
       
@@ -129,6 +130,7 @@ class PagesController < ApplicationController
         end
       end
 
+      # add the ds to render_params one by one. render_params will be used for template rendering
       r_page_ds = @page.r_page_ds
       if r_page_ds && r_page_ds.size > 0
         for r_page_d in r_page_ds

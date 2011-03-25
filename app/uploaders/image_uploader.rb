@@ -37,8 +37,8 @@ class ImageUploader < CarrierWave::Uploader::Base
   # default one used by datatable
   version :mg_small do
     process :resize_to_fill => [80, 80]
+    #process :convert => 'jpg'
     process :quality => 90
-    process :convert => 'jpg'
   end
 
 # Add a white list of extensions which are allowed to be uploaded.

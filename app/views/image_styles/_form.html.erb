@@ -32,10 +32,6 @@
       <%= f.text_field :height %>
     </p>
     <p>
-      <%= f.label :format %>
-      <%= f.collection_select :format, ALLOWED_IMAGE_TYPES, :to_s, :to_s %>
-    </p>
-    <p>
       <%= f.label :quality %>
       <%= f.collection_select :quality, IMAGE_CONVERT_QUALITY, :to_s, :to_s %>
     </p>
@@ -54,10 +50,9 @@
           <th>Name</th>
           <th>Width</th>
           <th>Height</th>
-          <th>Format</th>
           <th>Quality</th>
           <th>Crop</th>
-          <th></th>
+          <th>Op.</th>
         </tr>
         <% @image_style.child_image_styles.each do |is| %>
           <%= f.fields_for "versions[]", is do |is_field| %>
@@ -66,7 +61,6 @@
               <td><%= is_field.text_field :name %></td>
               <td><%= is_field.text_field :width, :size => 10 %></td>
               <td><%= is_field.text_field :height, :size => 10 %></td>
-              <td><%= is_field.collection_select :format, ALLOWED_IMAGE_TYPES, :to_s, :to_s  %></td>
               <td><%= is_field.collection_select :quality, IMAGE_CONVERT_QUALITY, :to_s, :to_s  %></td>
               <td><%= is_field.check_box :crop %></td>
               <td><%= link_to "Destroy", destroy_version_image_style_path(@image_style, :version_id => is.id), :confirm => 'Are you sure?', :method => :delete %></td>
@@ -97,7 +91,6 @@
         <th>Name</th>
         <th>Width</th>
         <th>Height</th>
-        <th>Format</th>
         <th>Quality</th>
         <th>Crop</th>
         <th></th>
@@ -107,7 +100,6 @@
         <td><%= text_field_tag "image_style[name]" %></td>
         <td><%= text_field_tag "image_style[width]" %></td>
         <td><%= text_field_tag "image_style[height]" %></td>
-        <td><%= collection_select "image_style","format", ALLOWED_IMAGE_TYPES, :to_s, :to_s  %></td>
         <td><%= collection_select "image_style","quality", IMAGE_CONVERT_QUALITY, :to_s, :to_s  %></td>
         <td><%= check_box_tag "image_style[crop]" %></td>
         <td><%= f.submit "Add Version" %></td>

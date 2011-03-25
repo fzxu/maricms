@@ -6,7 +6,7 @@ class ImageStyle
   
   field :width, :type => Integer
   field :height, :type => Integer
-  field :format
+  #field :format
   field :quality, :type => Integer
   field :crop, :type => Boolean
   
@@ -20,7 +20,7 @@ class ImageStyle
   # regenerate the Class on the fly when changed
   after_save :gen_uploader_klass, :regenerate_related_d_klass
   
-  before_destroy :remove_ds_element_relation, :regenerate_related_d_klass
+  before_destroy :remove_ds_element_relation, :destroy_uploader_klass, :regenerate_related_d_klass
   
   def gen_uploader_klass
     class_name = gen_class_name
@@ -46,13 +46,11 @@ class ImageStyle
     meta_string += <<-PARENT_STYLE          
       process :#{get_resize_string(self.crop)} => [#{self.width}, #{self.height}]
       process :quality => #{self.quality}
-      process :convert => '#{self.format}'
 
       # default one used by datatable
       version :mg_small do
         process :resize_to_fill => [80, 80]
         process :quality => 90
-        process :convert => 'jpg'
       end      
     PARENT_STYLE
     
@@ -64,7 +62,6 @@ class ImageStyle
         version :#{version.key} do
           process :#{get_resize_string(version.crop)} => [#{version.width}, #{version.height}]
           process :quality => #{version.quality}
-          process :convert => '#{version.format}'
         end      
       VERSION
       liquid_string += " '#{version.key}_url' => self.#{version.key}.url, \n"
@@ -139,5 +136,19 @@ class ImageStyle
         end
       end
     end    
+  end
+  
+  def destroy_uploader_klass
+    class_name = gen_class_name
+    
+    # Need to recreate the klass even it is exist, because it has been changed
+    Object.class_eval do
+      begin
+        const_get(class_name)
+        remove_const(class_name)
+      rescue NameError
+      end
+    end
+    GC.start    
   end
 end

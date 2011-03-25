@@ -71,14 +71,14 @@ class DsController < ApplicationController
     @d = D.find(params[:id])
     new_ds_elements = params[:d].delete(:ds_elements)
     unless new_ds_elements.blank?
-      @d.ds_elements.destroy_all
       new_ds_elements.each do |key, value|
-        @d.ds_elements << DsElement.new(value)
+        element = @d.ds_elements.find(key)
+        element.update_attributes(value)
       end
     end
 
     respond_to do |format|
-      if @d.update_attributes(params[:d]) && @d.save
+      if @d.update_attributes(params[:d])
         format.html { redirect_to(edit_d_path(@d)) }
         format.xml  { head :ok }
       else

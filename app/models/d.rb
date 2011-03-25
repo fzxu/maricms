@@ -28,7 +28,7 @@ class D
   
   # regenerate the Class on the fly when changed
   after_save :gen_klass
-  before_destroy :remove_page_relation, :remove_collection
+  before_destroy :remove_page_relation, :remove_collection, :destroy_klass
   
   def gen_klass
     class_name = gen_class_name
@@ -176,5 +176,19 @@ class D
   def remove_collection
     #Mongoid.database.collection(self.get_klass.collection_name).drop
     self.get_klass.delete_all
+  end
+  
+  def destroy_klass
+    class_name = gen_class_name
+
+    # Need to recreate the klass even it is exist, because it has been changed
+    Object.class_eval do
+      begin
+        const_get(class_name)
+        remove_const(class_name)
+      rescue NameError
+      end
+    end
+    GC.start    
   end
 end

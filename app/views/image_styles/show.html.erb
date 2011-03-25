@@ -23,11 +23,6 @@
 </p>
 
 <p>
-  Format:
-  <%= @image_style.format %>
-</p>
-
-<p>
   Crop:
   <%= @image_style.crop %>
 </p>
@@ -38,7 +33,6 @@
     <th>Name</th>
     <th>Width</th>
     <th>Height</th>
-    <th>Format</th>
     <th>Crop</th>
   </tr>
   <% @image_style.child_image_styles.each do |is| %>
@@ -47,7 +41,6 @@
       <td><%= is.name %></td>
       <td><%= is.width %></td>
       <td><%= is.height %></td>
-      <td><%= is.format %></td>
       <td><%= is.crop %></td>
     </tr>
   <% end %>

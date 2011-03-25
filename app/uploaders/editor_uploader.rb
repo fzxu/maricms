@@ -26,7 +26,7 @@ class EditorUploader < CarrierWave::Uploader::Base
   # Process files as they are uploaded:
   process :resize_to_fit => [1920, 1080]
   process :quality => 100
-  process :convert => 'jpg'
+  #process :convert => 'jpg'
   
   # def scale(width, height)
   #   # do something
@@ -36,7 +36,7 @@ class EditorUploader < CarrierWave::Uploader::Base
   version :icon do
     process :resize_to_fill => [80, 80]
     process :quality => 100
-    process :convert => 'jpg'
+    #process :convert => 'jpg'
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

@@ -9,7 +9,6 @@ DS_VIEW_TYPES = ["Developer", "User"]
 EXT_CLASS_PREFIX = "EMg"
 INT_CLASS_PREFIX = "Mg"
 
-ALLOWED_IMAGE_TYPES = ["jpg", "png", "bmp", "tiff"]
 IMAGE_CONVERT_QUALITY = ["100", "90", "80", "70", "60", "50", "40"]
 
 

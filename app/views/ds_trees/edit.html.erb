@@ -3,7 +3,7 @@
 <%= form_for(:record, :url => ds_tree_path(@record, :d => @d.id), :html => {:method => :put}) do |f| %>
   <% if @record.errors.any? %>
     <div id="error_explanation" class="error">
-      <h2><%= pluralize(@record.errors.count, "error") %> prohibited this tab from being saved:</h2>
+      <h4><%= pluralize(@record.errors.count, "error") %> prohibited this tab from being saved:</h4>
       <ul>
         <% @record.errors.full_messages.each do |msg| %>
         <li>
@@ -14,17 +14,19 @@
     </div>
   <% end %>
   
-  <%= render :partial => 'ds_lists/form_element', :object => f%>
-  
   <fieldset>
-    <legend>
-      Attributes
-    </legend>
+    <legend>System</legend>
+    <p>
+      <%= f.label :mg_name %>
+      <%= f.text_field :mg_name %>
+    </p>
     <p>
       <%= f.label :parent %>
-      <%= collection_select :tab, "parent_id", @d.get_klass.all - [@record], :id, :name, :prompt => true %>
+      <%= f.collection_select "parent_id", @d.get_klass.all - [@record], :id, :mg_name, :prompt => true %>
     </p>
   </fieldset>
+  
+  <%= render :partial => 'ds_lists/form_element', :object => f%>
 
   <div class="actions">
     <%= f.submit %>

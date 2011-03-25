@@ -5,6 +5,9 @@ class DsTree
   include Mongoid::Tree::Traversal
 
   references_one :mg_url, :as => :record, :autosave => true
+  field :mg_name
+  
+  validates_presence_of :mg_name
   
   before_destroy :move_children_to_parent
 

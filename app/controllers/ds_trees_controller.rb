@@ -72,18 +72,18 @@ class DsTreesController < ApplicationController
       @record.parent = @d.get_klass.find(parent_id)
     end
 
+    # update the mg url
+    unless mg_url[:path].blank?
+      @record.mg_url = MgUrl.new(mg_url)
+    end
+
     respond_to do |format|
       if @record.save
-        # update the mg url
-        unless mg_url.blank?
-          @record.mg_url = MgUrl.new(mg_url)
-          @record.save
-        end
         expire_action_cache(@record)
         format.html { redirect_to(ds_trees_path(:d => @d.id), :notice => 'Tree was successfully created.') }
         format.xml  { render :xml => @record, :status => :created, :location => @record }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :layout => "ds_view_#{@d.ds_view_type.downcase}" }
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
     end
@@ -102,22 +102,17 @@ class DsTreesController < ApplicationController
       @record.parent = @d.get_klass.find(parent_id)
     end
 
+    unless mg_url[:path].blank?
+      @record.mg_url = MgUrl.new(mg_url) unless @record.mg_url
+    end
+
     respond_to do |format|
-      if @record.update_attributes(params[:record]) && @record.save
-        # update the mg url
-        unless mg_url.blank?
-          if @record.mg_url
-            @record.mg_url.update_attributes(mg_url)
-          else
-            @record.mg_url = MgUrl.new(mg_url)
-            @record.save
-          end
-        end
+      if @record.update_attributes(params[:record]) && (@record.mg_url.update_attributes(mg_url) if @record.mg_url)
         expire_action_cache(@record)
         format.html { redirect_to(ds_trees_path(:d => @d.id), :notice => 'Tree was successfully updated.') }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render :action => "edit", :layout => "ds_view_#{@d.ds_view_type.downcase}" }
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
     end

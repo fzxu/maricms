@@ -69,7 +69,7 @@ class DsListsController < ApplicationController
     @record = @d.get_klass.new(params[:record])
 
     # update the mg url
-    unless mg_url.blank?
+    unless mg_url[:path].blank?
       @record.mg_url = MgUrl.new(mg_url)
     end
 

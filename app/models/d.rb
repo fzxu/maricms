@@ -9,7 +9,6 @@ class D
   field :ds_view_type, :default => "User"
 
   embeds_many :ds_elements
-  # references_one :r_page_d
 
   index :key, :unique => true
   index "ds_elements.key"
@@ -71,9 +70,6 @@ class D
         end
         meta_string += "mount_uploader :#{ds_element.key}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
         
-        # image_style.each do |key, style|
-        #   liquid_string = liquid_string + "'#{ds_element.key}_#{key}' => self.#{ds_element.key}.url(:#{key}), \n"
-        # end
       elsif ds_element.ftype == "Text"
         meta_string += "field :#{ds_element.key}, :type => String \n"
       elsif ds_element.ftype == "Date" || ds_element.ftype == "DateTime" || ds_element.ftype == "Time"
@@ -174,7 +170,7 @@ class D
   end
   
   def remove_collection
-    #Mongoid.database.collection(self.get_klass.collection_name).drop
+    # delete the data in mongodb
     self.get_klass.delete_all
   end
   

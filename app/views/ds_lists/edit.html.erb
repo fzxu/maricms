@@ -30,16 +30,28 @@
 </span>
 
 <%= form_for(:record, :url => ds_list_path(@record, :d => @d.id), :html => {:method => :put, :multipart => true}) do |f| %>
-<% if @record.errors.any? %>
+<% if @record.errors.any? || @record.mg_url.errors.any? %>
 <div id="error_explanation" class="error">
-  <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
-  <ul>
-    <% @record.errors.full_messages.each do |msg| %>
-    <li>
-      <%= msg %>
-    </li>
-    <% end %>
-  </ul>
+  <% if @record.errors.count > 0 %>
+    <h4><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h4>
+    <ul>
+      <% @record.errors.full_messages.each do |msg| %>
+      <li>
+        <%= msg %>
+      </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% if @record.mg_url.errors.count > 0 %>
+    <h4><%= pluralize(@record.mg_url.errors.count, "error") %> prohibited this alias from being saved:</h4>
+    <ul>
+      <% @record.mg_url.errors.full_messages.each do |msg| %>
+      <li>
+        <%= msg %>
+      </li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
 <% end %>
 

@@ -119,11 +119,8 @@ class DsController < ApplicationController
   def destroy_ds_element
     @d = D.find(params[:id])
     ds_element_id = params[:ds_element_id]
-    @d.ds_elements.each do |ds_element|
-      if ds_element.id.to_s ==  ds_element_id
-      ds_element.destroy
-      end
-    end
+    ds_element = @d.ds_elements.find(ds_element_id)
+    ds_element.destroy
 
     respond_to do |format|
       if @d.save

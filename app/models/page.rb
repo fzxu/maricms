@@ -4,7 +4,7 @@ class Page
   include Mongoid::Tree::Ordering
   include Mongoid::Tree::Traversal
   
-  field :slug
+  #field :slug
   field :name
   field :js_paths, :type => Array  #page based javascript include path
   field :css_paths, :type => Array
@@ -18,13 +18,13 @@ class Page
   embeds_many :page_metas
   
   
-  validates_presence_of :slug
-  validates_uniqueness_of :slug
+  # validates_presence_of :slug
+  # validates_uniqueness_of :slug
   validates_presence_of :name
   
   before_destroy :move_children_to_parent
   
-  def to_param
-    self.slug
-  end
+  # def to_param
+  #   self.slug
+  # end
 end

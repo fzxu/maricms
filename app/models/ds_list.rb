@@ -2,5 +2,5 @@ class DsList
   include Mongoid::Document
   include Mongoid::Orderable
   
-  has_one :mg_url, :as => :record
+  references_one :mg_url, :as => :record, :autosave => true
 end

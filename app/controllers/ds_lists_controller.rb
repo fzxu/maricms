@@ -36,23 +36,16 @@ class DsListsController < ApplicationController
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
 
+    unless mg_url[:path].blank?
+      @record.mg_url = MgUrl.new(mg_url) unless @record.mg_url
+    end
     respond_to do |format|
-      if @record.update_attributes(params[:record])
-        
-        # update the mg url
-        unless mg_url.blank?
-          if @record.mg_url
-            @record.mg_url.update_attributes(mg_url)
-          else
-            @record.mg_url = MgUrl.new(mg_url)
-            @record.save
-          end
-        end
+      if @record.update_attributes(params[:record]) && (@record.mg_url.update_attributes(mg_url) if @record.mg_url)
         expire_action_cache(@record)
         format.html { redirect_to(ds_lists_path(:d => @d.id)) }
         format.xml  { head :ok }
       else
-        format.html { render :edit}
+        format.html { render :edit, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
         format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
       end
     end
@@ -75,18 +68,18 @@ class DsListsController < ApplicationController
     @d = D.find(params[:d])
     @record = @d.get_klass.new(params[:record])
 
+    # update the mg url
+    unless mg_url.blank?
+      @record.mg_url = MgUrl.new(mg_url)
+    end
+
     respond_to do |format|
       if @record.save
-        # update the mg url
-        unless mg_url.blank?
-          @record.mg_url = MgUrl.new(mg_url)
-          @record.save
-        end
         expire_action_cache(@record)
         format.html { redirect_to(ds_lists_path(:d => @d.id))}
         format.xml { head :ok}
       else
-        format.html {render :new}
+        format.html {render :new, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
         format.xml { render :xml => @record.erros, :status => :unprocessable_entity}
       end
     end

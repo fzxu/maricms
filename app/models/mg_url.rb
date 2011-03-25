@@ -1,7 +1,7 @@
 class MgUrl
   include Mongoid::Document
   
-  belongs_to :record, :polymorphic => true
+  referenced_in :record, :polymorphic => true
   
   field :path
   

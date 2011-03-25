@@ -4,7 +4,7 @@ class DsTree
   include Mongoid::Tree::Ordering
   include Mongoid::Tree::Traversal
 
-  has_one :mg_url, :as => :record
+  references_one :mg_url, :as => :record, :autosave => true
   
   before_destroy :move_children_to_parent
 

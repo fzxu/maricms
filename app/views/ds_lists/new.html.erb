@@ -24,7 +24,7 @@
 <%= form_for(:record, :url => ds_lists_path(:d => @d.id), :html => {:method => :post, :multipart => true}) do |f| %>
 <% if @record.errors.any? %>
   <div id="error_explanation" class="error">
-    <h2><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h2>
+    <h4><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h4>
     <ul>
       <% @record.errors.full_messages.each do |msg| %>
       <li>

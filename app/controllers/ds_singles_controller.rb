@@ -32,7 +32,7 @@ class DsSinglesController < ApplicationController
         format.html { redirect_to(ds_singles_path(:d => @d.id), :notice => 'Ds single was successfully created.') }
         format.xml  { render :xml => @ds_single, :status => :created, :location => @ds_single }
       else
-        format.html { render :action => "index" }
+        format.html { render :action => "index", :layout => "ds_view_#{@d.ds_view_type.downcase}" }
         format.xml  { render :xml => @ds_single.errors, :status => :unprocessable_entity }
       end
     end

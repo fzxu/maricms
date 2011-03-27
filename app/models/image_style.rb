@@ -51,7 +51,12 @@ class ImageStyle
       version :mg_small do
         process :resize_to_fill => [80, 55]
         process :quality => 90
-      end      
+      end
+      
+      def extension_white_list
+        %w(jpg jpeg gif png)
+      end
+          
     PARENT_STYLE
     
     liquid_string += " 'url' => self.url, \n"

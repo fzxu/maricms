@@ -40,7 +40,7 @@
 
 <fieldset>
   <legend>Advanced</legend>
-  <%= form_element.fields_for :mg_url, @record.mg_url do |m|%>
+  <%= form_element.fields_for @record.mg_url do |m|%>
   <p>
     <label>Alias</label>
     <%= m.text_field :path %>

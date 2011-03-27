@@ -16,7 +16,7 @@
     <legend>
       Main
     </legend>
-    <%= f.fields_for :mg_url, @mg_url do |m|%>
+    <%= f.fields_for @page.mg_url do |m|%>
       <p>
         <label>Alias</label>
         <%= m.text_field :path %>

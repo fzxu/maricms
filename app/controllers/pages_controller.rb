@@ -179,7 +179,6 @@ class PagesController < ApplicationController
   # GET /pages/1/edit
   def edit
     @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
-    @mg_url = @page.mg_url
   end
 
   # POST /pages

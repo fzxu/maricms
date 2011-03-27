@@ -24,7 +24,7 @@
     <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
     <% if @setting.current_theme && !@setting.current_theme.blank? && list_themes.size > 0%>
     You can use the following svn url to check out the theme code:
-    <b>svn co svn+ssh://svn@<%= @setting.host_name%>/home/svn/<%= @setting.current_theme %></b>
+    <b>svn co svn+ssh://svn@<%= @setting.host_name%><%= File.join(@setting.repo_root, @setting.id.to_s, @setting.current_theme) %></b>
     <% end %>
     <br/>
     <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post,
@@ -38,9 +38,17 @@
     <%= f.text_field :host_name %>
   </p>
   <p>
+    <%= f.label :ruby_home %>
+    <%= f.text_field :ruby_home %>
+  </p>
+  <p>
+    <%= f.label :repo_root %>
+    <%= f.text_field :repo_root %>
+  </p>
+  <!-- <p>
     <%= f.label :attachment_max_size %>
     <%= f.text_field :attachment_max_size %>
-  </p>
+  </p> -->
 </fieldset>
 <fieldset>
   <legend>

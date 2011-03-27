@@ -24,4 +24,6 @@ class Setting
 	field :time_format
 	field :attachment_max_size, :type => Integer
 	field :host_name
+	field :ruby_home
+	field :repo_root
 end

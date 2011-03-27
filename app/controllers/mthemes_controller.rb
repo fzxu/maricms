@@ -6,16 +6,20 @@ class MthemesController < ApplicationController
     if File.exist?(File.join(Rails.root, "themes", theme_name))
       FileUtils.remove_dir(File.join(Rails.root, "themes", theme_name))
     end
-    if File.exist?("/home/svn/default")
-      FileUtils.remove_dir("/home/svn/default")
+    
+    repo_path = File.join(@setting.repo_root, @setting.id.to_s, theme_name)
+    ruby_bin_path = File.join(@setting.ruby_home, "bin")
+    
+    if File.exist?(repo_path)
+      FileUtils.remove_dir(repo_path)
     end
 
-    notice = `svnadmin create /home/svn/#{theme_name}`
-    notice += `chown -R svn /home/svn/#{theme_name}`
-    notice += `chgrp -R svn /home/svn/#{theme_name}`
-    notice += `svn co svn+ssh://svn@#{@setting.host_name}/home/svn/#{theme_name} #{File.join(Rails.root, "themes", theme_name)}`
+    notice = `svnadmin create #{repo_path}`
+    notice += `chown -R svn #{repo_path}`
+    notice += `chgrp -R svn #{repo_path}`
+    notice += `svn co svn+ssh://svn@#{@setting.host_name}#{repo_path} #{File.join(Rails.root, "themes", theme_name)}`
 
-    notice += `cd #{Rails.root}; /usr/local/ruby/bin/rails g theme_for_tt:theme #{theme_name} --ruby=/usr/local/ruby/bin/ruby`
+    notice += `cd #{Rails.root}; #{ruby_bin_path}/rails g theme_for_mg:theme #{theme_name} --ruby=#{ruby_bin_path}/ruby`
 
     notice += `svn add #{File.join(Rails.root, "themes", theme_name)}/*`
     notice += `svn commit #{File.join(Rails.root, "themes", theme_name)} -m "init"`
@@ -31,7 +35,7 @@ class MthemesController < ApplicationController
 
     notice = `svn update #{File.join(Rails.root, "themes", theme_name)}`
     
-    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; /usr/local/ruby/bin/rake themes:update_cache`
+    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; #{ruby_bin_path}/rake themes:update_cache`
 
     respond_to do |format|
       format.html { redirect_to '/manage/setting', :notice => notice}

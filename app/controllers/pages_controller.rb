@@ -178,7 +178,7 @@ class PagesController < ApplicationController
 
   # GET /pages/1/edit
   def edit
-    @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+    @page = Page.find(params[:id])
   end
 
   # POST /pages
@@ -224,7 +224,7 @@ class PagesController < ApplicationController
   def update
     
     r_page_ds = params[:page].delete(:r_page_ds)
-    @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+    @page = Page.find(params[:id])
     mg_url = params[:page].delete(:mg_url).merge(:page_id => @page.id)
     
     if r_page_ds.size > 0
@@ -263,7 +263,7 @@ class PagesController < ApplicationController
   # DELETE /pages/1
   # DELETE /pages/1.xml
   def destroy
-    @page = Page.find(:first, :conditions => {:slug => params[:id]}) || Page.find(params[:id])
+    @page = Page.find(params[:id])
     @page.destroy
 
     respond_to do |format|

@@ -39,38 +39,7 @@
       <%= f.text_field :per_page %>
     </p>
   </fieldset>
-  <fieldset>
-    <legend>
-      Display
-    </legend>
-    <p>
-      Javascript paths:
-      <br/>
-      <% Dir.glob(File.join(theme_path, "javascripts", "*.js")).each do |js_file_str|
-      base_name = File.basename(js_file_str, ".js") %>
-      <% if base_name != 'global' %>
-      <%= fields_for "page[js_paths]" do |form| %>
-      <%= base_name %>:<%= form.check_box nil,{:checked => @page.js_paths.nil? ? false : @page.js_paths.include?(base_name)}, base_name, "" %>
-      <br/>
-      <% end %>
-      <% end %>
-      <% end %>
-    </p>
-  
-    <p>
-      CSS paths:
-      <br/>
-      <% Dir.glob(File.join(theme_path, "stylesheets", "*.css")).each do |css_file_str|
-      base_name = File.basename(css_file_str, ".css") %>
-      <% if base_name != 'global' %>
-      <%= fields_for "page[css_paths]" do |form| %>
-      <%= base_name %>:<%= form.check_box nil,{:checked => @page.css_paths.nil? ? false : @page.css_paths.include?(base_name)}, base_name, "" %>
-      <br/>
-      <% end %>
-      <% end %>
-      <% end %>
-    </p>
-  </fieldset>
+
   <fieldset>
     <legend>
       Datasource
@@ -103,13 +72,7 @@
       <% end %>
     </p>
   </fieldset>
-  <fieldset>
-    <legend>Add on code</legend>
-    <p>
-      <%= f.label :head_yield %><br/>
-      <%= f.text_area :head_yield %>
-    </p>
-  </fieldset>
+
   <div class="actions">
     <%= f.submit %>
   </div>

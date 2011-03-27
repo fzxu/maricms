@@ -151,9 +151,13 @@ class PagesController < ApplicationController
         end
       end
 
+      # add additional variables needed
+      render_params["theme_path"] = "/themes/" + get_theme
+      render_params["page_name"] = @page.name
+      
       respond_to do |format|
         puts render_params
-        format.html { render :layout => "front", :text => template.render(render_params, :registers => {:controller => self})}
+        format.html { render :layout => false, :text => template.render(render_params, :registers => {:controller => self})}
         format.xml  { render :xml => @page }
       end
     rescue BSON::InvalidObjectId => e

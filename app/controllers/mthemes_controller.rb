@@ -40,6 +40,8 @@ class MthemesController < ApplicationController
     
     notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; #{ruby_bin_path}/rake themes:update_cache`
 
+    notice += `cd #{Rails.root}; #{ruby_bin_path}/rake tmp:cache:clear`
+    
     respond_to do |format|
       format.html { redirect_to '/manage/setting', :notice => notice}
       format.xml { head :ok}

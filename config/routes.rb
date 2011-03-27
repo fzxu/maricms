@@ -1,5 +1,7 @@
 MariCMS::Application.routes.draw do
   
+  resources :ds_singles
+  
   resources :ds_trees do
     member do
       post 'move_up'

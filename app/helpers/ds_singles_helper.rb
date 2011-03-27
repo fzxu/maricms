@@ -1,0 +1,2 @@
+module DsSinglesHelper
+end

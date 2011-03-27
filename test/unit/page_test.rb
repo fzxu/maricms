@@ -13,7 +13,7 @@ class PageTest < ActiveSupport::TestCase
   end
   
   test "create a normal page" do
-    page = Page.new(:slug => "home", :name => "Home", :theme_path=> "home.liquid",
+    page = Page.new(:name => "Home", :theme_path=> "home.liquid",
     :js_paths => ["accordion.js", "event/cool.js"],
     :page_metas => [
       {
@@ -36,21 +36,7 @@ class PageTest < ActiveSupport::TestCase
     assert_equal "Pragma", page_ret.page_metas.second.http_equiv
     assert_equal "home.liquid", page_ret.theme_path
   end
-  
-  test "create an abnormal page, without slug" do
-    page = Page.new(:name => "About")
-    assert page.invalid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
-    assert page.errors[:slug].any?, "should have error message about the missing slug"
-  end
-  
-  test "create an abnormal page, with duplicated slug" do
-    page = Page.new(:slug => "home", :name => "Home")
-    assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
-    page.save
-    page2 = Page.new(:slug => "home", :name => "Home2")
-    assert page2.invalid?
-  end
-
+    
   test "create a page with two data sources" do
     ds_blog = D.create(:key => "blog", :name => "Blog", :ds_elements => [
       {
@@ -85,7 +71,7 @@ class PageTest < ActiveSupport::TestCase
     r_page_event = RPageD.new(:query_hash =>{:ascending => "when", :descending => "name", :excludes => "name = Event4"})
     r_page_event.d = ds_event
 
-    page = Page.new(:slug => "home2", :name => "Home2")
+    page = Page.new(:name => "Home2")
     assert page.valid?, page.errors.full_messages.map { |msg| msg + ".\n" }.join
     page.r_page_ds = [r_page_blog, r_page_event]
 
@@ -93,7 +79,6 @@ class PageTest < ActiveSupport::TestCase
     page.save
 
     page_ret = Page.find(:all).first
-    assert_equal page_ret.slug, "home2"
     assert_equal page_ret.r_page_ds.size, 2
     assert_equal page_ret.r_page_ds.first.d, ds_blog
     assert_equal page_ret.r_page_ds.last.d, ds_event

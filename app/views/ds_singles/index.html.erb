@@ -1,0 +1,22 @@
+<h4>Editing <%= @d.name %></h4>
+
+<%= form_for(:record, :url => ds_singles_path(:d => @d.id), :html => {:method => :post, :multipart => true}) do |f| %>
+  <% if @record.errors.any? %>
+    <div id="error_explanation" class="error">
+      <h4><%= pluralize(@record.errors.count, "error") %> prohibited this record from being saved:</h4>
+      <ul>
+        <% @record.errors.full_messages.each do |msg| %>
+        <li>
+          <%= msg %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render :partial => 'ds_lists/form_element', :object => f %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

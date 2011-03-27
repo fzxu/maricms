@@ -30,7 +30,7 @@
 </span>
 
 <%= form_for(:record, :url => ds_list_path(@record, :d => @d.id), :html => {:method => :put, :multipart => true}) do |f| %>
-<% if @record.errors.any? || @record.mg_url.errors.any? %>
+<% if @record.errors.any? || (@record.mg_url && @record.mg_url.errors.any?) %>
 <div id="error_explanation" class="error">
   <% if @record.errors.count > 0 %>
     <h4><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h4>

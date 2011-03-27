@@ -1,6 +1,6 @@
 <h2>New <%= @d.name %></h2>
 
-<%= form_for(:record, :url => ds_trees_path( :d => @d.id), :html => {:method => :post}) do |f| %>
+<%= form_for(:record, :url => ds_trees_path( :d => @d.id), :html => {:method => :post, :multipart => true}) do |f| %>
   <% if @record.errors.any? %>
     <div id="error_explanation" class="error">
       <h4><%= pluralize(@record.errors.count, "error") %> prohibited this tab from being saved:</h4>

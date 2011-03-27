@@ -13,6 +13,7 @@ class MthemesController < ApplicationController
     if File.exist?(repo_path)
       FileUtils.remove_dir(repo_path)
     end
+    FileUtils.mkdir_p(File.join(@setting.repo_root, @setting.id.to_s))
 
     notice = `svnadmin create #{repo_path}`
     notice += `chown -R svn #{repo_path}`

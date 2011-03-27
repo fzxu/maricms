@@ -10,7 +10,6 @@ class MthemesController < ApplicationController
     end
     
     repo_path = File.join(@setting.repo_root, @setting.id.to_s, theme_name)
-    ruby_bin_path = File.join(@setting.ruby_home, "bin")
     
     if File.exist?(repo_path)
       FileUtils.remove_dir(repo_path)
@@ -47,5 +46,11 @@ class MthemesController < ApplicationController
       format.xml { head :ok}
     end
 
+  end
+  
+  private
+  
+  def ruby_bin_path
+    File.join(@setting.ruby_home, "bin")
   end
 end

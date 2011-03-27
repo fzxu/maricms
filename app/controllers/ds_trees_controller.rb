@@ -196,7 +196,7 @@ class DsTreesController < ApplicationController
           # support parent
           par = rec.parent
           while par
-            if  par.name =~ /#{params[:sSearch]}/
+            if  par.mg_name =~ /#{params[:sSearch]}/
               found = true
             end
             par = par.parent

@@ -20,7 +20,7 @@
           "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>
       <% end %>
-      "<%= ActiveSupport::JSON.encode rec.parent.name if rec.parent %>",
+      "<%= ActiveSupport::JSON.encode rec.parent.mg_name if rec.parent %>",
       "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",
       "<%= rec.position.to_i %>",
       "<%= (button_to "Up", move_up_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_down_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",

@@ -6,8 +6,8 @@ gem 'jquery-rails'
 
 #gem "mongo_mapper"
 gem "bson_ext", "~> 1.2"
-#gem "mongoid", "2.0.0.rc.7"
-gem "mongoid", :git => "git://github.com/mongoid/mongoid.git"
+gem "mongoid", "2.0.0.rc.8"
+#gem "mongoid", :git => "git://github.com/mongoid/mongoid.git"
 
 gem 'mongoid-tree', :git => "https://github.com/benedikt/mongoid-tree.git", :branch => "mongoid-2.0.0", :require => 'mongoid/tree'
 gem 'mongoid_order'

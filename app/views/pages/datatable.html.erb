@@ -6,7 +6,7 @@
   <% @records.each_with_index do |rec,ind| %>
     <% indentation = '-' * rec.depth %>
     [
-      "<%= indentation + ActiveSupport::JSON.encode (rec.name) %>",
+      "<%= indentation + (ActiveSupport::JSON.encode rec.name) %>",
       "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",
       "<%= rec.parent.name if rec.parent%>",
       "<%= rec.theme_path %>",

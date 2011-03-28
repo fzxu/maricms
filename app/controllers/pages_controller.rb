@@ -227,7 +227,7 @@ class PagesController < ApplicationController
     @page = Page.find(params[:id])
     mg_url = params[:page].delete(:mg_url).merge(:page_id => @page.id)
     
-    if r_page_ds.size > 0
+    if r_page_ds && r_page_ds.size > 0
 
       #remove the old ones
       @page.r_page_ds.destroy_all

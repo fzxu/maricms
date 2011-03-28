@@ -147,15 +147,6 @@ class D
     EXT_CLASS_PREFIX + self.key.capitalize
   end
   
-  def convert_symbol(inhash)
-    inhash.inject({}) do |memo,(k,v)|
-      if v.is_a?(Hash)
-        v = convert_symbol(v)
-      end
-      memo[k.to_sym] = v; memo
-    end
-  end
-
   def remove_page_relation
     # loop all the pages and delete the related refs
     Page.all.each do |p|

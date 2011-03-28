@@ -21,11 +21,16 @@ class MthemesController < ApplicationController
     notice += `chgrp -R svn #{repo_path}`
     notice += `svn co file://#{repo_path} #{File.join(Rails.root, "themes", theme_name)}`
 
+    # generate the default theme
     notice += `cd #{Rails.root}; #{ruby_bin_path}/rails g theme_for_mg:theme #{theme_name} --ruby=#{ruby_bin_path}/ruby`
 
+    # commit in the init version
     notice += `cd #{theme_path}; svn add #{theme_path}/*`
     notice += `cd #{theme_path}; svn commit #{theme_path} -m "init"`
 
+    # clear the cache for sure
+    notice += `cd #{Rails.root}; #{ruby_bin_path}/rake tmp:cache:clear`
+    
     respond_to do |format|
       format.html { redirect_to '/manage/setting', :notice => notice}
       format.xml { head :ok}

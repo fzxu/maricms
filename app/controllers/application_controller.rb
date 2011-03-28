@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 
             # remove related alias cache
             MgUrl.where(:page_id => p.id).each do |a|
-              expire_fragment(/alias\S+#{a.path}/)
+              expire_fragment(/\S+#{a.path}/)
             end
           end
         end
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     expire_fragment(/pages\S+#{page.id}/)
     # remove related alias cache
     MgUrl.where(:page_id => page.id).each do |a|
-      expire_fragment(/alias\S+#{a.path}/)
+      expire_fragment(/\S+#{a.path}/)
     end
   end
 end

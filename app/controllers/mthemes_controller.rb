@@ -19,7 +19,7 @@ class MthemesController < ApplicationController
     notice = `svnadmin create #{repo_path}`
     notice += `chown -R svn #{repo_path}`
     notice += `chgrp -R svn #{repo_path}`
-    notice += `svn co svn+ssh://svn@localhost#{repo_path} #{File.join(Rails.root, "themes", theme_name)}`
+    notice += `svn co file://#{repo_path} #{File.join(Rails.root, "themes", theme_name)}`
 
     notice += `cd #{Rails.root}; #{ruby_bin_path}/rails g theme_for_mg:theme #{theme_name} --ruby=#{ruby_bin_path}/ruby`
 

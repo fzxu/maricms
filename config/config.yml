@@ -23,7 +23,7 @@ defaults: &defaults
   attachment_max_size: ""
   host_name: "localhost"
   ruby_home: "/usr/local/ruby/"
-  repo_root: "/home/svn/"
+  repo_root: "/home/www/"
 	
 development:
   <<: *defaults

@@ -1,4 +1,5 @@
 module ApplicationHelper
+  
   def datatable(columns=nil, opts={})
     sort_by = opts[:sort_by] || nil
     additional_data = opts[:additional_data] || {}

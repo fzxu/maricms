@@ -11,11 +11,7 @@ INT_CLASS_PREFIX = "Mg"
 
 IMAGE_CONVERT_QUALITY = ["100", "90", "80", "70", "60", "50", "40"]
 
-
-# Initialized all the uploader, it should be initialied before the ds
-# ImageStyle.all.each do |is|
-#   is.gen_uploader_klass
-# end
+MOBILE_BROWSERS = ["android", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
 
 # Initialized all the ds
 D.all.each do |d|

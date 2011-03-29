@@ -23,9 +23,7 @@ class ApplicationController < ActionController::Base
             expire_fragment(/pages\S+#{p.id}/)
 
             # remove related alias cache
-            MgUrl.where(:page_id => p.id).each do |a|
-              expire_fragment(/\S+#{a.path}/)
-            end
+            expire_alias_for_page(p)
           end
         end
       end
@@ -36,8 +34,31 @@ class ApplicationController < ActionController::Base
     #expire_fragment(/pages\S+#{page.slug}/)
     expire_fragment(/pages\S+#{page.id}/)
     # remove related alias cache
+    expire_alias_for_page(page)
+  end
+
+  def handle_mobile
+    request.format = :mobile if mobile_user_agent?
+  end
+  
+  def mobile_user_agent?
+    agent = request.headers["HTTP_USER_AGENT"].downcase
+    unless @mobile_user_agent
+      MOBILE_BROWSERS.each do |m|
+        @mobile_user_agent = agent.match(m) && !(agent =~ /ipad/)
+        break if @mobile_user_agent
+      end      
+    end
+    @mobile_user_agent
+  end
+
+  private
+
+  def expire_alias_for_page(page)
     MgUrl.where(:page_id => page.id).each do |a|
       expire_fragment(/\S+#{a.path}/)
+      expire_fragment(/\S+\/index/)
+      expire_fragment(/\S+\/.mobile/)
     end
-  end
+  end    
 end

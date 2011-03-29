@@ -88,9 +88,9 @@ class MgUrlsController < ApplicationController
   # DELETE /mg_aliases/1.xml
   def destroy
     @mg_url = MgUrl.find(params[:id])
-    old_path = @mg_url.path
-    @mg_url.destroy
     expire_action_cache(@mg_url)
+    @mg_url.destroy
+    
     respond_to do |format|
       format.html { redirect_to(mg_urls_url) }
       format.xml  { head :ok }
@@ -132,5 +132,7 @@ class MgUrlsController < ApplicationController
 
   def expire_action_cache(a)
     expire_fragment(/\S+#{a.path}/)
+    expire_fragment(/\S+\/index/)
+    expire_fragment(/\S+\/.mobile/)    
   end
 end

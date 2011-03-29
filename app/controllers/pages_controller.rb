@@ -331,7 +331,12 @@ class PagesController < ApplicationController
     begin
       template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.#{format}" ))
     rescue
-      template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.html" ))
+      begin
+        template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.html" ))
+      rescue
+        template = Liquid::Template.parse("The page template(#{page.theme_path}.#{format}) can not be found!")
+        return template
+      end
     end
     template = Liquid::Template.parse(template_content)  # Parses and compiles the template
   #TODO need to cache the template somewhere in future

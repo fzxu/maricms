@@ -22,15 +22,16 @@
     <%= f.label :current_theme %>
     <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
     <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
-    <% if @setting.current_theme && !@setting.current_theme.blank? && list_themes.size > 0%>
-    You can use the following svn url to check out the theme code:
-    <b>svn co svn+ssh://www@<%= @setting.host_name%><%= File.join(@setting.repo_root, @setting.id.to_s, @setting.current_theme) %></b>
-    <% end %>
-    <br/>
     <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post,
     :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
     <% if list_themes.size > 0 %>
-    <%= link_to "Sync and Cache the theme", sync_mtheme_path(:id => "default"), :method => :post %>
+      <%= link_to "Sync and Cache the theme", sync_mtheme_path(:id => "default"), :method => :post %>
+    <% end %><br/>
+    <% if File.exist?(File.join(@setting.repo_path, @setting.id.to_s, @setting.current_theme)) %>
+      You can use the following svn url to check out the theme code:<br/>
+      <fieldset>
+      <b>svn co svn+ssh://www@<%= @setting.host_name%><%= File.join(@setting.repo_path, @setting.id.to_s, @setting.current_theme) %></b>
+      </fieldset>
     <% end %>
   </p>
   <p>
@@ -38,13 +39,26 @@
     <%= f.text_field :host_name %>
   </p>
   <p>
-    <%= f.label :ruby_home %>
-    <%= f.text_field :ruby_home %>
+    <%= f.label :ruby_bin_path %>
+    <%= f.text_field :ruby_bin_path %>
   </p>
   <p>
-    <%= f.label :repo_root %>
-    <%= f.text_field :repo_root %>
+    <%= f.label :gem_bin_path %>
+    <%= f.text_field :gem_bin_path %>
   </p>
+  <p>
+    <%= f.label :repo_path %>
+    <%= f.text_field :repo_path %>
+  </p>
+  <p>
+    <%= f.label :repo_user %>
+    <%= f.text_field :repo_user %>
+  </p>
+  <p>
+    <%= f.label :repo_group %>
+    <%= f.text_field :repo_group %>
+  </p>
+
   <!-- <p>
     <%= f.label :attachment_max_size %>
     <%= f.text_field :attachment_max_size %>

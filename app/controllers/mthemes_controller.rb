@@ -9,27 +9,26 @@ class MthemesController < ApplicationController
       FileUtils.remove_dir(theme_path)
     end
     
-    repo_path = File.join(@setting.repo_root, @setting.id.to_s, theme_name)
+    repo_path = File.join(@setting.repo_path, @setting.id.to_s, theme_name)
     
     if File.exist?(repo_path)
       FileUtils.remove_dir(repo_path)
     end
-    FileUtils.mkdir_p(File.join(@setting.repo_root, @setting.id.to_s))
+    FileUtils.mkdir_p(File.join(@setting.repo_path, @setting.id.to_s))
 
     notice = `svnadmin create #{repo_path}`
-    notice += `chown -R svn #{repo_path}`
-    notice += `chgrp -R svn #{repo_path}`
+    notice += `chown -R #{@setting.repo_user}:#{@setting.repo_group} #{repo_path}`
     notice += `svn co file://#{repo_path} #{File.join(Rails.root, "themes", theme_name)}`
 
     # generate the default theme
-    notice += `cd #{Rails.root}; #{ruby_bin_path}/rails g theme_for_mg:theme #{theme_name} --ruby=#{ruby_bin_path}/ruby`
+    notice += `cd #{Rails.root}; #{gem_bin_path("rails")} g theme_for_mg:theme #{theme_name} --ruby=#{ruby_bin_path("ruby")}`
 
     # commit in the init version
     notice += `cd #{theme_path}; svn add #{theme_path}/*`
     notice += `cd #{theme_path}; svn commit #{theme_path} -m "init"`
 
     # clear the cache for sure
-    notice += `cd #{Rails.root}; #{ruby_bin_path}/rake tmp:cache:clear`
+    notice += `cd #{Rails.root}; #{gem_bin_path("rake")} tmp:cache:clear`
     
     respond_to do |format|
       format.html { redirect_to '/manage/setting', :notice => notice}
@@ -42,9 +41,9 @@ class MthemesController < ApplicationController
 
     notice = `svn update #{File.join(Rails.root, "themes", theme_name)}`
     
-    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; #{ruby_bin_path}/rake themes:update_cache`
+    notice += `cd #{File.join(Rails.root, "themes", theme_name)} ; #{gem_bin_path("rake")} themes:update_cache`
 
-    notice += `cd #{Rails.root}; #{ruby_bin_path}/rake tmp:cache:clear`
+    notice += `cd #{Rails.root}; #{gem_bin_path("rake")} tmp:cache:clear`
     
     respond_to do |format|
       format.html { redirect_to '/manage/setting', :notice => notice}
@@ -55,7 +54,11 @@ class MthemesController < ApplicationController
   
   private
   
-  def ruby_bin_path
-    File.join(@setting.ruby_home, "bin")
+  def ruby_bin_path(cmd)
+    File.join(@setting.ruby_bin_path, cmd)
+  end
+  
+  def gem_bin_path(cmd)
+    File.join(@setting.gem_bin_path, cmd)
   end
 end

@@ -22,8 +22,11 @@ defaults: &defaults
   time_format: "%H:%M"
   attachment_max_size: ""
   host_name: "localhost"
-  ruby_home: "/usr/local/ruby/"
-  repo_root: "/home/www/"
+  ruby_bin_path: "/usr/local/ruby/bin/"
+  gem_bin_path: "/usr/local/ruby/bin/"
+  repo_path: "/home/www/"
+  repo_user: "www"
+  repo_group: "www"
 	
 development:
   <<: *defaults

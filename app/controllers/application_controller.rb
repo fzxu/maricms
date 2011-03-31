@@ -1,5 +1,16 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_locale
+  def set_locale
+    # if params[:locale] is nil then I18n.default_locale will be used
+    I18n.locale = params[:locale]
+  end
+
+  def default_url_options(options={})
+    logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    { :locale => I18n.locale }
+  end
+
   def get_theme
     @setting.current_theme
   end
@@ -40,14 +51,14 @@ class ApplicationController < ActionController::Base
   def handle_mobile
     request.format = :mobile if mobile_user_agent?
   end
-  
+
   def mobile_user_agent?
     agent = request.headers["HTTP_USER_AGENT"].downcase
     unless @mobile_user_agent
       MOBILE_BROWSERS.each do |m|
         @mobile_user_agent = agent.match(m) && !(agent =~ /ipad/)
         break if @mobile_user_agent
-      end      
+      end
     end
     @mobile_user_agent
   end
@@ -60,5 +71,5 @@ class ApplicationController < ActionController::Base
       expire_fragment(/\S+\/index/)
       expire_fragment(/\S+\/.mobile/)
     end
-  end    
+  end
 end

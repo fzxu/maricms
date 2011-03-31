@@ -1,0 +1,10 @@
+en-US:
+  ds:
+    form:
+      ds_type_hint: (Please do not change it after creation, unless you know what you are doing!)
+    new:
+      title_new_ds: New DataSource
+    index:
+      title_list_ds: DataSources List
+    show:
+      title_show_ds: Show DataSource

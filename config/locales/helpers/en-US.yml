@@ -1,0 +1,15 @@
+"en-US":
+  helpers:
+    label:
+      user:
+        login: Username or email
+      d:
+        key: Key
+        name: Name
+        ds_type: DataSource Type
+        ds_view_type: DataSource View Type
+        time_log: Log Time
+      ds_element:
+        key: "Key"
+        name: "Name"
+        type: "Type"

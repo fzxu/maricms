@@ -25,6 +25,10 @@ gem 'carrierwave'
 gem "liquid", :git => "https://github.com/arkxu/liquid.git"
 #gem "liquid", :path => "/Users/arkxu/r/liquid"
 
+gem 'http_accept_language'
+
+#gem 'rack-contrib', :require => 'rack/contrib'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

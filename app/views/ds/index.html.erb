@@ -5,13 +5,13 @@
 <table id="datasource" class="datatable">
   <thead>
     <tr>
-    	<th>Key(Unique)</th>
-    	<th>Name</th>
-      <th>DataSource Type</th>
-      <th>View Type</th>
-      <th>Log Time</th>
-      <th>Field Count</th>
-      <th>Op.</th>
+    	<th><%= t ".ds_key" %></th>
+    	<th><%= t ".ds_name" %></th>
+      <th><%= t ".ds_type" %></th>
+      <th><%= t ".ds_view_type" %></th>
+      <th><%= t ".ds_log_time" %></th>
+      <th><%= t ".ds_field_count" %></th>
+      <th><%= t ".ds_operation" %></th>
     </tr>
   </thead>
   <tbody></tbody>
@@ -19,4 +19,4 @@
 
 <br />
 
-<%= link_to 'New DataSource', new_d_path %>
+<%= link_to (t ".new_ds"), new_d_path %>

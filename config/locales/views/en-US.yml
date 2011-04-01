@@ -5,6 +5,14 @@ en-US:
     new:
       title_new_ds: New DataSource
     index:
-      title_list_ds: DataSources List
+      title_list_ds: DataSource List
+      ds_key: Key(Unique)
+      ds_name: Name
+      ds_type: Type
+      ds_view_type: View Type
+      ds_log_time: Log Timestamp?
+      ds_field_count: Field Count.
+      ds_operation: Op.
+      new_ds: New DataSource
     show:
       title_show_ds: Show DataSource

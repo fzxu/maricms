@@ -1,14 +1,22 @@
 class ApplicationController < ActionController::Base
+  include HttpAcceptLanguage
+  
   protect_from_forgery
   before_filter :set_locale
   def set_locale
     # if params[:locale] is nil then I18n.default_locale will be used
-    I18n.locale = params[:locale]
+    logger.debug "*MG Accept-Language: #{request.env['HTTP_ACCEPT_LANGUAGE']}"
+    I18n.locale = params[:locale] || preferred_language_from(AVAILABLE_LOCALE)
+    logger.debug "*MG Locale set to '#{I18n.locale}'"
   end
 
   def default_url_options(options={})
-    logger.debug "default_url_options is passed options: #{options.inspect}\n"
-    { :locale => I18n.locale }
+    logger.debug "*MG default_url_options is passed options: #{options.inspect}\n"
+    if params[:locale]
+      { :locale => I18n.locale }
+    else
+      {}
+    end
   end
 
   def get_theme

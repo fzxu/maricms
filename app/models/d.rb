@@ -72,19 +72,12 @@ class D
         
       elsif ds_element.ftype == "Text"
         meta_string += "field :#{ds_element.key}, :type => String \n"
-      elsif ds_element.ftype == "Date" || ds_element.ftype == "DateTime" || ds_element.ftype == "Time"
-        meta_string += "field :#{ds_element.key}, :type => #{ds_element.ftype} \n"
-        liquid_string += <<-TIMELOG
-          '#{ds_element.key}' => self.#{ds_element.key}.nil? ? "" : self.#{ds_element.key}.strftime("#{setting.date_format}"),
-        TIMELOG
       else
         meta_string += "field :#{ds_element.key}, :type => #{ds_element.ftype} \n"
       end
       
-      # add date to liquid output
-      unless ds_element.ftype == "Date" || ds_element.ftype == "DateTime" || ds_element.ftype == "Time"
-        liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
-      end
+      # add fields to liquid output
+      liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
       
       # handle the unique attribute
       if ds_element.unique

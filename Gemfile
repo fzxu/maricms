@@ -27,6 +27,8 @@ gem "liquid", :git => "https://github.com/arkxu/liquid.git"
 
 gem 'http_accept_language'
 
+gem 'rspec-rails', :group => [:development, :test]
+
 #gem 'rack-contrib', :require => 'rack/contrib'
 
 # Bundle edge Rails instead:

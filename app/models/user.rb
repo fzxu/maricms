@@ -7,7 +7,7 @@ class User
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
-  attr_accessor :login
+  attr_accessor :login, :email
   attr_accessible :login, :user_name, :email, :password, :password_confirmation
   
   field :user_name

@@ -145,6 +145,8 @@ class PagesController < ApplicationController
       render_params["theme_path"] = "/themes/" + get_theme
       render_params["current_page"] = @page
       render_params["current_lang"] = I18n.locale.to_s
+      render_params["current_alias"] = @mg_url
+      render_params["current_url"] = request.request_uri
 
       respond_to do |format|
         format.html do

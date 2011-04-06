@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   def set_locale
     # if params[:locale] is nil then I18n.default_locale will be used
     logger.debug "*MG Accept-Language: #{request.env['HTTP_ACCEPT_LANGUAGE']}"
-    I18n.locale = params[:locale] || preferred_language_from(AVAILABLE_LANGUAGES)
+    I18n.locale = params[:locale] || Setting.first.default_lang
     logger.debug "*MG Locale set to '#{I18n.locale}'"
   end
 

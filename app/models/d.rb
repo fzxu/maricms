@@ -21,15 +21,16 @@ class D
 
   scope :list, :where => {:ds_type => "List"}
   scope :tree, :where => {:ds_type => "Tree"}
-  
+
   scope :developer_view, :where => {:ds_view_type => "Developer"}
   scope :user_view, :where => {:ds_view_type => "User"}
-  
+
   # regenerate the Class on the fly when changed
   after_save :gen_klass
   before_destroy :remove_page_relation, :remove_collection, :destroy_klass
-  
   def gen_klass
+    setting = Setting.first
+
     class_name = gen_class_name
 
     # Need to recreate the klass even it is exist, because it has been changed
@@ -44,7 +45,7 @@ class D
 
     # generate the class const and inherit the class with the name = ds_type
     klass = Object.const_set(class_name,Class.new(Object.const_get("Ds" + self.ds_type) || Object))
-    
+
     # can find the related d from the ds record
     meta_string = <<-INIT
       cattr_accessor :d
@@ -54,36 +55,53 @@ class D
       meta_string += "\n include Mongoid::Timestamps \n"
     end
 
-
     liquid_string = ""
-    
+
     self.ds_elements.each do |ds_element|
-      # assemble the model based on the ftype
+    # assemble the model based on the ftype
       if ds_element.ftype == "File"
-        meta_string += "mount_uploader :#{ds_element.key}, FileUploader \n"
+        if ds_element.multi_lang
+          setting.languages.each do |l|
+            meta_string += "mount_uploader :#{ds_element.key}__#{l.gsub(/-/, '_')}, FileUploader \n"
+          end
+        else
+          meta_string += "mount_uploader :#{ds_element.key}__#{setting.default_language}, FileUploader \n"
+        end
       elsif ds_element.ftype == "Image"
-        
+
         # if the related image style has been deleted
         begin
           image_style = ImageStyle.find(ds_element.image_style_id)
         rescue
         end
-        meta_string += "mount_uploader :#{ds_element.key}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
         
+        if ds_element.multi_lang
+          setting.languages.each do |l|
+            meta_string += "mount_uploader :#{ds_element.key}__#{l.gsub(/-/, '_')}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
+          end
+        else
+          meta_string += "mount_uploader :#{ds_element.key}__#{setting.default_language}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
+        end
+        
+
       elsif ds_element.ftype == "Text"
-        meta_string += "field :#{ds_element.key}, :type => String \n"
+        meta_string += add_text_fields(ds_element, setting, "String")
       else
-        meta_string += "field :#{ds_element.key}, :type => #{ds_element.ftype} \n"
+        meta_string += add_text_fields(ds_element, setting)
       end
-      
-      # add fields to liquid output
-      liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
-      
+
+      # add fields to liquid output, which is language specific
+      if ds_element.multi_lang
+        liquid_string += "'#{ds_element.key}' => self.send(\"#{ds_element.key}__" + '#{I18n.locale.to_s.gsub(/-/, \'_\')}' + "\"), \n"
+      else
+        liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}__#{setting.default_language}, \n"
+      end
+
       # handle the unique attribute
       if ds_element.unique
         meta_string += "validates_uniqueness_of :#{ds_element.key} \n"
       end
-      
+
       # handle the notnull attribute
       if ds_element.notnull
         meta_string += "validates_presence_of :#{ds_element.key} \n"
@@ -139,25 +157,25 @@ class D
   def gen_class_name
     EXT_CLASS_PREFIX + self.key.capitalize
   end
-  
+
   def remove_page_relation
     # loop all the pages and delete the related refs
     Page.all.each do |p|
       if p.r_page_ds
         p.r_page_ds.each do |r_page_d|
           if r_page_d.d.id == self.id
-            r_page_d.destroy
+          r_page_d.destroy
           end
         end
       end
     end
   end
-  
+
   def remove_collection
     # delete the data in mongodb
     self.get_klass.delete_all
   end
-  
+
   def destroy_klass
     class_name = gen_class_name
 
@@ -169,6 +187,20 @@ class D
       rescue NameError
       end
     end
-    GC.start    
+    GC.start
   end
+ 
+  # add mongoid fields to the model based on the ds structure and the language setting
+  def add_text_fields(ds_element, setting, ftype = nil)
+    local_meta_string = ""
+    if ds_element.multi_lang
+      setting.languages.each do |l|
+        local_meta_string += "field :#{ds_element.key}__#{l.gsub(/-/, '_')}, :type => #{ftype || ds_element.ftype} \n"
+      end
+      local_meta_string
+    else
+      local_meta_string += "field :#{ds_element.key}__#{setting.default_language}, :type => #{ftype || ds_element.ftype} \n"
+    end
+  end
+
 end

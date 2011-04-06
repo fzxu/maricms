@@ -105,6 +105,8 @@ class DsTreesController < ApplicationController
     unless mg_url[:path].blank?
       @record.mg_url = MgUrl.new(mg_url) unless @record.mg_url
     end
+    
+    #TODO need to remove the existing alias when the passing mg_url is null and @recoard.mg_url has value
 
     respond_to do |format|
       if @record.update_attributes(params[:record]) && (@record.mg_url.update_attributes(mg_url) if @record.mg_url)

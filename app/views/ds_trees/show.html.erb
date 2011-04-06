@@ -4,15 +4,15 @@
 <p>
   <%= label_tag element.name %><br/>
   <% if element.ftype == "File" %>
-    <%= link_to "Download", @record.send(element.key).url %>
+    <%= link_to "Download", @record.send("#{element.key}__#{@setting.default_language}").url %>
   <% elsif element.ftype == "Image"%>
-    <%= image_tag @record.send(element.key).url %>
+    <%= image_tag @record.send("#{element.key}__#{@setting.default_language}").url %>
   <% elsif element.ftype == "Text" %>
-    <%= render :inline => @record.send(element.key) %>
+    <%= render :inline => @record.send("#{element.key}__#{@setting.default_language}") %>
   <% elsif element.ftype == "DateTime" %>
     <%= @record.send(element.key).strftime(@setting.date_format) if @record.send(element.key)%>
   <% else %>
-    <%= @record.send(element.key) %>
+    <%= @record.send("#{element.key}__#{@setting.default_language}") %>
   <% end %>
 </p>
 <% end %>

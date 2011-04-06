@@ -6,6 +6,7 @@ class DsElement
   field :ftype, :default => "String"
   field :unique, :type => Boolean, :default => false
   field :notnull, :type => Boolean, :default => false
+  field :multi_lang, :type => Boolean, :default => false
   
   referenced_in :image_style
   embedded_in :d

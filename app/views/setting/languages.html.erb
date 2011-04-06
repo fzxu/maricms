@@ -26,8 +26,8 @@
   <fieldset>
     <legend>Language</legend>
     <p>
-      <%= f.label :default_language %>
-      <%= f.select(:default_language, (@setting.languages.collect {|l| [t("general_lang_name", :locale => l), l.to_s]}))%>
+      <%= f.label :default_lang %>
+      <%= f.select(:default_lang, (@setting.languages.collect {|l| [t("general_lang_name", :locale => l), l.to_s]}))%>
     </p>
     <p>
       <%= f.label :use_client_locale %>?

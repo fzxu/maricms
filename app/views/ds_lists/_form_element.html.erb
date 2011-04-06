@@ -4,23 +4,57 @@
     <p>
       <%= form_element.label element.name %>
       <% if element.ftype == "File" %>
-        <%= form_element.file_field element.key %><br/>
-        File Name: <%= @record.send("#{element.key}_filename") %>
+        <% if element.multi_lang %>
+          <% @setting.languages.each do |l| %>
+            <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
+            <%= form_element.file_field "#{element.key}__#{l.gsub(/-/, '_')}" %>
+            File Name: <%= @record.send("#{element.key}__#{l.gsub(/-/, '_')}_filename") %>
+          <% end %>
+        <% else %>
+          <br/><%= form_element.file_field "#{element.key}__#{@setting.default_language}" %>
+          File Name: <%= @record.send("#{element.key}__#{@setting.default_language}_filename") %>
+        <% end %>
       <% elsif element.ftype == "Image" %>
-        <%= form_element.file_field element.key %><br/>
-        <%= form_element.hidden_field "#{element.key}_cache" %><br/>
-        <%= image_tag @record.send(element.key).mg_small.url %>
+        <% if element.multi_lang %>
+          <% @setting.languages.each do |l| %>
+            <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
+            <%= form_element.file_field "#{element.key}__#{l.gsub(/-/, '_')}" %><br/>
+            <%= form_element.hidden_field "#{element.key}__#{l.gsub(/-/, '_')}_cache" %><br/>
+            <%= image_tag @record.send("#{element.key}__#{l.gsub(/-/, '_')}").mg_small.url %>                  
+          <% end %>
+        <% else %>
+          <%= form_element.file_field "#{element.key}__#{@setting.default_language}" %><br/>
+          <%= form_element.hidden_field "#{element.key}__#{@setting.default_language}_cache" %><br/>
+          <%= image_tag @record.send("#{element.key}__#{@setting.default_language}").mg_small.url %>                          
+        <% end %>
       <% elsif element.ftype == "Text" %>
-        <%= form_element.text_area element.key, :id => element.key %>
-        <script>
-          KE.show({
-            id : "<%=element.key%>",
-            width : "760px", //编辑器的宽度为70%
-            height : "300px", //编辑器的高度为100px
-            allowFileManager : true,
-            imageUploadJson:'/editor_attachments/upload'
-          });
-        </script>
+        <% if element.multi_lang %>
+          <% @setting.languages.each do |l| %>
+            <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
+            <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
+            <script>
+              KE.show({
+                id : "<%= element.key %>__<%= l.gsub(/-/, '_') %>",
+                width : "760px", //编辑器的宽度为70%
+                height : "300px", //编辑器的高度为100px
+                allowFileManager : true,
+                imageUploadJson:'/editor_attachments/upload'
+              });
+            </script>
+            
+          <% end %>
+        <% else %>
+          <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
+          <script>
+            KE.show({
+              id : "<%= element.key %>__<%= @setting.default_language %>",
+              width : "760px", //编辑器的宽度为70%
+              height : "300px", //编辑器的高度为100px
+              allowFileManager : true,
+              imageUploadJson:'/editor_attachments/upload'
+            });
+          </script>          
+        <% end %>
       <% elsif element.ftype == "Boolean" %>
         <%= form_element.check_box element.key %>
       <% elsif element.ftype == "DateTime" %>
@@ -31,7 +65,14 @@
           });
         </script>
       <% else %>
-        <%= form_element.text_field element.key %>
+        <% if element.multi_lang %>
+          <% @setting.languages.each do |l| %>
+            <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
+            <%= form_element.text_field "#{element.key}__#{l.gsub(/-/, '_')}" %>
+          <% end %>
+        <% else %>
+          <%= form_element.text_field "#{element.key}__#{@setting.default_language}" %>
+        <% end %>
       <% end %>
     </p>
   <% end %>

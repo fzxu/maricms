@@ -26,12 +26,22 @@ TIME_FORMATS = [
   '%I:%M %p'
 ]
 
-
 IMAGE_CONVERT_QUALITY = ["100", "90", "80", "70", "60", "50", "40"]
 
 MOBILE_BROWSERS = ["android", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
 
 AVAILABLE_LANGUAGES = ['en-US', 'zh-CN', 'zh-TW', 'ja']
+
+# load init setting
+setting = Setting.first
+unless setting
+  default_image_style = APP_CONFIG.delete("image_style")
+  Setting.create(APP_CONFIG)
+  ImageStyle.create(default_image_style)
+end
+
+# now, set the default locale
+I18n.locale = setting.default_lang
 
 # Initialized all the ds
 D.all.each do |d|

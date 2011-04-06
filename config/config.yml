@@ -29,7 +29,7 @@ defaults: &defaults
   repo_group: "www"
   languages:
     - "zh-CN"
-  default_language: "zh-CN"
+  default_lang: "zh-CN"
   use_client_locale: false
 	
 development:

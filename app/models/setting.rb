@@ -14,6 +14,10 @@ class Setting
 	field :repo_group
 	
 	field :languages, :type => Array  #The languages that the sites currently supports
-	field :default_language
+	field :default_lang
 	field :use_client_locale, :type => Boolean
+	
+	def default_language
+	  self.default_lang.gsub(/-/, '_')
+	end
 end

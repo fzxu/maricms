@@ -91,11 +91,7 @@ class D
       end
 
       # add fields to liquid output, which is language specific
-      if ds_element.multi_lang
-        liquid_string += "'#{ds_element.key}' => self.send(\"#{ds_element.key}__" + '#{I18n.locale.to_s.gsub(/-/, \'_\')}' + "\"), \n"
-      else
-        liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}__#{setting.default_language}, \n"
-      end
+      liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\"), \n"
 
       # handle the unique attribute
       if ds_element.unique
@@ -107,6 +103,16 @@ class D
         meta_string += "validates_presence_of :#{ds_element.key} \n"
       end
     end
+
+    meta_string += <<-GETFIELD
+      def get_field_value(key)
+        if self.respond_to?(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
+          self.send(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
+        else
+          ""
+        end
+      end
+    GETFIELD
 
     #explore the timestamp to liquid
     if self.time_log

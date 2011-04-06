@@ -1,23 +1,6 @@
 class Setting
   include Mongoid::Document
 
-  DATE_FORMATS = [
-    '%Y-%m-%d',
-    '%d/%m/%Y',
-    '%d.%m.%Y',
-    '%d-%m-%Y',
-    '%m/%d/%Y',
-    '%d %b %Y',
-    '%d %B %Y',
-    '%b %d, %Y',
-    '%B %d, %Y'
-  ]
-
-  TIME_FORMATS = [
-    '%H:%M',
-    '%I:%M %p'
-  ]
-
 	field :application_title
   field :current_theme
 	field :date_format
@@ -29,4 +12,8 @@ class Setting
 	field :repo_path
 	field :repo_user
 	field :repo_group
+	
+	field :languages, :type => Array  #The languages that the sites currently supports
+	field :default_language
+	field :use_client_locale, :type => Boolean
 end

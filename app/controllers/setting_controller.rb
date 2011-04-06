@@ -52,4 +52,27 @@ class SettingController < ApplicationController
       end
     end
   end
+  
+  def languages
+    @setting = Setting.first
+  end
+  
+  def update_languages
+    @setting = Setting.first
+
+    respond_to do |format|
+      if @setting.update_attributes(params[:setting])
+        # regenerate all the Data source classes in mem
+        D.all.each do |d|
+          d.gen_klass
+        end
+        
+        format.html { redirect_to :action => "languages" }
+        format.xml  { head :ok }
+      else
+        format.html { redirect_to :action => "languages" }
+        format.xml  { render :xml => @setting.errors, :status => :unprocessable_entity }
+      end
+    end    
+  end
 end

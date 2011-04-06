@@ -1,0 +1,42 @@
+<div id="settings" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+  <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    <li class="ui-state-default ui-corner-top">
+      <a title="General" href="/manage/setting">General</a>
+    </li>
+    <li class="ui-state-default ui-corner-top">
+      <a title="Image Style" href="<%= image_styles_path %>">Image Style</a>
+    </li>
+    <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+      <a title="General" href="/manage/languages">Languages</a>
+    </li>  
+  </ul>
+</div>
+
+<h4>Language Setting</h4>
+
+<%= form_for(@setting, :url => "/manage/update_languages") do |f| %>
+  <fieldset>
+    <legend>Multi Languages</legend>
+    <% AVAILABLE_LANGUAGES.each do |ml| %>
+      <%= f.fields_for :languages, ml do |lf| %>
+        <%= t "general_lang_name", :locale => ml%>:<%= check_box_tag "setting[languages][]", ml, @setting.languages.include?(ml), {}%><br/>
+      <% end %>
+    <% end %>
+  </fieldset>
+  <fieldset>
+    <legend>Language</legend>
+    <p>
+      <%= f.label :default_language %>
+      <%= f.select(:default_language, (@setting.languages.collect {|l| [t("general_lang_name", :locale => l), l.to_s]}))%>
+    </p>
+    <p>
+      <%= f.label :use_client_locale %>?
+      <%= f.check_box :use_client_locale %>
+    </p>
+  </fieldset>
+  
+<div class="actions">
+  <%= f.submit %>
+</div>
+  
+<% end %>

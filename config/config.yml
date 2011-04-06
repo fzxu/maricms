@@ -27,6 +27,10 @@ defaults: &defaults
   repo_path: "/home/www/"
   repo_user: "www"
   repo_group: "www"
+  languages:
+    - "zh-CN"
+  default_language: "zh-CN"
+  use_client_locale: false
 	
 development:
   <<: *defaults

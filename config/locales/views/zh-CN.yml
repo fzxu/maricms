@@ -11,4 +11,5 @@ zh-CN:
       ds_log_time: 保存时间戳?
       ds_field_count: 字段数量
       ds_operation: 操作
-      new_ds: 新建数据源 
+      new_ds: 新建数据源
+  general_lang_name: 'Simplified Chinese (简体中文)'

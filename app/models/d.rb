@@ -95,15 +95,23 @@ class D
 
       # handle the unique attribute
       if ds_element.unique
-        setting.languages.each do |l|
-          meta_string += "validates_uniqueness_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+        if ds_element.multi_lang
+          setting.languages.each do |l|
+            meta_string += "validates_uniqueness_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+          end
+        else
+          meta_string += "validates_uniqueness_of :#{ds_element.key}__#{setting.default_language} \n"
         end
       end
 
       # handle the notnull attribute
       if ds_element.notnull
-        setting.languages.each do |l|
-          meta_string += "validates_presence_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+        if ds_element.multi_lang
+          setting.languages.each do |l|
+            meta_string += "validates_presence_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+          end
+        else
+          meta_string += "validates_presence_of :#{ds_element.key}__#{setting.default_language} \n"
         end
       end
     end

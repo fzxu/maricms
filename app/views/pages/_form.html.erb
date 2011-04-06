@@ -32,7 +32,14 @@
     </p>    
     <p>
       <%= f.label :theme_path %>
-      <%= f.collection_select :theme_path, Dir.glob(File.join(theme_path, "theme", "*.html")).map{|tf| File.basename(tf,".html")}, :to_s, :to_s %>
+      <%
+        selectable_html = []
+        all_html = Dir.glob(File.join(theme_path, "theme", "*.html"))
+        all_html.map do |tf|
+          selectable_html << File.basename(tf,".html") unless tf =~ /mobile\.html/
+        end   
+      %>
+      <%= f.collection_select :theme_path, selectable_html, :to_s, :to_s %>
     </p>
     <p>
       <%= f.label :per_page %>

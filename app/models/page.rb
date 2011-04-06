@@ -17,4 +17,16 @@ class Page
   
   before_destroy :move_children_to_parent
   
+  def to_liquid
+    {
+      "id" => self.id.to_s,
+      "name" => self.name,
+      "alias" => self.mg_url,
+      "root?" => self.root?,
+      "leaf?" => self.leaf?,
+      "parent" => self.parent,
+      "children" => self.children,
+      "depth" => self.depth      
+    }
+  end
 end

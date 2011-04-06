@@ -13,6 +13,8 @@ class DsTree
 
   def to_liquid
     {
+      "id" => self.id.to_s,
+      "alias" => self.mg_url,
       "root?" => self.root?,
       "leaf?" => self.leaf?,
       "parent" => self.parent,

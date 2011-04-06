@@ -143,11 +143,11 @@ class PagesController < ApplicationController
 
       # add additional variables needed
       render_params["theme_path"] = "/themes/" + get_theme
-      render_params["page_name"] = @page.name
+      render_params["current_page"] = @page
 
       respond_to do |format|
         format.html do
-          render :layout => false, :text => get_template(@page, "html").render(render_params, :registers => {:controller => self})
+          render :layout => false, :text => get_template(@page).render(render_params, :registers => {:controller => self})
         end
         format.mobile do
           render :layout => false, :text => get_template(@page, "mobile").render(render_params, :registers => {:controller => self})
@@ -327,16 +327,20 @@ class PagesController < ApplicationController
     Page.all.count
   end
 
-  def get_template(page, format = "html")
+  def get_template(page, format = nil)
     begin
-      template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.#{format}" ))
-    rescue
-      begin
+      if format
+        begin
+          template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.#{format}.html") )
+        rescue
+          template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.html" ))
+        end
+      else
         template_content = IO.read(File.join(theme_path, "theme", "#{page.theme_path}.html" ))
-      rescue
-        template = Liquid::Template.parse("The page template(#{page.theme_path}.#{format}) can not be found!")
-        return template
       end
+    rescue
+      template = Liquid::Template.parse("The page template(#{page.theme_path}.#{format}) can not be found!")
+      return template
     end
     template = Liquid::Template.parse(template_content)  # Parses and compiles the template
   #TODO need to cache the template somewhere in future

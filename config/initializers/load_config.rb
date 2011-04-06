@@ -41,7 +41,7 @@ unless setting
 end
 
 # now, set the default locale
-I18n.locale = setting.default_lang
+I18n.locale = Setting.first.default_lang
 
 # Initialized all the ds
 D.all.each do |d|

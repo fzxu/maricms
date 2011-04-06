@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 #source 'http://gemcutter.org'
 
-gem 'rails', '3.0.5'
+gem 'rails', '3.0.6'
 gem 'jquery-rails'
 
 #gem "mongo_mapper"
@@ -29,6 +29,9 @@ gem 'http_accept_language'
 
 gem 'rspec-rails', :group => [:development, :test]
 
+if RUBY_VERSION =~ /1\.8/
+  gem 'SystemTimer'
+end
 #gem 'rack-contrib', :require => 'rack/contrib'
 
 # Bundle edge Rails instead:

@@ -32,6 +32,8 @@ MOBILE_BROWSERS = ["android", "ipod", "opera mini", "blackberry", "palm","hiptop
 
 AVAILABLE_LANGUAGES = ['en-US', 'zh-CN', 'zh-TW', 'ja']
 
+TEMPLATE_VARIABLE_PREFIX = "mg_"
+
 # load init setting
 setting = Setting.first
 unless setting

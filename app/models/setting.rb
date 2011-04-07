@@ -20,4 +20,14 @@ class Setting
 	def default_language
 	  self.default_lang.gsub(/-/, '_')
 	end
+	
+	def to_liquid
+    {
+      "app_title" => self.application_title,
+      "current_theme" => self.current_theme,
+      "host_name" => self.host_name,
+      "languages" => self.languages,
+      "default_lang" => self.default_lang
+    }
+	end
 end

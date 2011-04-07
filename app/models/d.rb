@@ -91,7 +91,7 @@ class D
       end
 
       # add fields to liquid output, which is language specific
-      liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\"), \n"
+      liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
 
       # handle the unique attribute
       if ds_element.unique
@@ -117,9 +117,13 @@ class D
     end
 
     meta_string += <<-GETFIELD
-      def get_field_value(key)
-        if self.respond_to?(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
-          self.send(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
+      def get_field_value(key, multi_lang)
+        if multi_lang
+          if self.respond_to?(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
+            self.send(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
+          else
+            self.send(\"#\{key\}__#{setting.default_language}\") || ""
+          end
         else
           self.send(\"#\{key\}__#{setting.default_language}\") || ""
         end

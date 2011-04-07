@@ -126,7 +126,7 @@ class PagesController < ApplicationController
         v.each do |condition|
           result = result.where(condition)
         end
-        render_params["#{TEMPLATE_VARIABLE_PREFIX}#{k}"] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+        render_params["#{TEMPLATE_DYNAMIC_DS_PREFIX}#{k}"] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
       end
 
       # datasource query hash

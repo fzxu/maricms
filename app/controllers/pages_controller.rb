@@ -82,21 +82,26 @@ class PagesController < ApplicationController
         end
       end
 
-      q = {}
-      param_hash = params
+      #Assemble the variable and it's content, and then pass to template
+      render_params = Hash.new
+      render_params["#{TEMPLATE_VARIABLE_PREFIX}params"] = params
+
+      # alias query hash
+      alias_q = {}
+      alias_hash = params # combine the alias hash with the url params
 
       # try to convert the ds record which bind to the mg_url to query hash
       if @mg_url && !@mg_url.record.is_a?(Page)
         if !@mg_url.record.blank?
-          unless q[@mg_url.record.class.d.key]
-          q[@mg_url.record.class.d.key] = []
+          unless alias_q[@mg_url.record.class.d.key]
+            alias_q[@mg_url.record.class.d.key] = []
           end
-          q[@mg_url.record.class.d.key] << {"_id" => @mg_url.record_id}
+          alias_q[@mg_url.record.class.d.key] << {"_id" => @mg_url.record_id}
         else
           unless @mg_url.param_string.blank?
             @mg_url.param_string.split('&').each do |p_str|
               pair = p_str.strip.split('=')
-              param_hash[pair.first] = pair.last
+              alias_hash[pair.first] = pair.last
             end
           end
         end
@@ -104,12 +109,32 @@ class PagesController < ApplicationController
 
       end
 
-      #Assemble the variable and it's content, and then pass to template
-      render_params = Hash.new
-      render_params["params"] = params
+      # assemble the alias query hash
+      alias_hash.each do |k,v|
+        s = k.split(".")
+        if s && s.size > 2 && s[0] == "ds"
+          unless alias_q[s[1]]
+            alias_q[s[1]] = []
+          end
+          alias_q[s[1]] << {s[2] => v}
+        end
+      end
+      
+      # actually do the query and add to template
+      alias_q.each do |k, v|
+        result = D.where(:key => k).first.get_klass
+        v.each do |condition|
+          result = result.where(condition)
+        end
+        render_params["#{TEMPLATE_VARIABLE_PREFIX}#{k}"] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+      end
+
+      # datasource query hash
+      q = {}
+      param_hash = {}
+
 
       # Query the datasource based on the parameters
-
       param_hash.each do |k,v|
         s = k.split(".")
         if s && s.size > 2 && s[0] == "ds"

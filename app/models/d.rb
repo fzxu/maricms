@@ -121,7 +121,7 @@ class D
         if self.respond_to?(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
           self.send(\"#\{key\}__#\{I18n.locale.to_s.gsub(/-/, '_')\}\")
         else
-          ""
+          self.send(\"#\{key\}__#{setting.default_language}\") || ""
         end
       end
     GETFIELD

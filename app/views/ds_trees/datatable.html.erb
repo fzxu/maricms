@@ -13,7 +13,7 @@
         <% elsif ds_element.ftype == "Image" %>
           "<%= (image_tag rec.send("#{ds_element.key}__#{@setting.default_language}").mg_small.url).gsub(/\"/, "'") unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
         <% elsif ds_element.ftype == "DateTime" %>
-          "<%= rec.send(ds_element.key).strftime(@setting.date_format) unless rec.send(ds_element.key).blank? %>",
+          "<%= rec.send("#{ds_element.key}__#{@setting.default_language}").strftime(@setting.date_format) unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
         <% elsif ds_element.ftype == "File" %>
           "<%= (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send("#{ds_element.key}__#{@setting.default_language}").url).gsub(/\"/, "'") unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
         <% else %>

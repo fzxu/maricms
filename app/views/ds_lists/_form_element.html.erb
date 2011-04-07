@@ -56,12 +56,12 @@
           </script>          
         <% end %>
       <% elsif element.ftype == "Boolean" %>
-        <%= form_element.check_box element.key %>
+        <%= form_element.check_box "#{element.key}__#{@setting.default_language}" %>
       <% elsif element.ftype == "DateTime" %>
-        <%= form_element.text_field element.key, :id => element.key %>
+        <%= form_element.text_field "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
         <script>
           $(function() {
-            $( "#<%= element.key %>" ).datepicker({ dateFormat: 'yy-mm-dd' });
+            $( "#<%= "#{element.key}__#{@setting.default_language}" %>" ).datepicker({ dateFormat: 'yy-mm-dd' });
           });
         </script>
       <% else %>

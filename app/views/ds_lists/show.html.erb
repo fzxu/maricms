@@ -33,7 +33,7 @@
   <% elsif element.ftype == "Text" %>
     <%= render :inline => @record.send("#{element.key}__#{@setting.default_language}") %>
   <% elsif element.ftype == "DateTime" %>
-    <%= @record.send(element.key).strftime(@setting.date_format) if @record.send(element.key)%>
+    <%= @record.send("#{element.key}__#{@setting.default_language}").strftime(@setting.date_format) if @record.send(element.key)%>
   <% else %>
   	<%= @record.send("#{element.key}_#{@setting.default_lang}") %>
   <% end %>

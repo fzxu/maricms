@@ -1,16 +1,18 @@
 class MgUrl
   include Mongoid::Document
   
-  referenced_in :record, :polymorphic => true
+  belongs_to :record, :polymorphic => true
   
-  field :path
+  field :path, :type => String
   
-  field :param_string
+  field :param_string, :type => String
   
-  referenced_in :page
+  belongs_to :page
   
   validates_uniqueness_of :path
   validates_format_of :path, :with => /\A([\w]+)\z/
+  
+  index :path, :unique => true
   
   def to_liquid
     {

@@ -1,20 +1,20 @@
 class Setting
   include Mongoid::Document
 
-	field :application_title
-  field :current_theme
-	field :date_format
-	field :time_format
+	field :application_title, :type => String
+  field :current_theme, :type => String
+	field :date_format, :type => String
+	field :time_format, :type => String
 	field :attachment_max_size, :type => Integer
-	field :host_name
-	field :ruby_bin_path
-	field :gem_bin_path
-	field :repo_path
-	field :repo_user
-	field :repo_group
+	field :host_name, :type => String
+	field :ruby_bin_path, :type => String
+	field :gem_bin_path, :type => String
+	field :repo_path, :type => String
+	field :repo_user, :type => String
+	field :repo_group, :type => String
 	
 	field :languages, :type => Array  #The languages that the sites currently supports
-	field :default_lang
+	field :default_lang, :type => String
 	field :use_client_locale, :type => Boolean
 	
 	def default_language

@@ -1,7 +1,7 @@
 class DsSingle
   include Mongoid::Document
   
-  references_one :mg_url, :as => :record, :autosave => true
+  has_one :mg_url, :as => :record, :autosave => true
   
   def to_liquid
     {

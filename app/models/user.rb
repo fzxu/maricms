@@ -10,7 +10,7 @@ class User
   attr_accessor :login, :email
   attr_accessible :login, :user_name, :email, :password, :password_confirmation
   
-  field :user_name
+  field :user_name, :type => String
   
   validates_presence_of :user_name
   validates_uniqueness_of :user_name, :scope => authentication_keys[1..-1],

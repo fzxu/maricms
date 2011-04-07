@@ -2,11 +2,11 @@ class D
   include Mongoid::Document
 
   # This model is for data source
-  field :key
-  field :name
+  field :key, :type => String
+  field :name, :type => String
   field :time_log, :type => Boolean
-  field :ds_type, :default => "List"
-  field :ds_view_type, :default => "User"
+  field :ds_type, :type => String, :default => "List"
+  field :ds_view_type, :type => String, :default => "User"
 
   embeds_many :ds_elements
 

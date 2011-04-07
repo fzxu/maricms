@@ -4,14 +4,14 @@ class Page
   include Mongoid::Tree::Ordering
   include Mongoid::Tree::Traversal
   
-  field :name
-  field :theme_path
+  field :name, :type => String
+  field :theme_path, :type => String
   field :per_page, :type => Integer, :default => 20
     
   embeds_many :r_page_ds
   embeds_many :page_metas
   
-  references_one :mg_url, :as => :record, :autosave => true
+  has_one :mg_url, :as => :record, :autosave => true
   
   validates_presence_of :name
   

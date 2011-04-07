@@ -2,7 +2,7 @@ class DsList
   include Mongoid::Document
   include Mongoid::Orderable
   
-  references_one :mg_url, :as => :record, :autosave => true
+  has_one :mg_url, :as => :record, :autosave => true
   
   def to_liquid
     {

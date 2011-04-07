@@ -1,12 +1,12 @@
 class ImageStyle
   include Mongoid::Document
   
-  field :key
-  field :name
+  field :key, :type => String
+  field :name, :type => String
   
   field :width, :type => Integer
   field :height, :type => Integer
-  #field :format
+  
   field :quality, :type => Integer
   field :crop, :type => Boolean
   

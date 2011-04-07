@@ -3,10 +3,10 @@ class RPageD
 
   include Mongoid::Document
 
-  field :new_d_name
+  field :new_d_name, :type => String
   field :query_hash, :type => Hash
 
-  referenced_in :d
+  belongs_to :d
   embedded_in :page
   
   def default_query

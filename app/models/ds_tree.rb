@@ -4,8 +4,8 @@ class DsTree
   include Mongoid::Tree::Ordering
   include Mongoid::Tree::Traversal
 
-  references_one :mg_url, :as => :record, :autosave => true
-  field :mg_name
+  has_one :mg_url, :as => :record, :autosave => true
+  field :mg_name, :type => String
   
   validates_presence_of :mg_name
   

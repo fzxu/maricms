@@ -172,7 +172,7 @@ class PagesController < ApplicationController
       render_params["#{TEMPLATE_VARIABLE_PREFIX}current_lang"] = I18n.locale.to_s
       render_params["#{TEMPLATE_VARIABLE_PREFIX}setting"] = @setting
       render_params["#{TEMPLATE_VARIABLE_PREFIX}current_alias"] = @mg_url
-      render_params["#{TEMPLATE_VARIABLE_PREFIX}current_url"] = request.request_uri
+      render_params["#{TEMPLATE_VARIABLE_PREFIX}current_url"] = request.fullpath
 
       respond_to do |format|
         format.html do
@@ -357,6 +357,9 @@ class PagesController < ApplicationController
   end
 
   def get_template(page, format = nil)
+    # for include tag usage
+    Liquid::Template.file_system = Liquid::ThemeFileSystem.new(File.join(theme_path, "theme"))
+    
     begin
       if format
         begin

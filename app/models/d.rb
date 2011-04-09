@@ -93,25 +93,27 @@ class D
       # add fields to liquid output, which is language specific
       liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
 
-      # handle the unique attribute
-      if ds_element.unique
-        if ds_element.multi_lang
-          setting.languages.each do |l|
-            meta_string += "validates_uniqueness_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+      if ds_element.ftype == "String" || ds_element.ftype == "Text" 
+        # handle the unique attribute
+        if ds_element.unique
+          if ds_element.multi_lang
+            setting.languages.each do |l|
+              meta_string += "validates_uniqueness_of :#{ds_element.key}__#{l.gsub(/-/, '_')}, :allow_blank => true \n"
+            end
+          else
+            meta_string += "validates_uniqueness_of :#{ds_element.key}__#{setting.default_language}, :allow_blank => true \n"
           end
-        else
-          meta_string += "validates_uniqueness_of :#{ds_element.key}__#{setting.default_language} \n"
         end
-      end
-
-      # handle the notnull attribute
-      if ds_element.notnull
-        if ds_element.multi_lang
-          setting.languages.each do |l|
-            meta_string += "validates_presence_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+  
+        # handle the notnull attribute
+        if ds_element.notnull
+          if ds_element.multi_lang
+            setting.languages.each do |l|
+              meta_string += "validates_presence_of :#{ds_element.key}__#{l.gsub(/-/, '_')} \n"
+            end
+          else
+            meta_string += "validates_presence_of :#{ds_element.key}__#{setting.default_language} \n"
           end
-        else
-          meta_string += "validates_presence_of :#{ds_element.key}__#{setting.default_language} \n"
         end
       end
     end

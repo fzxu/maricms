@@ -102,14 +102,22 @@ class DsTreesController < ApplicationController
       @record.parent = @d.get_klass.find(parent_id)
     end
 
-    unless mg_url[:path].blank?
-      @record.mg_url = MgUrl.new(mg_url) unless @record.mg_url
+    if mg_url[:path].blank?
+      if @record.mg_url
+        @record.mg_url.destroy
+      end
+    else
+      if @record.mg_url
+        @record.mg_url.update_attributes(mg_url)
+      else
+        @record.mg_url = MgUrl.new(mg_url)
+      end
     end
     
     #TODO need to remove the existing alias when the passing mg_url is null and @recoard.mg_url has value
 
     respond_to do |format|
-      if @record.update_attributes(params[:record]) && (@record.mg_url.update_attributes(mg_url) if @record.mg_url)
+      if @record.update_attributes(params[:record])
         expire_action_cache(@record)
         format.html { redirect_to(ds_trees_path(:d => @d.id), :notice => 'Tree was successfully updated.') }
         format.xml  { head :ok }

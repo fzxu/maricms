@@ -35,11 +35,20 @@ class DsListsController < ApplicationController
     @d = D.find(params[:d])
     @record = @d.get_klass.find(params[:id])
 
-    unless mg_url[:path].blank?
-      @record.mg_url = MgUrl.new(mg_url) unless @record.mg_url
+    if mg_url[:path].blank?
+      if @record.mg_url
+        @record.mg_url.destroy
+      end
+    else
+      if @record.mg_url
+        @record.mg_url.update_attributes(mg_url)
+      else
+        @record.mg_url = MgUrl.new(mg_url)
+      end
     end
+    
     respond_to do |format|
-      if @record.update_attributes(params[:record]) && (@record.mg_url.update_attributes(mg_url) if @record.mg_url)
+      if @record.update_attributes(params[:record])
         expire_action_cache(@record)
         format.html { redirect_to(ds_lists_path(:d => @d.id)) }
         format.xml  { head :ok }

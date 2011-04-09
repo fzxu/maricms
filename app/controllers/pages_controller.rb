@@ -227,7 +227,7 @@ class PagesController < ApplicationController
 
     # update the mg url
     unless mg_url[:path].blank?
-    @page.mg_url = MgUrl.new(mg_url.merge(:page_id => @page.id))
+      @page.mg_url = MgUrl.new(mg_url.merge(:page_id => @page.id))
     end
 
     respond_to do |format|
@@ -267,12 +267,20 @@ class PagesController < ApplicationController
       end
     end
 
-    unless mg_url[:path].blank?
-    @page.mg_url = MgUrl.new(mg_url) unless @page.mg_url
+    if mg_url[:path].blank?
+      if @page.mg_url
+        @page.mg_url.destroy
+      end
+    else
+      if @page.mg_url
+        @page.mg_url.update_attributes(mg_url)
+      else
+        @page.mg_url = MgUrl.new(mg_url)
+      end
     end
 
     respond_to do |format|
-      if @page.update_attributes(params[:page].merge({:r_page_ds => rpd})) && (@page.mg_url.update_attributes(mg_url) if @page.mg_url)
+      if @page.update_attributes(params[:page].merge({:r_page_ds => rpd}))
         expire_cache_for_page(@page)
         format.html { redirect_to(pages_url, :notice => 'Page was successfully updated.') }
         format.xml  { head :ok }

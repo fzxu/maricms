@@ -13,9 +13,9 @@ class ApplicationController < ActionController::Base
   def default_url_options(options={})
     logger.debug "*MG default_url_options is passed options: #{options.inspect}\n"
     if params[:locale]
-      { :locale => I18n.locale, :host => Setting.first.host_name }
+      { :locale => I18n.locale }
     else
-      {:host => Setting.first.host_name}
+      {}
     end
   end
 

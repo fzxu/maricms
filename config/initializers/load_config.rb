@@ -46,6 +46,9 @@ end
 # now, set the default locale
 I18n.locale = Setting.first.default_lang
 
+# set host for action mailer
+ActionMailer::Base.default_url_options[:host] = Setting.first.host_name
+
 # Initialized all the ds
 D.all.each do |d|
   d.gen_klass

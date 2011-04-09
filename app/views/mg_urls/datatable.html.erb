@@ -6,8 +6,8 @@
   <% @records.each_with_index do |rec,ind| %>
     [
       "<%= ActiveSupport::JSON.encode (rec.path) %>",
-      "<%= ((defined? rec.record.class) && rec.record && !rec.record.is_a?(Page)) ? rec.record.class.d.key : "missing" %>",
-      "<%= ((defined? rec.record.class) && rec.record && !rec.record.is_a?(Page)) ? rec.record.class.d.name : "missing" %>",
+      "<%= (!rec.record_id.blank? && !(defined? rec.record.class) && rec.record_type != "Page") ? "missing" : rec.record_id %>",
+      "<%= (!rec.record_type.blank? && !(defined? rec.record.class) && rec.record_type != "Page") ? "missing" : rec.record_type %>",
       "<%= (link_to "GO", "#{rec.record.class.superclass.name.tableize}/#{rec.record_id}/edit?d=#{rec.record.class.d.id}").gsub(/\"/, "'") if (defined? rec.record.class) && !rec.record.blank? && !rec.record.is_a?(Page) %>",
       "<%= (link_to rec.page.name, edit_page_path(rec.page)).gsub(/\"/, "'") if rec.page %>",
       "<%= ActiveSupport::JSON.encode rec.param_string if !rec.param_string.blank? %>",

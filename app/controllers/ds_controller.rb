@@ -1,5 +1,6 @@
 class DsController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
   
   # GET /ds
   # GET /ds.xml

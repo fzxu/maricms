@@ -1,6 +1,7 @@
 class EditorAttachmentsController < ApplicationController
   protect_from_forgery :except => :upload
   before_filter :get_setting
+  before_filter :authenticate_user!
 
   def upload  
     @image = EditorAttachment.new(:asset => params[:imgFile])  

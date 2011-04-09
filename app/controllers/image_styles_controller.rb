@@ -1,4 +1,6 @@
 class ImageStylesController < ApplicationController
+  before_filter :authenticate_user!
+  
   layout 'setting'
   
   # GET /image_styles

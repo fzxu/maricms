@@ -1,4 +1,5 @@
 class SettingController < ApplicationController
+  before_filter :authenticate_user!
   
   def index
     @d = D.user_view.first

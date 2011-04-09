@@ -1,5 +1,7 @@
 class DsSinglesController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
+  
   # GET /ds_singles
   # GET /ds_singles.xml
   def index

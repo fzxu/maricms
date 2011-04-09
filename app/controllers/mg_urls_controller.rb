@@ -1,5 +1,6 @@
 class MgUrlsController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
   
   # GET /mg_aliases
   # GET /mg_aliases.xml

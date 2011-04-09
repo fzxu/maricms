@@ -1,5 +1,7 @@
 class DsListsController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
+  
   def index
     @d = D.find(params[:d])
 

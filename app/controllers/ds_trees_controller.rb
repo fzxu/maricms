@@ -1,5 +1,6 @@
 class DsTreesController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
   
   # GET /ds_trees
   # GET /ds_trees.xml

@@ -1,6 +1,8 @@
 class PagesController < ApplicationController
   before_filter :get_setting
   before_filter :handle_mobile, :only => :show
+  before_filter :authenticate_user!, :except => :show
+  
   theme :get_theme
 
   caches_action :show, :cache_path => Proc.new {|c| c.params}

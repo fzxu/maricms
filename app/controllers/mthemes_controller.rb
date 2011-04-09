@@ -1,5 +1,6 @@
 class MthemesController < ApplicationController
   before_filter :get_setting
+  before_filter :authenticate_user!
   
   def create
     theme_name = params[:id]

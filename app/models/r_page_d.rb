@@ -10,7 +10,11 @@ class RPageD
   embedded_in :page
   
   def default_query
-    ret = self.d.get_klass
+    if self.d.ds_type == "Tree"
+      ret = self.d.get_klass.roots
+    else
+      ret = self.d.get_klass
+    end
     
     queried = false
     

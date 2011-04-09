@@ -10,7 +10,7 @@ class DsTree
   validates_presence_of :mg_name
   
   before_destroy :move_children_to_parent
-
+  
   def to_liquid
     {
       "id" => self.id.to_s,

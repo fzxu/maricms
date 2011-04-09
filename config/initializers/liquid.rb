@@ -21,7 +21,7 @@ class Liquid::ThemeFileSystem
       File.join(root, "#{template_path}")
     end
     puts "the full path is:"+full_path.to_s
-    
+
     raise Liquid::FileSystemError, "Illegal template path '#{File.expand_path(full_path)}'" unless File.expand_path(full_path) =~ /^#{File.expand_path(root)}/
 
     full_path

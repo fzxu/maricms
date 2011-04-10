@@ -9,14 +9,19 @@
 
 require_once 'JSON.php';
 
+$php_path = dirname(__FILE__) . '/';
+$php_url = dirname($_SERVER['PHP_SELF']) . '/';
+
 //文件保存目录路径
-$save_path = '../attached/';
+$save_path = $php_path . '../attached/';
 //文件保存目录URL
-$save_url = '../attached/';
+$save_url = $php_url . '../attached/';
 //定义允许上传的文件扩展名
 $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
 //最大文件大小
 $max_size = 1000000;
+
+$save_path = realpath($save_path) . '/';
 
 //有上传文件时
 if (empty($_FILES) === false) {
@@ -54,6 +59,13 @@ if (empty($_FILES) === false) {
 	//检查扩展名
 	if (in_array($file_ext, $ext_arr) === false) {
 		alert("上传文件扩展名是不允许的扩展名。");
+	}
+	//创建文件夹
+	$ymd = date("Ymd");
+	$save_path .= $ymd . "/";
+	$save_url .= $ymd . "/";
+	if (!file_exists($save_path)) {
+		mkdir($save_path);
 	}
 	//新文件名
 	$new_file_name = date("YmdHis") . '_' . rand(10000, 99999) . '.' . $file_ext;

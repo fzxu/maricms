@@ -1,8 +1,7 @@
 var JSON_URL = '/editor_attachments/images_list';
 
 var KE = parent.KindEditor;
-location.href.match(/\?id=([\w-]+)/i);
-var id = RegExp.$1;
+var id = KE.util.getParam(location.href, 'id');
 var fileManagerJson = (typeof KE.g[id].fileManagerJson == 'undefined') ? JSON_URL : KE.g[id].fileManagerJson;
 var lang = KE.lang.plugins.file_manager;
 KE.event.ready(function() {
@@ -123,7 +122,6 @@ KE.event.ready(function() {
 			var cell0 = row.insertCell(0);
 			cell0.className = 'name';
 			var iconName = data.is_dir ? 'folder-16.gif' : 'file-16.gif';
-			//var iconName = data.is_dir ? 'folder-16.gif' : data.icon;
 			var img = KE.$$('img', document);
 			img.src = './images/' + iconName;
 			img.width = 16;
@@ -168,7 +166,7 @@ KE.event.ready(function() {
 			cell.valign = 'middle';
 			cell.align = 'center';
 			//var fileUrl = result.current_url + data.filename;
-			var fileUrl = data.icon
+			var fileUrl = data.icon;
 			var iconUrl = data.is_dir ? './images/folder-64.gif' : (data.is_photo ? fileUrl : './images/file-64.gif');
 			var img = KE.$$('img', document);
 			img.src = iconUrl;
@@ -197,8 +195,11 @@ KE.event.ready(function() {
 		KE.util.showLoadingPage(id);
 		var req = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 		var url = fileManagerJson;
-		url += param;
-		url += (url.match(/\?/) ? "&" : "?") + (new Date()).getTime()
+		if (!url.match(/\?/)) {
+			url += '?';
+			param = param.substr(1);
+		}
+		url += param + '&' + (new Date()).getTime();
 		req.open('GET', url, true);
 		req.onreadystatechange = function () {
 			if (req.readyState == 4) {
@@ -212,7 +213,7 @@ KE.event.ready(function() {
 		req.send(null);
 	};
 	var reloadPage = function (path, order, func) {
-		httpRequest('?path=' + path + '&order=' + order, func);
+		httpRequest('&path=' + path + '&order=' + order, func);
 	};
 	changeType('VIEW');
 	viewType.value = 'VIEW';

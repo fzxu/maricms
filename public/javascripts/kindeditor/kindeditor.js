@@ -1,18 +1,18 @@
 /*******************************************************************************
 * KindEditor - WYSIWYG HTML Editor for Internet
-* Copyright (C) 2006-2010 Longhao Luo
+* Copyright (C) 2006-2011 Longhao Luo
 *
 * @author Roddy <luolonghao@gmail.com>
 * @site http://www.kindsoft.net/
 * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
-* @version 3.5.2 (2010-12-02)
+* @version 3.5.3 (2011-04-10)
 *******************************************************************************/
 
 (function (undefined) {
 
 var KE = {};
 
-KE.version = '3.5.2 (2010-12-02)';
+KE.version = '3.5.3 (2011-04-10)';
 
 KE.scriptPath = (function() {
 	var elements = document.getElementsByTagName('script');
@@ -40,10 +40,12 @@ KE.setting = {
 	loadStyleMode : true,
 	resizeMode : 2,
 	filterMode : false,
-	autoSetDataMode : true,
+	autoSetDataMode : false,
 	shadowMode : true,
+	useContextmenu : true,
 	urlType : '',
 	skinType : 'default',
+	syncType : 'form',
 	newlineTag : 'p',
 	dialogAlignType : 'page',
 	cssPath : '',
@@ -112,6 +114,10 @@ KE.setting = {
 		rm : 'audio/x-pn-realaudio-plugin',
 		flash : 'application/x-shockwave-flash',
 		media : 'video/x-ms-asf-plugin'
+	},
+	afterTab : function(id) {
+		KE.util.setSelection(id);
+		KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
 };
 
@@ -160,11 +166,17 @@ KE.event = {
 			}
 		}
 	},
-	stop : function(e) {
-		if (e.preventDefault) e.preventDefault();
+	stopPropagation : function(e) {
 		if (e.stopPropagation) e.stopPropagation();
 		if (e.cancelBubble !== undefined) e.cancelBubble = true;
+	},
+	preventDefault : function(e) {
+		if (e.preventDefault) e.preventDefault();
 		if (e.returnValue !== undefined) e.returnValue = false;
+	},
+	stop : function(e) {
+		this.stopPropagation(e);
+		this.preventDefault(e);
 	},
 	bind : function(el, type, fn, id) {
 		this.add(el, type, function(e) {
@@ -1003,10 +1015,11 @@ KE.format = {
 				for (var i = 0, len = arr.length; i < len; i++) htmlTagHash[arr[i]] = KE.util.arrayToHash(val);
 			});
 		}
+		var skipFlag = false;
 		var noEndTagHash = KE.util.arrayToHash(KE.setting.noEndTags);
 		var inlineTagHash = KE.util.arrayToHash(KE.setting.inlineTags);
 		var endlineTagHash = KE.util.arrayToHash(KE.setting.endlineTags);
-		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w-:]+)((?:\s+|(?:\s+[\w-:]+)|(?:\s+[\w-:]+=[^\s"'<>]+)|(?:\s+[\w-:]+="[^"]*")|(?:\s+[\w-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
+		var re = /((?:\r\n|\n|\r)*)<(\/)?([\w\-:]+)((?:\s+|(?:\s+[\w\-:]+)|(?:\s+[\w\-:]+=[^\s"'<>]+)|(?:\s+[\w\-:]+="[^"]*")|(?:\s+[\w\-:]+='[^']*'))*)(\/)?>((?:\r\n|\n|\r)*)/g;
 		html = html.replace(re, function($0, $1, $2, $3, $4, $5, $6) {
 			var startNewline = $1 || '';
 			var startSlash = $2 || '';
@@ -1014,6 +1027,9 @@ KE.format = {
 			var attr = $4 || '';
 			var endSlash = $5 ? ' ' + $5 : '';
 			var endNewline = $6 || '';
+			if (tagName === 'script' && startSlash !== '') skipFlag = false;
+			if (skipFlag) return $0;
+			if (tagName === 'script' && startSlash === '') skipFlag = true;
 			if (isFilter && typeof htmlTagHash[tagName] == "undefined") return '';
 			if (endSlash === '' && typeof noEndTagHash[tagName] != "undefined") endSlash = ' /';
 			if (tagName in endlineTagHash) {
@@ -1026,7 +1042,7 @@ KE.format = {
 			}
 			if (tagName === 'font') {
 				var style = {}, styleStr = '';
-				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
+				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
 					var val = $2 || '';
 					val = val.replace(/^["']|["']$/g, '');
@@ -1059,7 +1075,7 @@ KE.format = {
 				tagName = 'span';
 			}
 			if (attr !== '') {
-				attr = attr.replace(/\s*([\w-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
+				attr = attr.replace(/\s*([\w\-:]+)=([^\s"'<>]+|"[^"]*"|'[^']*')/g, function($0, $1, $2) {
 					var key = $1.toLowerCase();
 					var val = $2 || '';
 					if (isFilter) {
@@ -1297,7 +1313,7 @@ KE.util = {
 		document.getElementsByTagName("head")[0].appendChild(link);
 	},
 	getAttrList : function(tag) {
-		var re = /\s+(?:([\w-:]+)|(?:([\w-:]+)=([\w-:]+))|(?:([\w-:]+)="([^"]*)")|(?:([\w-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
+		var re = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([\w\-:]+))|(?:([\w\-:]+)="([^"]*)")|(?:([\w\-:]+)='([^']*)'))(?=(?:\s|\/|>)+)/g;
 		var arr, key, val, list = {};
 		while ((arr = re.exec(tag))) {
 			key = arr[1] || arr[2] || arr[4] || arr[6];
@@ -1419,6 +1435,9 @@ KE.util = {
 			return eval('(' + text + ')');
 		}
 		throw 'JSON parse error';
+	},
+	getParam : function(url, name) {
+		return url.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? unescape(RegExp.$1) : '';
 	},
 	createRange : function(doc) {
 		return doc.createRange ? doc.createRange() : doc.body.createTextRange();
@@ -1834,10 +1853,10 @@ KE.util = {
 		}
 	},
 	addTabEvent : function(id) {
-		KE.event.add(KE.g[id].iframeDoc, 'keydown', function(e) {
+		var g = KE.g[id];
+		KE.event.add(g.iframeDoc, 'keydown', function(e) {
 			if (e.keyCode == 9) {
-				KE.util.setSelection(id);
-				KE.util.insertHtml(id, '&nbsp;&nbsp;&nbsp;&nbsp;');
+				if (g.afterTab) g.afterTab(id);
 				KE.event.stop(e);
 				return false;
 			}
@@ -1846,6 +1865,7 @@ KE.util = {
 	addContextmenuEvent : function(id) {
 		var g = KE.g[id];
 		if (g.contextmenuItems.length == 0) return;
+		if (!g.useContextmenu) return;
 		KE.event.add(g.iframeDoc, 'contextmenu', function(e){
 			KE.hideMenu(id);
 			KE.util.setSelection(id);
@@ -2217,7 +2237,6 @@ KE.dialog = function(arg){
 		var div = KE.$$('div');
 		div.className = 'ke-dialog';
 		KE.event.bind(div, 'click', function(e){}, id);
-		KE.event.bind(div, 'mousedown', function(e){}, id);
 		var stack = KE.g[id].dialogStack;
 		if (stack.length > 0) {
 			this.zIndex = stack[stack.length - 1].zIndex + 1;
@@ -2513,6 +2532,7 @@ KE.toolbar = {
 				continue;
 			}
 			var a = KE.$$('a');
+			a.tabIndex = -1;
 			self._setAttr(id, a, cmd);
 			var span = KE.$$('span');
 			if (typeof defaultItemHash[cmd] == 'undefined') {
@@ -2600,13 +2620,27 @@ KE.focus = function(id, position) {
 	}
 };
 
+KE.blur = function(id) {
+	var g = KE.g[id];
+	if (!g.container) return;
+	if (KE.browser.IE) {
+		var input = KE.$$('input');
+		input.type = 'text';
+		g.container.appendChild(input);
+		input.focus();
+		g.container.removeChild(input);
+	} else {
+		g.wyswygMode ? g.iframeWin.blur() : g.newTextarea.blur();
+	}
+};
+
 KE.html = function(id, val) {
 	if (val === undefined) {
 		return KE.util.getData(id);
 	} else {
 		if (!KE.g[id].container) return;
 		KE.util.setFullHtml(id, val);
-		KE.focus(id, 'end');
+		KE.focus(id);
 	}
 };
 
@@ -2636,7 +2670,6 @@ KE.insertHtml = function(id, val) {
 
 KE.appendHtml = function(id, val) {
 	KE.html(id, KE.html(id) + val);
-	KE.focus(id, 'end');
 };
 
 KE.isEmpty = function(id) {
@@ -2673,6 +2706,10 @@ KE.count = function(id, mode) {
 		return data.length;
 	}
 	return 0;
+};
+
+KE.sync = function(id) {
+	return KE.util.setData(id);
 };
 
 KE.remove = function(id, mode) {
@@ -2737,9 +2774,11 @@ KE.create = function(id, mode) {
 	toolbarTable.style.height = KE.g[id].toolbarHeight + 'px';
 	toolbarOuter.appendChild(toolbarTable);
 	var iframe = KE.g[id].iframe || KE.$$('iframe');
+	iframe.tabIndex = KE.g[id].tabIndex || srcTextarea.tabIndex;
 	iframe.className = 'ke-iframe';
 	iframe.setAttribute("frameBorder", "0");
 	var newTextarea = KE.$$('textarea');
+	newTextarea.tabIndex = iframe.tabIndex;
 	newTextarea.className = 'ke-textarea';
 	newTextarea.style.display = 'none';
 	KE.g[id].container = container;
@@ -2790,7 +2829,7 @@ KE.create = function(id, mode) {
 	KE.util.setDefaultPlugin(id);
 	var iframeWin = iframe.contentWindow;
 	var iframeDoc = KE.util.getIframeDoc(iframe);
-	if (!KE.browser.IE || KE.browser.VERSION < 8) iframeDoc.designMode = 'on';
+	if (!KE.browser.IE) iframeDoc.designMode = 'on';
 	var html = KE.util.getFullHtml(id);
 	iframeDoc.open();
 	iframeDoc.write(html);
@@ -2801,6 +2840,15 @@ KE.create = function(id, mode) {
 		iframe.style.display = 'none';
 		KE.toolbar.disable(id, ['source', 'fullscreen']);
 		KE.toolbar.select(id, 'source');
+	}
+	if (KE.g[id].syncType == 'form') {
+		var el = srcTextarea;
+		while ((el = el.parentNode)) {
+			if (el.nodeName.toLowerCase() == 'form') {
+				KE.event.add(el, 'submit', function() { KE.sync(id); }, id);
+				break;
+			}
+		}
 	}
 	function hideMenu() {
 		KE.hideMenu(id);
@@ -2827,11 +2875,21 @@ KE.create = function(id, mode) {
 			}
 		}, id);
 	}
-	KE.event.add(iframeDoc, 'click', hideMenu, id);
+	function afterFocus() {
+		if (KE.g[id].afterFocus) KE.g[id].afterFocus(id);
+	}
+	function afterBlur() {
+		if (KE.g[id].afterBlur) KE.g[id].afterBlur(id);
+	}
+	KE.event.add(iframeDoc, 'mousedown', hideMenu, id);
 	KE.event.add(iframeDoc, 'click', updateToolbar, id);
 	KE.event.input(iframeDoc, updateToolbar, id);
 	KE.event.bind(newTextarea, 'click', hideMenu, id);
 	KE.event.add(document, 'click', hideMenu, id);
+	KE.event.add(iframeWin, 'focus', afterFocus);
+	KE.event.add(newTextarea, 'focus', afterFocus);
+	KE.event.add(iframeWin, 'blur', afterBlur);
+	KE.event.add(newTextarea, 'blur', afterBlur);
 	KE.g[id].toolbarTable = toolbarTable;
 	KE.g[id].textareaTable = textareaTable;
 	KE.g[id].srcTextarea = srcTextarea;
@@ -2876,13 +2934,15 @@ KE.create = function(id, mode) {
 	KE.event.add(iframeDoc, 'mouseup', setSelectionHandler, id);
 	KE.event.add(document, 'mousedown', setSelectionHandler, id);
 	KE.onchange(id, function(id) {
-		if (KE.g[id].autoSetDataMode) {
+		if (KE.g[id].autoSetDataMode || KE.g[id].syncType == 'auto') {
 			KE.util.setData(id);
 			if (KE.g[id].afterSetData) KE.g[id].afterSetData(id);
 		}
+		if (KE.g[id].afterChange) KE.g[id].afterChange(id);
 		KE.history.add(id, KE.g[id].minChangeSize);
 	});
-	if (KE.browser.IE && KE.browser.VERSION > 7) KE.readonly(id, false);
+	if (KE.browser.IE) KE.readonly(id, false);
+	if (KE.browser.IE && KE.browser.VERSION < 8) KE.blur(id);
 	KE.util.setFullHtml(id, srcTextarea.value);
 	KE.history.add(id, 0);
 	if (mode > 0) KE.util.focus(id);
@@ -2934,194 +2994,192 @@ window.KindEditor = KE;
 
 (function (KE, undefined) {
 
-KE.langType = 'zh_CN';
+KE.langType = 'en';
 
 KE.lang = {
-	source : 'HTML代码',
-	undo : '后退(Ctrl+Z)',
-	redo : '前进(Ctrl+Y)',
-	cut : '剪切(Ctrl+X)',
-	copy : '复制(Ctrl+C)',
-	paste : '粘贴(Ctrl+V)',
-	plainpaste : '粘贴为无格式文本',
-	wordpaste : '从Word粘贴',
-	selectall : '全选',
-	justifyleft : '左对齐',
-	justifycenter : '居中',
-	justifyright : '右对齐',
-	justifyfull : '两端对齐',
-	insertorderedlist : '编号',
-	insertunorderedlist : '项目符号',
-	indent : '增加缩进',
-	outdent : '减少缩进',
-	subscript : '下标',
-	superscript : '上标',
-	title : '标题',
-	fontname : '字体',
-	fontsize : '文字大小',
-	textcolor : '文字颜色',
-	bgcolor : '文字背景',
-	bold : '粗体(Ctrl+B)',
-	italic : '斜体(Ctrl+I)',
-	underline : '下划线(Ctrl+U)',
-	strikethrough : '删除线',
-	removeformat : '删除格式',
-	image : '图片',
-	flash : '插入Flash',
-	media : '插入多媒体',
-	table : '插入表格',
-	hr : '插入横线',
-	emoticons : '插入表情',
-	link : '超级链接',
-	unlink : '取消超级链接',
-	fullscreen : '全屏显示',
-	about : '关于',
-	print : '打印',
-	fileManager : '浏览服务器',
-	advtable : '表格',
-	yes : '确定',
-	no : '取消',
-	close : '关闭',
-	editImage : '图片属性',
-	deleteImage : '删除图片',
-	editLink : '超级链接属性',
-	deleteLink : '取消超级链接',
-	tableprop : '表格属性',
-	tableinsert : '插入表格',
-	tabledelete : '删除表格',
-	tablecolinsertleft : '左侧插入列',
-	tablecolinsertright : '右侧插入列',
-	tablerowinsertabove : '上方插入行',
-	tablerowinsertbelow : '下方插入行',
-	tablecoldelete : '删除列',
-	tablerowdelete : '删除行',
-	noColor : '无颜色',
-	invalidImg : "请输入有效的URL地址。\n只允许jpg,gif,bmp,png格式。",
-	invalidMedia : "请输入有效的URL地址。\n只允许swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb格式。",
-	invalidWidth : "宽度必须为数字。",
-	invalidHeight : "高度必须为数字。",
-	invalidBorder : "边框必须为数字。",
-	invalidUrl : "请输入有效的URL地址。",
-	invalidRows : '行数为必选项，只允许输入大于0的数字。',
-	invalidCols : '列数为必选项，只允许输入大于0的数字。',
-	invalidPadding : '边距必须为数字。',
-	invalidSpacing : '间距必须为数字。',
-	invalidBorder : '边框必须为数字。',
-	pleaseInput : "请输入内容。",
-	invalidJson : '服务器发生故障。',
-	cutError : '您的浏览器安全设置不允许使用剪切操作，请使用快捷键(Ctrl+X)来完成。',
-	copyError : '您的浏览器安全设置不允许使用复制操作，请使用快捷键(Ctrl+C)来完成。',
-	pasteError : '您的浏览器安全设置不允许使用粘贴操作，请使用快捷键(Ctrl+V)来完成。'
+	source : 'Source',
+	undo : 'Undo(Ctrl+Z)',
+	redo : 'Redo(Ctrl+Y)',
+	cut : 'Cut(Ctrl+X)',
+	copy : 'Copy(Ctrl+C)',
+	paste : 'Paste(Ctrl+V)',
+	plainpaste : 'Paste as plain text',
+	wordpaste : 'Paste from Word',
+	selectall : 'Select all',
+	justifyleft : 'Align left',
+	justifycenter : 'Align center',
+	justifyright : 'Align right',
+	justifyfull : 'Align full',
+	insertorderedlist : 'Ordered list',
+	insertunorderedlist : 'Unordered list',
+	indent : 'Increase indent',
+	outdent : 'Decrease indent',
+	subscript : 'Subscript',
+	superscript : 'Superscript',
+	title : 'Paragraph format',
+	fontname : 'Font family',
+	fontsize : 'Font size',
+	textcolor : 'Text color',
+	bgcolor : 'Highlight color',
+	bold : 'Bold(Ctrl+B)',
+	italic : 'Italic(Ctrl+I)',
+	underline : 'Underline(Ctrl+U)',
+	strikethrough : 'Strikethrough',
+	removeformat : 'Remove format',
+	image : 'Image',
+	flash : 'Insert Flash',
+	media : 'Insert embeded media',
+	table : 'Insert table',
+	hr : 'Insert horizontal line',
+	emoticons : 'Insert emoticon',
+	link : 'Link',
+	unlink : 'Unlink',
+	fullscreen : 'Toggle fullscreen mode',
+	about : 'About',
+	print : 'Print',
+	fileManager : 'File Manager',
+	advtable : 'Table',
+	yes : 'OK',
+	no : 'Cancel',
+	close : 'Close',
+	editImage : 'Image properties',
+	deleteImage : 'Delete image',
+	editLink : 'Link properties',
+	deleteLink : 'Unlink',
+	tableprop : 'Table properties',
+	tableinsert : 'Insert table',
+	tabledelete : 'Delete table',
+	tablecolinsertleft : 'Insert column left',
+	tablecolinsertright : 'Insert column right',
+	tablerowinsertabove : 'Insert row above',
+	tablerowinsertbelow : 'Insert row below',
+	tablecoldelete : 'Delete column',
+	tablerowdelete : 'Delete row',
+	noColor : 'Default',
+	invalidImg : "Please type valid URL.\nAllowed file extension: jpg,gif,bmp,png",
+	invalidMedia : "Please type valid URL.\nAllowed file extension: swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb",
+	invalidWidth : "The width must be number.",
+	invalidHeight : "The height must be number.",
+	invalidBorder : "The border must be number.",
+	invalidUrl : "Please type valid URL.",
+	invalidRows : 'Invalid rows.',
+	invalidCols : 'Invalid columns.',
+	invalidPadding : 'The padding must be number.',
+	invalidSpacing : 'The spacing must be number.',
+	invalidBorder : 'The border width must be number.',
+	pleaseInput : "Please type content.",
+	invalidJson : 'Invalid JSON string.',
+	cutError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+X) instead.',
+	copyError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+C) instead.',
+	pasteError : 'Currently not supported by your browser, use keyboard shortcut(Ctrl+V) instead.'
 };
 
 var plugins = KE.lang.plugins = {};
 
 plugins.about = {
 	version : KE.version,
-	title : 'HTML可视化编辑器'
+	title : 'WYSIWYG Editor'
 };
 
 plugins.plainpaste = {
-	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
+	comment : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.'
 };
 
 plugins.wordpaste = {
-	comment : '请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。'
+	comment : 'Use keyboard shortcut(Ctrl+V) to paste the text into the window.'
 };
 
 plugins.link = {
-	url : 'URL地址',
-	linkType : '打开类型',
-	newWindow : '新窗口',
-	selfWindow : '当前窗口'
+	url : 'Link URL',
+	linkType : 'Target',
+	newWindow : 'New window',
+	selfWindow : 'Same window'
 };
 
 plugins.flash = {
-	url : 'Flash地址',
-	width : '宽度',
-	height : '高度'
+	url : 'Flash URL',
+	width : 'Width',
+	height : 'Height'
 };
 
 plugins.media = {
-	url : '媒体文件地址',
-	width : '宽度',
-	height : '高度',
-	autostart : '自动播放'
+	url : 'Media URL',
+	width : 'Width',
+	height : 'Height',
+	autostart : 'Auto start'
 };
 
 plugins.image = {
-	remoteImage : '远程图片',
-	localImage : '本地上传',
-	remoteUrl : '图片地址',
-	localUrl : '图片地址',
-	size : '图片大小',
-	width : '宽',
-	height : '高',
-	resetSize : '重置大小',
-	align : '对齐方式',
-	defaultAlign : '默认方式',
-	leftAlign : '左对齐',
-	rightAlign : '右对齐',
-	imgTitle : '图片说明',
-	viewServer : '浏览...'
+	remoteImage : 'Insert URL',
+	localImage : 'Upload',
+	remoteUrl : 'Image URL',
+	localUrl : 'Image File',
+	size : 'Dimensions',
+	width : 'Width',
+	height : 'Height',
+	resetSize : 'Reset dimensions',
+	align : 'Align',
+	defaultAlign : 'Default',
+	leftAlign : 'Left',
+	rightAlign : 'Right',
+	imgTitle : 'Title',
+	viewServer : 'Browse'
 };
 
 plugins.file_manager = {
-	emptyFolder : '空文件夹',
-	moveup : '移到上一级文件夹',
-	viewType : '显示方式：',
-	viewImage : '缩略图',
-	listImage : '详细信息',
-	orderType : '排序方式：',
-	fileName : '名称',
-	fileSize : '大小',
-	fileType : '类型'
+	emptyFolder : 'Blank',
+	moveup : 'Parent folder',
+	viewType : 'Display: ',
+	viewImage : 'Thumbnails',
+	listImage : 'List',
+	orderType : 'Sorting: ',
+	fileName : 'By name',
+	fileSize : 'By size',
+	fileType : 'By type'
 };
 
 plugins.advtable = {
-	cells : '单元格数',
-	rows : '行数',
-	cols : '列数',
-	size : '表格大小',
-	width : '宽度',
-	height : '高度',
+	cells : 'Cells',
+	rows : 'Rows',
+	cols : 'Columns',
+	size : 'Dimensions',
+	width : 'Width',
+	height : 'Height',
 	percent : '%',
 	px : 'px',
-	space : '边距间距',
-	padding : '边距',
-	spacing : '间距',
-	align : '对齐方式',
-	alignDefault : '默认',
-	alignLeft : '左对齐',
-	alignCenter : '居中',
-	alignRight : '右对齐',
-	border : '表格边框',
-	borderWidth : '边框',
-	borderColor : '颜色',
-	backgroundColor : '背景颜色'
+	space : 'Space',
+	padding : 'Padding',
+	spacing : 'Spacing',
+	align : 'Align',
+	alignDefault : 'Default',
+	alignLeft : 'Left',
+	alignCenter : 'Center',
+	alignRight : 'Right',
+	border : 'Border',
+	borderWidth : 'Width',
+	borderColor : 'Color',
+	backgroundColor : 'Background'
 };
 
 plugins.title = {
-	h1 : '标题 1',
-	h2 : '标题 2',
-	h3 : '标题 3',
-	h4 : '标题 4',
-	p : '正 文'
+	h1 : 'Heading 1',
+	h2 : 'Heading 2',
+	h3 : 'Heading 3',
+	h4 : 'Heading 4',
+	p : 'Normal'
 };
 
 plugins.fontname = {
 	fontName : {
-		'SimSun' : '宋体',
-		'NSimSun' : '新宋体',
-		'FangSong_GB2312' : '仿宋_GB2312',
-		'KaiTi_GB2312' : '楷体_GB2312',
-		'SimHei' : '黑体',
-		'Microsoft YaHei' : '微软雅黑',
 		'Arial' : 'Arial',
 		'Arial Black' : 'Arial Black',
-		'Times New Roman' : 'Times New Roman',
+		'Comic Sans MS' : 'Comic Sans MS',
 		'Courier New' : 'Courier New',
+		'Garamond' : 'Garamond',
+		'Georgia' : 'Georgia',
 		'Tahoma' : 'Tahoma',
+		'Times New Roman' : 'Times New Roman',
+		'Trebuchet MS' : 'Trebuchet MS',
 		'Verdana' : 'Verdana'
 	}
 };
@@ -3238,7 +3296,11 @@ KE.plugin['plainpaste'] = {
 		var html = KE.$('textArea', dialogDoc).value;
 		html = KE.util.escape(html);
 		html = html.replace(/ /g, '&nbsp;');
-		html = html.replace(/\r\n|\n|\r/g, "<br />$&");
+		if (KE.g[id].newlineTag == 'p') {
+			html = html.replace(/^/, '<p>').replace(/$/, '</p>').replace(/\r\n|\n|\r/g, '</p><p>');
+		} else {
+			html = html.replace(/\r\n|\n|\r/g, '<br />$&');
+		}
 		KE.util.insertHtml(id, html);
 		this.dialog.hide();
 		KE.util.focus(id);
@@ -3894,7 +3956,8 @@ KE.plugin['image'] = {
 				}
 				if (typeof data === 'object' && 'error' in data) {
 					if (data.error === 0) {
-						self.insert(id, data.url, title, width, height, 0, align);
+						var url = KE.format.getUrl(data.url, 'absolute');
+						self.insert(id, url, title, width, height, 0, align);
 					} else {
 						alert(data.message);
 						return false;
@@ -4223,10 +4286,11 @@ KE.plugin['advtable'] = {
 		this.tablerowinsert(id, 1);
 	},
 	tablecoldelete : function(id) {
-		var table = this.getSelectedTable(id);
-		var cell = this.getSelectedCell(id);
+		var table = this.getSelectedTable(id),
+			cell = this.getSelectedCell(id),
+			index = cell.cellIndex;
 		for (var i = 0, len = table.rows.length; i < len; i++) {
-			table.rows[i].deleteCell(cell.cellIndex);
+			table.rows[i].deleteCell(index);
 		}
 	},
 	tablerowdelete : function(id) {

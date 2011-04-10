@@ -90,6 +90,12 @@ class D
         meta_string += add_text_fields(ds_element, setting)
       end
 
+      meta_string += <<-DEFAULTLANG
+        def #{ds_element.key}
+          self.#{ds_element.key}__#{setting.default_language}
+        end
+      DEFAULTLANG
+
       # add fields to liquid output, which is language specific
       liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
 

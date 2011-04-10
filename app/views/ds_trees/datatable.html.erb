@@ -9,15 +9,15 @@
       "<%= indentation + (ActiveSupport::JSON.encode rec.mg_name) %>",
       <% @d.ds_elements.each do |ds_element|%>
         <% if ds_element.ftype == "Text"%>
-          "<%= ActiveSupport::JSON.encode truncate(rec.send("#{ds_element.key}__#{@setting.default_language}").gsub(/<\/?[^>]*>/, "")) unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
+          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "Image" %>
-          "<%= (image_tag rec.send("#{ds_element.key}__#{@setting.default_language}").mg_small.url).gsub(/\"/, "'") unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
+          "<%= (image_tag rec.send(ds_element.key).mg_small.url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "DateTime" %>
-          "<%= rec.send("#{ds_element.key}__#{@setting.default_language}").strftime(@setting.date_format) unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
+          "<%= rec.send(ds_element.key).strftime(@setting.date_format) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "File" %>
-          "<%= (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send("#{ds_element.key}__#{@setting.default_language}").url).gsub(/\"/, "'") unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
+          "<%= (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send(ds_element.key).url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% else %>
-          "<%= ActiveSupport::JSON.encode rec.send("#{ds_element.key}__#{@setting.default_language}") unless rec.send("#{ds_element.key}__#{@setting.default_language}").blank? %>",
+          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>
       <% end %>
       "<%= ActiveSupport::JSON.encode rec.parent.mg_name if rec.parent %>",

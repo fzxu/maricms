@@ -92,7 +92,7 @@ class D
 
       meta_string += <<-DEFAULTLANG
         def #{ds_element.key}
-          self.#{ds_element.key}__#{setting.default_language}
+          get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang})
         end
       DEFAULTLANG
 

@@ -15,14 +15,9 @@
     <%= javascript_include_tag "kindeditor/kindeditor-min.js" %>
     <%= javascript_include_tag "jquery.dataTables.min.js" %>
     <%= csrf_meta_tag %>
-    <script type="text/javascript">
-      $(function(){
-        $( "#developview" ).button();
-      });
-    </script>
-    
   </head>
   <body>
+    <%= render :partial => "shared/user_bar" %>
     <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
       <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
         <% D.user_view.each do |d|%>
@@ -36,7 +31,6 @@
             </li>
           <% end %>
         <% end %>
-        <a class="right" id="developview" href="/ds">Develop View</a>
       </ul>
       <%= yield %>
     </div>

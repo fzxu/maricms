@@ -297,8 +297,12 @@ class PagesController < ApplicationController
   # DELETE /pages/1.xml
   def destroy
     @page = Page.find(params[:id])
-    @page.destroy
+    @mg_url = @page.mg_url
+    if @mg_url
+      @mg_url.destroy
+    end
 
+    @page.destroy
     respond_to do |format|
       expire_cache_for_page(@page)
       format.html { redirect_to(pages_url) }

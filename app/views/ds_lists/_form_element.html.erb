@@ -2,7 +2,7 @@
   <legend>Standard</legend>
   <% @d.ds_elements.each do |element| %>
     <p>
-      <%= form_element.label element.name %><br/>
+      <%= form_element.label element.name %>
       <% if element.ftype == "File" %>
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>
@@ -33,7 +33,7 @@
             <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
             <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
             <script>
-              KE.init({
+              KE.show({
                 id : "<%= element.key %>__<%= l.gsub(/-/, '_') %>",
                 width : "760px", //编辑器的宽度为70%
                 height : "300px", //编辑器的高度为100px
@@ -41,25 +41,19 @@
                 imageUploadJson:'/editor_attachments/upload'
               });
             </script>
-            <br/>
-            <input type="button" name="button" value="加载编辑器" onclick="javascript:KE.create('<%= element.key %>__<%= l.gsub(/-/, '_') %>');" />
-            <input type="button" name="button" value="卸载编辑器" onclick="javascript:KE.remove('<%= element.key %>__<%= l.gsub(/-/, '_') %>');" />
+            
           <% end %>
         <% else %>
           <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
           <script>
-            KE.init({
+            KE.show({
               id : "<%= element.key %>__<%= @setting.default_language %>",
               width : "760px", //编辑器的宽度为70%
               height : "300px", //编辑器的高度为100px
               allowFileManager : true,
               imageUploadJson:'/editor_attachments/upload'
             });
-          </script>
-          <br/>
-          <input type="button" name="button" value="加载编辑器" onclick="javascript:KE.create('<%= element.key %>__<%= @setting.default_language %>');" />
-          <input type="button" name="button" value="卸载编辑器" onclick="javascript:KE.remove('<%= element.key %>__<%= @setting.default_language %>');" />
-                    
+          </script>          
         <% end %>
       <% elsif element.ftype == "Boolean" %>
         <%= form_element.check_box "#{element.key}__#{@setting.default_language}" %>

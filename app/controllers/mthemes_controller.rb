@@ -32,7 +32,7 @@ class MthemesController < ApplicationController
     notice += `cd #{Rails.root}; #{gem_bin_path("rake")} tmp:cache:clear`
     
     respond_to do |format|
-      format.html { redirect_to '/manage/setting', :notice => notice}
+      format.html { redirect_to '/manage/setting', :notice => notice[0..200]}
       format.xml { head :ok}
     end
   end
@@ -47,7 +47,7 @@ class MthemesController < ApplicationController
     notice += `cd #{Rails.root}; #{gem_bin_path("rake")} tmp:cache:clear`
     
     respond_to do |format|
-      format.html { redirect_to '/manage/setting', :notice => notice}
+      format.html { redirect_to '/manage/setting', :notice => notice[0..200]}
       format.xml { head :ok}
     end
 

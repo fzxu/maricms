@@ -73,11 +73,11 @@
   </legend>
   <p>
     <%= f.label :date_format %>
-    <%= f.collection_select :date_format, Setting::DATE_FORMATS.collect {|df| [Date.today.strftime(df), df]}, :last, :first %>
+    <%= f.collection_select :date_format, DATE_FORMATS.collect {|df| [Date.today.strftime(df), df]}, :last, :first %>
   </p>
   <p>
     <%= f.label :time_format %>
-    <%= f.collection_select :time_format, Setting::TIME_FORMATS.collect {|tf| [Time.now.strftime(tf), tf]}, :last, :first %>
+    <%= f.collection_select :time_format, TIME_FORMATS.collect {|tf| [Time.now.strftime(tf), tf]}, :last, :first %>
   </p>
 </fieldset>
 <div class="actions">

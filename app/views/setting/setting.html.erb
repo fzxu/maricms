@@ -25,8 +25,6 @@
     <%= f.label :current_theme %>
     <% list_themes = Dir.entries(File.join(Rails.root, "themes")) - [".", "..", ".DS_Store"]%>
     <%= f.collection_select :current_theme,list_themes, :to_s, :to_s %>
-    <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post,
-    :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
     <% if list_themes.size > 0 %>
       <%= link_to "Sync and Cache the theme", sync_mtheme_path(:id => "default"), :method => :post %>
     <% end %><br/>
@@ -81,7 +79,9 @@
   </p>
 </fieldset>
 <div class="actions">
-  <%= f.submit %> | <%= link_to "Reset all to default", "/manage/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %>
+  <%= f.submit %> | <%= link_to "Reset all to default", "/manage/reset", :method => :post, :confirm => "Are you sure? All the config will be removed and reset!" %> |
+    <%= link_to "(Re)Generate Default Theme", mthemes_path(:id => "default"), :method => :post,
+    :confirm => "Are you sure? All the templates in the default theme will be removed!!" %>
 </div>
 <% end %>
 

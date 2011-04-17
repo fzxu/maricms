@@ -143,6 +143,26 @@ class DsController < ApplicationController
     end
   end
 
+  def move_up
+    @d = D.find(params[:id])
+    @d.move_up
+
+    respond_to do |format|
+      format.html { redirect_to(ds_path) }
+      format.xml  { head :ok }
+    end
+  end
+
+  def move_down
+    @d = D.find(params[:id])
+    @d.move_down
+
+    respond_to do |format|
+      format.html { redirect_to(ds_path) }
+      format.xml  { head :ok }
+    end
+  end
+
   private
   
   def current_records(params={})
@@ -151,11 +171,11 @@ class DsController < ApplicationController
     unless params[:sSearch].blank?
       result = D.any_of(conditions(params))
     else
-    result = D.all
+      result = D.all
     end
     @total_disp_records_size = result.size
 
-    result.desc(:position).paginate :page => current_page,
+    result.asc(:position).paginate :page => current_page,
     :per_page => params[:iDisplayLength]
   end
   

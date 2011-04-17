@@ -11,7 +11,8 @@
       "<%= rec.ds_view_type %>",
       "<%= rec.time_log %>",
       "<%= rec.ds_elements.size %>",
-      "<%= (link_to 'Manage', manage_d_path(rec)).gsub(/\"/, "'") %>  <%= (link_to "Show", d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", d_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+      "<%= (button_to 'Up', move_up_d_path(rec)).gsub(/\"/, "'") %> <%= (button_to 'Down', move_down_d_path(rec)).gsub(/\"/, "'") %>",
+      "<%= (link_to 'Manage', manage_d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Show", d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_d_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", d_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>
     ,

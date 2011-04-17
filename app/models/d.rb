@@ -1,5 +1,6 @@
 class D
   include Mongoid::Document
+  include Mongoid::Orderable
 
   # This model is for data source
   field :key, :type => String

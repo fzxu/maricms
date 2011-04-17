@@ -304,8 +304,27 @@ class PagesController < ApplicationController
 
     @page.destroy
     respond_to do |format|
-      expire_cache_for_page(@page)
       format.html { redirect_to(pages_url) }
+      format.xml  { head :ok }
+    end
+  end
+
+  def move_up
+    @page = Page.find(params[:id])
+    @page.move_up
+
+    respond_to do |format|
+      format.html {redirect_to(pages_path)}
+      format.xml  { head :ok }
+    end
+  end
+
+  def move_down
+    @page = Page.find(params[:id])
+    @page.move_down
+
+    respond_to do |format|
+      format.html { redirect_to(pages_path)}
       format.xml  { head :ok }
     end
   end

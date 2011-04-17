@@ -12,6 +12,7 @@ en-US:
       ds_view_type: View Type
       ds_log_time: Log Timestamp?
       ds_field_count: Field Count.
+      ds_ope_reorder: Reorder
       ds_operation: Op.
       new_ds: New DataSource
     show:

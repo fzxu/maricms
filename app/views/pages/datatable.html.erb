@@ -12,6 +12,7 @@
       "<%= rec.theme_path %>",
       "<%= rec.per_page %>",
       "<%= rec.r_page_ds.map{|r| r.d.name}.join(",") %>",
+      "<%= (button_to 'Up', move_up_page_path(rec)).gsub(/\"/, "'") %> <%= (button_to 'Down', move_down_page_path(rec)).gsub(/\"/, "'") %>",
       "<%= (link_to "Show", page_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_page_path(rec)).gsub(/\"/, "'") %> <%= (link_to "Destroy", page_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>

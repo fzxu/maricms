@@ -1,5 +1,6 @@
 class DsElement
   include Mongoid::Document
+  #include Mongoid::Orderable
   
   field :key, :type => String
   field :name, :type => String

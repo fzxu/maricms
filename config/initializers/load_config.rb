@@ -53,3 +53,5 @@ ActionMailer::Base.default_url_options[:host] = Setting.first.host_name
 D.all.each do |d|
   d.gen_klass
 end
+
+Mongoid.add_language("zh-CN")

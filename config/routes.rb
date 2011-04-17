@@ -33,6 +33,8 @@ MariCMS::Application.routes.draw do
   		post 'create_ds_element'
   		delete 'destroy_ds_element'
   		get 'manage'
+      post 'move_up'
+      post 'move_down'
   	end
     collection do
       get 'datatable'
@@ -43,6 +45,10 @@ MariCMS::Application.routes.draw do
     collection do
       get 'datatable'
     end    
+    member do
+      post 'move_up'
+      post 'move_down'
+    end
   end
   
   resources :mthemes do

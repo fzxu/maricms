@@ -33,6 +33,9 @@ gem 'rspec-rails', :group => [:development, :test]
 if RUBY_VERSION =~ /1\.8/
   gem 'SystemTimer'
 end
+
+#gem "mongoid_rails_migrations", ">=0.0.10"
+
 #gem 'rack-contrib', :require => 'rack/contrib'
 
 # Bundle edge Rails instead:

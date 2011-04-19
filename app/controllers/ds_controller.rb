@@ -193,6 +193,7 @@ class DsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(ds_path) }
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end
@@ -203,6 +204,7 @@ class DsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(ds_path) }
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end

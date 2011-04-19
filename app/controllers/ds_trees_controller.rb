@@ -198,6 +198,7 @@ class DsTreesController < ApplicationController
     expire_action_cache(@record)
     respond_to do |format|
       format.html {redirect_to(ds_trees_path(:d => @d.id))}
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end
@@ -211,6 +212,7 @@ class DsTreesController < ApplicationController
     expire_action_cache(@record)
     respond_to do |format|
       format.html { redirect_to(ds_trees_path(:d => @d.id))}
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end

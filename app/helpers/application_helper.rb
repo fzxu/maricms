@@ -71,7 +71,7 @@ module ApplicationHelper
     %Q{
     <script type="text/javascript">
     $(function() {
-        $('#{table_dom_id}').dataTable({
+        oTable = $('#{table_dom_id}').dataTable({
           "oLanguage": {
             "sSearch": "#{search_label}",
             #{"'sZeroRecords': '#{no_records_message}'," if no_records_message}

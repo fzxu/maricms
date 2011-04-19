@@ -23,7 +23,7 @@
       "<%= ActiveSupport::JSON.encode rec.parent.mg_name if rec.parent %>",
       "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",
       "<%= rec.position.to_i %>",
-      "<%= (button_to "Up", move_up_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'")%> <%= (button_to "Down", move_down_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %>",
+      "<%= (button_to "Up", move_up_ds_tree_path(rec, :d => @d.id), :remote => true, :class=>"ui-icon ui-icon-arrowthick-1-n").gsub(/\"/, "'")%> <%= (button_to "Down", move_down_ds_tree_path(rec, :d => @d.id), :remote => true, :class => "ui-icon ui-icon-arrowthick-1-s").gsub(/\"/, "'") %>",
       "<%= (link_to "Show", ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", ds_tree_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>

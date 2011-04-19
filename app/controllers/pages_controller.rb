@@ -359,6 +359,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       format.html {redirect_to(pages_path)}
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end
@@ -369,6 +370,7 @@ class PagesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(pages_path)}
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end

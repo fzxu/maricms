@@ -173,6 +173,7 @@ class DsListsController < ApplicationController
     respond_to do |format|
       expire_action_cache(@record)
       format.html { redirect_to(ds_lists_path(:d => @d.id)) }
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end
@@ -185,6 +186,7 @@ class DsListsController < ApplicationController
     respond_to do |format|
       expire_action_cache(@record)
       format.html { redirect_to(ds_lists_path(:d => @d.id)) }
+      format.js { render "shared/datatable/fnDraw" }
       format.xml  { head :ok }
     end
   end

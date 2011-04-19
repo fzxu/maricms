@@ -33,25 +33,20 @@
             <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
             <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
             <script>
-              KE.show({
-                id : "<%= element.key %>__<%= l.gsub(/-/, '_') %>",
-                width : "760px", //编辑器的宽度为70%
-                height : "300px", //编辑器的高度为100px
-                allowFileManager : true,
-                imageUploadJson:'/editor_attachments/upload'
+              $(function() {
+                $('#<%= element.key %>__<%= l.gsub(/-/, '_') %>').tinymce({
+                  <%= render :inline => TINYMCE_SETTING %>                
+                });
               });
-            </script>
-            
+            </script>            
           <% end %>
         <% else %>
           <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
           <script>
-            KE.show({
-              id : "<%= element.key %>__<%= @setting.default_language %>",
-              width : "760px", //编辑器的宽度为70%
-              height : "300px", //编辑器的高度为100px
-              allowFileManager : true,
-              imageUploadJson:'/editor_attachments/upload'
+            $(function() {
+              $('#<%= element.key %>__<%= @setting.default_language %>').tinymce({
+                <%= render :inline => TINYMCE_SETTING %>                
+              });
             });
           </script>          
         <% end %>

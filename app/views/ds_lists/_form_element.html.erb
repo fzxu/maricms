@@ -31,6 +31,16 @@
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>
             <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
+            <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
+          <% end %>
+        <% else %>
+          <br/>
+          <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
+        <% end %>
+      <% elsif element.ftype == "RichText" %>
+        <% if element.multi_lang %>
+          <% @setting.languages.each do |l| %>
+            <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
             <div class="editorcontainer">
               <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
             </div>

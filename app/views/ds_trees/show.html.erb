@@ -7,7 +7,7 @@
     <%= link_to "Download", @record.send("#{element.key}__#{@setting.default_language}").url %>
   <% elsif element.ftype == "Image"%>
     <%= image_tag @record.send("#{element.key}__#{@setting.default_language}").url %>
-  <% elsif element.ftype == "Text" %>
+  <% elsif element.ftype == "Text" || element.ftype == "RichText"%>
     <%= render :inline => @record.send("#{element.key}__#{@setting.default_language}") %>
   <% elsif element.ftype == "DateTime" %>
     <%= @record.send(element.key).strftime(@setting.date_format) if @record.send(element.key)%>

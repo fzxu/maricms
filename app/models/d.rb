@@ -129,7 +129,7 @@ class D
         end
         
 
-      elsif ds_element.ftype == "Text"
+      elsif ds_element.ftype == "Text" || ds_element.ftype == "RichText"
         meta_string += add_text_fields(ds_element, setting, "String")
       else
         meta_string += add_text_fields(ds_element, setting)
@@ -144,7 +144,7 @@ class D
       # add fields to liquid output, which is language specific
       liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
 
-      if ds_element.ftype == "String" || ds_element.ftype == "Text" 
+      if ds_element.ftype == "String" || ds_element.ftype == "Text" || ds_element.ftype == "RichText"
         # handle the unique attribute
         if ds_element.unique
           if ds_element.multi_lang

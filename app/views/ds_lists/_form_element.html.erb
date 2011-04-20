@@ -31,7 +31,9 @@
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>
             <br/>(<%= t "general_lang_name", :locale => l%>)<br/>
-            <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
+            <div class="editorcontainer">
+              <%= form_element.text_area "#{element.key}__#{l.gsub(/-/, '_')}", :id => "#{element.key}__#{l.gsub(/-/, '_')}" %>
+            </div>
             <script>
               $(function() {
                 $('#<%= element.key %>__<%= l.gsub(/-/, '_') %>').tinymce({
@@ -41,7 +43,9 @@
             </script>            
           <% end %>
         <% else %>
-          <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
+          <div class="editorcontainer">
+            <%= form_element.text_area "#{element.key}__#{@setting.default_language}", :id => "#{element.key}__#{@setting.default_language}" %>
+          </div>
           <script>
             $(function() {
               $('#<%= element.key %>__<%= @setting.default_language %>').tinymce({

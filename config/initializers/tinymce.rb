@@ -22,5 +22,6 @@ TINYMCE_SETTING = <<-S
       content_css : "/javascripts/tiny_mce/themes/advanced/skins/default/content.css",
       
       width : "90%",
-      height: "250"
+      height: "250",
+      language: "zh-cn"
 S

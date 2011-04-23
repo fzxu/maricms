@@ -24,9 +24,9 @@ defaults: &defaults
   host_name: "localhost"
   ruby_bin_path: "/usr/local/ruby/bin/"
   gem_bin_path: "/usr/local/ruby/bin/"
-  repo_path: "/home/www/"
-  repo_user: "www"
-  repo_group: "www"
+  repo_path: "/home/www-data/"
+  repo_user: "www-data"
+  repo_group: "www-data"
   languages:
     - "zh-CN"
   default_lang: "zh-CN"

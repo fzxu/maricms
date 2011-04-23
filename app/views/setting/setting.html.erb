@@ -31,7 +31,7 @@
     <% if File.exist?(File.join(@setting.repo_path, @setting.id.to_s, @setting.current_theme)) %>
       You can use the following svn url to check out the theme code:<br/>
       <fieldset>
-      <b>svn co svn+ssh://www@<%= @setting.host_name%><%= File.join(@setting.repo_path, @setting.id.to_s, @setting.current_theme) %></b>
+      <b>svn co svn+ssh://<%= @setting.repo_user %>@<%= @setting.host_name%><%= File.join(@setting.repo_path, @setting.id.to_s, @setting.current_theme) %></b>
       </fieldset>
     <% end %>
   </p>

@@ -209,6 +209,13 @@ class DsController < ApplicationController
     end
   end
 
+  def get_ds_elements
+    @d = D.where(:key => params[:id]).first
+    @ds_elements = @d.ds_elements
+    
+    render :layout => false
+  end
+  
   private
   
   def current_records(params={})

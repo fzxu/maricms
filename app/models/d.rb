@@ -8,36 +8,36 @@
 # MariGold MariCMS is free software: you can redistribute it and/or
 # modify it under the terms of the GNU Affero General Public License as published
 # by the Free Software Foundation, version 3 of the License.
-# 
+#
 # Under the terms of the GNU Affero General Public License you must release the
 # complete source code for any application that uses any part of MariCMS
 # (system header files and libraries used by the operating system are excluded).
 # These terms must be included in any work that has MariCMS components.
 # If you are developing and distributing open source applications under the
 # GNU Affero General Public License, then you are free to use MariCMS.
-# 
+#
 # If you are deploying a web site in which users interact with any portion of
 # MariCMS over a network, the complete source code changes must be made
 # available.  For example, include a link to the source archive directly from
 # your web site.
-# 
+#
 # For OEMs, ISVs, SIs and VARs who distribute MariCMS with their products,
 # and do not license and distribute their source code under the GNU
 # Affero General Public License, MariGold provides a flexible commercial
 # license.
-# 
+#
 # To anyone in doubt, we recommend the commercial license. Our commercial license
 # is competitively priced and will eliminate any confusion about how
 # MariCMS can be used and distributed.
-# 
+#
 # MariCMS is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 # FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
 # details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with MariCMS.  If not, see <http://www.gnu.org/licenses/>.
-# 
+#
 # Attribution Notice: MariCMS is an Original Work of software created
 # by  金盏信息科技(上海)有限公司 | MariGold Information Tech. Co,. Ltd.
 ##
@@ -119,7 +119,7 @@ class D
           image_style = ImageStyle.find(ds_element.image_style_id)
         rescue
         end
-        
+
         if ds_element.multi_lang
           setting.languages.each do |l|
             meta_string += "mount_uploader :#{ds_element.key}__#{l.gsub(/-/, '_')}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
@@ -127,22 +127,43 @@ class D
         else
           meta_string += "mount_uploader :#{ds_element.key}__#{setting.default_language}, #{image_style.nil? ? ImageUploader : image_style.get_uploader_klass} \n"
         end
-        
 
       elsif ds_element.ftype == "Text" || ds_element.ftype == "RichText"
         meta_string += add_text_fields(ds_element, setting, "String")
+
+      elsif ds_element.ftype == "Relation"
+        # relation never support i18n
+        # need to make sure the related class are initialized
+        begin
+          Object.const_get(gen_class_name(ds_element.relation_ds))
+        rescue NameError
+          #init it
+          D.where(:key => ds_element.relation_ds).first.gen_klass
+        end
+        if ds_element.relation_type == "has_one"
+          meta_string += "#{ds_element.relation_type} '#{ds_element.key}', :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.relation_field}_id, :autosave => true \n"
+        elsif ds_element.relation_type == "belongs_to"
+          meta_string += "#{ds_element.relation_type} '#{ds_element.key}', :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_id, :autosave => true \n"
+        end
       else
         meta_string += add_text_fields(ds_element, setting)
       end
 
-      meta_string += <<-DEFAULTLANG
-        def #{ds_element.key}
-          get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang})
-        end
-      DEFAULTLANG
+      if ds_element.ftype != "Relation"
+        # do not handle the value of relationship
+        meta_string += <<-DEFAULTLANG
+          def #{ds_element.key}
+            get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang})
+          end
+        DEFAULTLANG
+      end
 
       # add fields to liquid output, which is language specific
-      liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
+      if ds_element.ftype != "Relation"
+        liquid_string += "'#{ds_element.key}' => get_field_value(\"#{ds_element.key}\", #{ds_element.multi_lang}), \n"
+      else
+        liquid_string += "'#{ds_element.key}' => self.#{ds_element.key}, \n"
+      end
 
       if ds_element.ftype == "String" || ds_element.ftype == "Text" || ds_element.ftype == "RichText"
         # handle the unique attribute
@@ -155,7 +176,7 @@ class D
             meta_string += "validates_uniqueness_of :#{ds_element.key}__#{setting.default_language}, :allow_blank => true \n"
           end
         end
-  
+
         # handle the notnull attribute
         if ds_element.notnull
           if ds_element.multi_lang
@@ -178,7 +199,13 @@ class D
             self.send(\"#\{key\}__#{setting.default_language}\") || ""
           end
         else
-          self.send(\"#\{key\}__#{setting.default_language}\") || ""
+          if self.respond_to?(\"#\{key\}__#{setting.default_language}\")
+            self.send(\"#\{key\}__#{setting.default_language}\")
+          elsif self.respond_to?(\"#\{key\}\")
+            self.send(\"#\{key\}\")
+          else
+            ""
+          end
         end
       end
     GETFIELD
@@ -229,8 +256,8 @@ class D
 
   private
 
-  def gen_class_name
-    EXT_CLASS_PREFIX + self.key.capitalize
+  def gen_class_name(ds_key = self.key)
+    EXT_CLASS_PREFIX + ds_key.capitalize
   end
 
   def remove_page_relation
@@ -264,7 +291,7 @@ class D
     end
     GC.start
   end
- 
+
   # add mongoid fields to the model based on the ds structure and the language setting
   def add_text_fields(ds_element, setting, ftype = nil)
     local_meta_string = ""
@@ -272,7 +299,7 @@ class D
       setting.languages.each do |l|
         local_meta_string += "field :#{ds_element.key}__#{l.gsub(/-/, '_')}, :type => #{ftype || ds_element.ftype} \n"
       end
-      local_meta_string
+    local_meta_string
     else
       local_meta_string += "field :#{ds_element.key}__#{setting.default_language}, :type => #{ftype || ds_element.ftype} \n"
     end

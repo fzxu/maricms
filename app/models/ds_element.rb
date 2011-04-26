@@ -52,6 +52,10 @@ class DsElement
   field :unique, :type => Boolean, :default => false
   field :notnull, :type => Boolean, :default => false
   field :multi_lang, :type => Boolean, :default => false
+  field :relation_type, :type => String
+  field :relation_ds, :type => String
+  field :relation_field, :type => String
+  field :relation_disp_field, :type => String
   
   belongs_to :image_style
   embedded_in :d

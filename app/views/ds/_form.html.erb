@@ -41,7 +41,7 @@
     <legend>
       Fields
     </legend>
-    <table>
+    <table id="ds_elements">
       <tr>
         <th>Key(Unique)</th>
         <th>Name</th>
@@ -49,22 +49,51 @@
         <th>Unique</th>
         <th>Not NULL</th>
         <th>Multi Language</th>
-        <th>Uploader</th>
-        <th></th>
+        <th>Op.</th>
       </tr>
       <% @d.ds_elements.each do |ds_element| %>
-      <%= f.fields_for "ds_elements[]", ds_element do |ds_element_field| %>
-      <tr>
-        <td><%= ds_element_field.text_field :key %></td>
-        <td><%= ds_element_field.text_field :name %></td>
-        <td><%= ds_element_field.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
-        <td><%= ds_element_field.check_box :unique %></td>
-        <td><%= ds_element_field.check_box :notnull %></td>
-        <td><%= ds_element_field.check_box :multi_lang %></td>
-        <td><%= ds_element_field.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></td>
-        <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
-      </tr>
-      <% end %>
+        <%= f.fields_for "ds_elements[]", ds_element do |ds_element_field| %>
+          <tr>
+            <td><%= ds_element_field.text_field :key %></td>
+            <td><%= ds_element_field.text_field :name %></td>
+            <td><%= ds_element_field.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s, {}, {:onchange => "changeFieldPropertyView(this.value, '#{ds_element.id}');"} %></td>
+            <td><%= ds_element_field.check_box :unique %></td>
+            <td><%= ds_element_field.check_box :notnull %></td>
+            <td><%= ds_element_field.check_box :multi_lang %></td>
+            
+            <td><%= link_to "Destroy", destroy_ds_element_d_path(@d, :ds_element_id => ds_element.id), :confirm => 'Are you sure?', :method => :delete %></td>
+          </tr>
+          <tr>
+            <% if ds_element.ftype == "Image"%>
+              <td colspan="8" id="<%=ds_element.id%>_image_uploader">
+            <% else %>
+              <td colspan="8" id="<%=ds_element.id%>_image_uploader" style="display:none;">
+            <% end %>
+            Image Uploader: <%= ds_element_field.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></td>
+
+            <% if ds_element.ftype == "Relation"%>
+              <td colspan="8" id="<%=ds_element.id%>_relation">
+            <% else %>
+              <td colspan="8" id="<%=ds_element.id%>_relation" style="display:none;">
+            <% end %>
+                Relation Type: <%= ds_element_field.collection_select :relation_type, RELATION_TYPE, :to_s, :to_s %>
+                Datasource: <%= ds_element_field.collection_select :relation_ds, D.all, :key, :name, {}, {:onchange => %Q{
+                  $.ajax({
+                    url: '/ds/'+this.value+'/get_ds_elements',
+                    success: function(value){
+                      $('##{ds_element.id}_relation_field').html(value);
+                    }
+                  })
+                }} 
+                %>
+                <span id="<%=ds_element.id %>_relation_field">
+                  Field: <%= ds_element_field.collection_select :relation_field, D.where(:key =>ds_element.relation_ds).first.ds_elements, :key, :name %>
+                  Display: <%= ds_element_field.collection_select :relation_disp_field, D.where(:key =>ds_element.relation_ds).first.ds_elements, :key, :name %>
+                </span>
+              </td> 
+
+          </tr>
+        <% end %>
       <% end %>
     </table>
   </fieldset>
@@ -88,20 +117,54 @@
       <th>Unique</th>
       <th>Not NULL</th>
       <th>Multi Language</th>
-      <th>Uploader</th>
-      <th></th>
+      <th>Op.</th>
     </tr>
     <tr>
       <td><%= f.text_field :key %></td>
       <td><%= f.text_field :name %></td>
-      <td><%= f.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s %></td>
+      <td>
+        <%= f.collection_select :ftype, ELEMENT_TYPES, :to_s, :to_s,{},{:onchange => "changeFieldPropertyView(this.value, '');"} %>
+      </td>
       <td><%= f.check_box :unique %></td>
       <td><%= f.check_box :notnull %></td>
       <td><%= f.check_box :multi_lang %></td>
-      <td><%= f.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></td>
       <td><%= f.submit "Add Field" %></td>
     </tr>
   </table>
+  <div>
+    <div id="_image_uploader" style="display:none;">Image Uploader: <%= f.collection_select :image_style_id, ImageStyle.all, :id, :name, :prompt => true %></div>
+    <div id="_relation" style="display:none;">
+      Relation Type: <%= f.collection_select :relation_type, RELATION_TYPE, :to_s, :to_s %>
+      Datasource: <%= f.collection_select :relation_ds, D.all, :key, :name, {}, {:onchange => %Q{
+        $.ajax({
+          url: '/ds/'+this.value+'/get_ds_elements',
+          success: function(value){
+            $('#relation_field').html(value);
+          }
+        })
+      }} 
+      %>
+      <span id="relation_field"></span> 
+    </div>
+  </div>
+
+  <script>
+
+    // change the data element field property view
+    function changeFieldPropertyView(value, id){
+      if(value == "Relation"){
+        $('#'+id+'_relation').show();
+      }else{
+        $('#'+id+'_relation').hide();
+      };
+
+      if(value == "Image"){
+        $('#'+id+'_image_uploader').show();
+      }else{
+        $('#'+id+'_image_uploader').hide();
+      };
+    };
+  </script>
 </fieldset>
 <% end %>
 <% end %>

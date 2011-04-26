@@ -1,7 +1,7 @@
 # config/initializers/load_config.rb
 APP_CONFIG = YAML.load_file(File.join(Rails.root, "config", "config.yml"))[Rails.env]
 
-ELEMENT_TYPES = ["String", "Integer", "DateTime", "Float", "Boolean", "Image", "File", "Text", "RichText"]
+ELEMENT_TYPES = ["String", "Integer", "DateTime", "Float", "Boolean", "Image", "File", "Text", "RichText", "Relation"]
 
 DS_TYPES = ["List", "Tree", "Single"]
 DS_VIEW_TYPES = ["Developer", "User"]
@@ -35,6 +35,8 @@ AVAILABLE_LANGUAGES = ['en-US', 'zh-CN', 'zh-TW', 'ja']
 TEMPLATE_VARIABLE_PREFIX = "mg_"
 TEMPLATE_DYNAMIC_DS_PREFIX = "mg_d_"
 
+RELATION_TYPE = ["has_one", "has_many", "belongs_to", "has_and_belongs_to_many"]
+
 # load init setting
 setting = Setting.first
 unless setting
@@ -51,7 +53,7 @@ ActionMailer::Base.default_url_options[:host] = Setting.first.host_name
 
 # Initialized all the ds
 D.all.each do |d|
-  d.gen_klass
+  d.get_klass
 end
 
 Mongoid.add_language("zh-CN")

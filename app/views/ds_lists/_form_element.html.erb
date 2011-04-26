@@ -73,6 +73,13 @@
             $( "#<%= "#{element.key}__#{@setting.default_language}" %>" ).datepicker({ dateFormat: 'yy-mm-dd' });
           });
         </script>
+      <% elsif element.ftype == "Relation" %>
+        <% if element.relation_type == "has_one" %>
+          <%= form_element.select "#{element.key}", 
+            options_from_collection_for_select(D.where(:key => element.relation_ds).first.get_klass.all, :id, :"#{element.relation_disp_field}", @record.send(element.key).id)%>
+        <% elsif element.relation_type == "belongs_to" %>
+          <%= form_element.collection_select "#{element.key}_id", D.where(:key => element.relation_ds).first.get_klass.all, :id, :"#{element.relation_disp_field}"%>
+        <% end %>
       <% else %>
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>

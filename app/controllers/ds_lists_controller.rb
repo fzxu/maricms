@@ -65,46 +65,6 @@ class DsListsController < ApplicationController
     end
   end
 
-  def edit
-    @d = D.find(params[:d])
-    @record = @d.get_klass.find(params[:id])
-    
-    respond_to do |format|
-      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
-      format.xml  { render :xml => @record }
-    end
-  end
-
-  def update
-    mg_url = params[:record].delete(:mg_url)
-    
-    @d = D.find(params[:d])
-    @record = @d.get_klass.find(params[:id])
-
-    if mg_url[:path].blank?
-      if @record.mg_url
-        @record.mg_url.destroy
-      end
-    else
-      if @record.mg_url
-        @record.mg_url.update_attributes(mg_url)
-      else
-        @record.mg_url = MgUrl.new(mg_url)
-      end
-    end
-    
-    respond_to do |format|
-      if @record.update_attributes(params[:record])
-        expire_action_cache(@record)
-        format.html { redirect_to(ds_lists_path(:d => @d.id)) }
-        format.xml  { head :ok }
-      else
-        format.html { render :edit, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
-        format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
   def new
     @d = D.find(params[:d])
     @record = @d.get_klass.new
@@ -137,6 +97,57 @@ class DsListsController < ApplicationController
       end
     end
   end
+  
+  def edit
+    @d = D.find(params[:d])
+    @record = @d.get_klass.find(params[:id])
+    
+    respond_to do |format|
+      format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
+      format.xml  { render :xml => @record }
+    end
+  end
+
+  def update
+    mg_url = params[:record].delete(:mg_url)
+    
+    @d = D.find(params[:d])
+    @record = @d.get_klass.find(params[:id])
+
+    if mg_url[:path].blank?
+      if @record.mg_url
+        @record.mg_url.destroy
+      end
+    else
+      if @record.mg_url
+        @record.mg_url.update_attributes(mg_url)
+      else
+        @record.mg_url = MgUrl.new(mg_url)
+      end
+    end
+    
+    # process the relationship
+    @d.ds_elements.each do |ds_element|
+      if ds_element.ftype == "Relation"
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to" 
+          related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(params[:record].delete("#{ds_element.key}"))
+          @record.send("#{ds_element.key}=", related_record)
+        end
+      end
+    end
+    
+    respond_to do |format|
+      if @record.update_attributes(params[:record])
+        expire_action_cache(@record)
+        format.html { redirect_to(ds_lists_path(:d => @d.id)) }
+        format.xml  { head :ok }
+      else
+        format.html { render :edit, :layout => "ds_view_#{@d.ds_view_type.downcase}"}
+        format.xml  { render :xml => @record.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
 
   def destroy
     @d = D.find(params[:d])

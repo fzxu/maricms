@@ -89,9 +89,12 @@ class DsListsController < ApplicationController
     # process the relationship
     @d.ds_elements.each do |ds_element|
       if ds_element.ftype == "Relation"
-        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to" 
-          related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(params[:record].delete("#{ds_element.key}"))
-          @record.send("#{ds_element.key}=", related_record)
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"
+          p_related_record = params[:record].delete("#{ds_element.key}")
+          unless p_related_record.empty?
+            related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+            @record.send("#{ds_element.key}=", related_record)
+          end
         end
       end
     end
@@ -139,9 +142,12 @@ class DsListsController < ApplicationController
     # process the relationship
     @d.ds_elements.each do |ds_element|
       if ds_element.ftype == "Relation"
-        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to" 
-          related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(params[:record].delete("#{ds_element.key}"))
-          @record.send("#{ds_element.key}=", related_record)
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"
+          p_related_record = params[:record].delete("#{ds_element.key}")
+          unless p_related_record.empty?
+            related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+            @record.send("#{ds_element.key}=", related_record)
+          end
         end
       end
     end

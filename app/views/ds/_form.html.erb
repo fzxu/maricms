@@ -87,8 +87,8 @@
                 }} 
                 %>
                 <span id="<%=ds_element.id %>_relation_field">
-                  Field: <%= ds_element_field.collection_select :relation_field, D.where(:key =>ds_element.relation_ds).first.ds_elements, :key, :name %>
-                  Display: <%= ds_element_field.collection_select :relation_disp_field, D.where(:key =>ds_element.relation_ds).first.ds_elements, :key, :name %>
+                  Field: <%= ds_element_field.collection_select :relation_field, D.where(:key =>ds_element.relation_ds).first.ds_elements.where(:ftype => "Relation"), :key, :name %>
+                  Display: <%= ds_element_field.collection_select :relation_disp_field, D.where(:key =>ds_element.relation_ds).first.ds_elements.where(:ftype.ne => "Relation"), :key, :name %>
                 </span>
               </td> 
 

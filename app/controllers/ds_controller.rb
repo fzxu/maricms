@@ -211,7 +211,8 @@ class DsController < ApplicationController
 
   def get_ds_elements
     @d = D.where(:key => params[:id]).first
-    @ds_elements = @d.ds_elements
+    @ds_r_elements = @d.ds_elements.where(:ftype => "Relation")
+    @ds_nr_elements = @d.ds_elements.where(:ftype.ne => "Relation")
     
     render :layout => false
   end

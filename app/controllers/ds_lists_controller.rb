@@ -86,6 +86,16 @@ class DsListsController < ApplicationController
       @record.mg_url = MgUrl.new(mg_url)
     end
 
+    # process the relationship
+    @d.ds_elements.each do |ds_element|
+      if ds_element.ftype == "Relation"
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to" 
+          related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(params[:record].delete("#{ds_element.key}"))
+          @record.send("#{ds_element.key}=", related_record)
+        end
+      end
+    end
+
     respond_to do |format|
       if @record.save
         expire_action_cache(@record)

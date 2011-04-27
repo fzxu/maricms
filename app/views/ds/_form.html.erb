@@ -89,7 +89,7 @@
                 <span id="<%=ds_element.id %>_relation_field">
 				  <% relation_ds = D.where(:key =>ds_element.relation_ds).first %>
                   Field: <%= ds_element_field.collection_select :relation_field, relation_ds.nil? ? [] : relation_ds.ds_elements.where(:ftype => "Relation"), :key, :name %>
-                  Display: <%= ds_element_field.collection_select :relation_disp_field, relation_ds.nil? ? [] : ds_elements.where(:ftype.ne => "Relation"), :key, :name %>
+                  Display: <%= ds_element_field.collection_select :relation_disp_field, relation_ds.nil? ? [] : relation_ds.ds_elements.where(:ftype.ne => "Relation"), :key, :name %>
                 </span>
               </td> 
 

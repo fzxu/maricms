@@ -1,0 +1,23 @@
+<!-- this is for open the new record form in an dialog-->
+
+<h2>Add <%= @d.name %> record</h2>
+<%= form_for(:record, :url => ds_lists_path(:d => @d.id), :html => {:method => :post, :multipart => true}, :remote => true) do |f| %>
+<% if @record.errors.any? %>
+  <div id="error_explanation" class="error">
+    <h4><%= pluralize(@record.errors.count, "error") %> prohibited this d from being saved:</h4>
+    <ul>
+      <% @record.errors.full_messages.each do |msg| %>
+      <li>
+        <%= msg %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render :partial => "form_element", :object => f %>
+
+<div class="actions">
+  <%= f.submit %>
+</div>
+<% end %>

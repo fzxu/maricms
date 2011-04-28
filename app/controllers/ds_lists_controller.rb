@@ -71,6 +71,7 @@ class DsListsController < ApplicationController
 
     respond_to do |format|
       format.html {render :layout => "ds_view_#{@d.ds_view_type.downcase}" }
+      format.js { render "new_js", :layout => false, :content_type => "text/html" }
       format.xml  { render :xml => @record }
     end
   end
@@ -103,6 +104,9 @@ class DsListsController < ApplicationController
       if @record.save
         expire_action_cache(@record)
         format.html { redirect_to(ds_lists_path(:d => @d.id))}
+        format.js {
+          render "shared/close_dialog" 
+        }
         format.xml { head :ok}
       else
         format.html {render :new, :layout => "ds_view_#{@d.ds_view_type.downcase}"}

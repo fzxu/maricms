@@ -217,6 +217,14 @@ class DsController < ApplicationController
     render :layout => false
   end
   
+  def get_options_for_select
+    @d = D.find(params[:id])
+    @disp_field = params[:disp_field]
+    @current_record_id = params[:current_record_id]
+    
+    render :layout => false
+  end
+  
   private
   
   def current_records(params={})

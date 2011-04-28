@@ -74,12 +74,42 @@
           });
         </script>
       <% elsif element.ftype == "Relation" %>
+        <% relation_ds = D.where(:key => element.relation_ds).first%>
         <% if element.relation_type == "has_one" %>
           <%= form_element.select "#{element.key}", 
-            options_from_collection_for_select(D.where(:key => element.relation_ds).first.get_klass.all, :id, :"#{element.relation_disp_field}", @record.send(element.key).nil? ? nil : @record.send(element.key).id ), :prompt => true%>
+            options_from_collection_for_select(relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", @record.send(element.key).nil? ? nil : @record.send(element.key).id ), :prompt => true%>
+
         <% elsif element.relation_type == "belongs_to" %>
-          <%= form_element.collection_select "#{element.key}_id", D.where(:key => element.relation_ds).first.get_klass.all, :id, :"#{element.relation_disp_field}", :prompt => true%>
+          <%= form_element.collection_select "#{element.key}_id", relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", :prompt => true%>
         <% end %>
+
+          <%= link_to "Add New", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
+          <script>
+            $(function(){
+              $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
+              //open the dialog before sending the request
+              $('#<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#new_record_dialog').dialog('open');
+              });
+              //get the response and fill in the dialog
+              $('#<%= element.id%>').bind("ajax:success", function(evt, data, status, xhr){
+                $('#new_record_dialog').html(data);
+                //refresh the option select for updated value
+                $('#new_record_dialog').unbind("dialogclose");
+                $('#new_record_dialog').bind("dialogclose", function(event, ui){
+                  $.ajax({
+                    url: '/ds/<%= relation_ds.id%>/get_options_for_select',
+                    data: 'disp_field=<%=element.relation_disp_field%>&current_r_id=<%= @record.send(element.key).nil? ? nil : @record.send(element.key).id %>',
+                    success: function(data){
+                      $('#record_<%= element.key %>').html(data);
+                    }
+                  });
+                });
+
+              });
+            });
+          </script>
+
       <% else %>
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>
@@ -104,3 +134,5 @@
   </p>
   <% end %>  
 </fieldset>
+
+<div id="new_record_dialog"></div>

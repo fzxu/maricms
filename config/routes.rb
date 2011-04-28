@@ -36,6 +36,7 @@ MariCMS::Application.routes.draw do
       post 'move_up'
       post 'move_down'
       get 'get_ds_elements'
+      get 'get_options_for_select'
   	end
     collection do
       get 'datatable'

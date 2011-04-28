@@ -220,7 +220,7 @@ class DsController < ApplicationController
   def get_options_for_select
     @d = D.find(params[:id])
     @disp_field = params[:disp_field]
-    @current_record_id = params[:current_record_id]
+    @current_record_id = params[:current_r_id]
     
     render :layout => false
   end

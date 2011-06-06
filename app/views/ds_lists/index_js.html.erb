@@ -1,0 +1,12 @@
+<ul id="related_record" class="ui-selectable">
+  <% @d.get_klass.all.each do |record| %>
+  <li class="ui-selectee" id="<%= record.id.to_s %>">
+    <%= record.send(@disp_field)%>
+  </li>
+  <% end %>
+</ul>
+<script>
+  $( function() {
+    $( "#related_record" ).selectable();
+  });
+</script>

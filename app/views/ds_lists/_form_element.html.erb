@@ -2,7 +2,7 @@
   <legend>Standard</legend>
   <% @d.ds_elements.each do |element| %>
     <p>
-      <%= form_element.label element.name %>
+      <%= form_element.label element.name %><br/>
       <% if element.ftype == "File" %>
         <% if element.multi_lang %>
           <% @setting.languages.each do |l| %>
@@ -79,11 +79,7 @@
           <%= form_element.select "#{element.key}", 
             options_from_collection_for_select(relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", @record.send(element.key).nil? ? nil : @record.send(element.key).id ), :prompt => true%>
 
-        <% elsif element.relation_type == "belongs_to" %>
-          <%= form_element.collection_select "#{element.key}_id", relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", :prompt => true%>
-        <% end %>
-
-          <%= link_to "Add New", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
+          <%= link_to "Create", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
           <script>
             $(function(){
               $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
@@ -109,6 +105,66 @@
               });
             });
           </script>
+
+        <% elsif element.relation_type == "belongs_to" %>
+          <%= form_element.collection_select "#{element.key}_id", relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", :prompt => true %>
+        <% elsif element.relation_type == "has_many" %>
+          
+          <% if @record.send(element.key)%>
+            <% @record.send(element.key).each do |rel| %>
+              <div id="<%= rel.id %>">
+                <%= rel.send("#{element.relation_disp_field}__#{@setting.default_language}") %>
+                <input id="record_<%= element.key%>[]" name="record[<%= element.key%>][]" value="<%= rel.id %>"></input>
+                <%= link_to_function "Remove", "$('##{rel.id}').remove()"%>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= link_to "Add", "/ds_#{relation_ds.ds_type.downcase.pluralize}?d=#{relation_ds.id}&disp_field=#{element.relation_disp_field}", :remote => true, :id => "add_#{element.id}"%>
+          <script>
+            $(function(){ 
+              $('#add_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false,
+                buttons:{
+                  "OK": function(){
+
+                    $( ".ui-selected", this ).each(function() {
+                      $('#add_<%= element.id %>').before('<input id="record_<%= element.key %>[]" name="record[<%= element.key %>][]" value=' + this.id + '></input><br/>');
+                    });
+                    $(this).dialog("close");
+                  },
+                  Cancel: function(){
+                    $(this).dialog("close");
+                  }
+                }
+              });
+              //open the dialog before sending the request
+              $('#add_<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#add_record_dialog').dialog('open');
+              });
+              //get the response and fill in the dialog
+              $('#add_<%= element.id%>').bind("ajax:success", function(evt, data, status, xhr){
+                $('#add_record_dialog').html(data);
+              });
+            });
+
+          </script>
+
+
+          <%= link_to "Create", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
+          <script>
+            $(function(){ 
+              $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
+              //open the dialog before sending the request
+              $('#<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#new_record_dialog').dialog('open');
+              });
+              //get the response and fill in the dialog
+              $('#<%= element.id%>').bind("ajax:success", function(evt, data, status, xhr){
+                $('#new_record_dialog').html(data);
+              });
+            });
+          </script>
+        <% end %>
 
       <% else %>
         <% if element.multi_lang %>
@@ -136,3 +192,4 @@
 </fieldset>
 
 <div id="new_record_dialog"></div>
+<div id="add_record_dialog" title="Choose related records, you can use 'Control(Command)' to select multiple"></div>

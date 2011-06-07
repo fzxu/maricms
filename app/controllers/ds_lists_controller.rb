@@ -83,11 +83,11 @@ class DsListsController < ApplicationController
     mg_url = params[:record].delete(:mg_url)
 
     @d = D.find(params[:d])
-    @record = @d.get_klass.new(params[:record])
+    @record = @d.get_klass.new()
 
     # update the mg url
     unless mg_url[:path].blank?
-    @record.mg_url = MgUrl.new(mg_url)
+      @record.mg_url = MgUrl.new(mg_url)
     end
 
     # process the relationship
@@ -99,20 +99,22 @@ class DsListsController < ApplicationController
             related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
             @record.send("#{ds_element.key}=", related_record)
           end
-        elsif ds_element.relation_type == "has_many"
+        elsif ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"
           p_related_records = params[:record].delete("#{ds_element.key}")
           if p_related_records && !p_related_records.empty?
+            related_records = []
             p_related_records.each do |p_related_record|
               related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
-              @record.send("#{ds_element.key}") << related_record
+              related_records << related_record
             end
+            @record.send("#{ds_element.key}=", related_records)
           end          
         end
       end
     end
 
     respond_to do |format|
-      if @record.save
+      if @record.update_attributes(params[:record]) && @record.save
         expire_action_cache(@record)
         format.html { redirect_to(ds_lists_path(:d => @d.id))}
         format.js {
@@ -163,13 +165,17 @@ class DsListsController < ApplicationController
             related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
             @record.send("#{ds_element.key}=", related_record)
           end
-        elsif ds_element.relation_type == "has_many"
+        elsif ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"
           p_related_records = params[:record].delete("#{ds_element.key}")
           if p_related_records && !p_related_records.empty?
+            related_records = @record.send("#{ds_element.key}")
+            @record.send("#{ds_element.key}").nullify && @record.save
             p_related_records.each do |p_related_record|
               related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
-              @record.send("#{ds_element.key}") << related_record
+              related_records << related_record
             end
+          else
+            @record.send("#{ds_element.key}").nullify
           end          
         end
       end

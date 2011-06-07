@@ -140,10 +140,14 @@ class D
           #init it
           D.where(:key => ds_element.relation_ds).first.gen_klass
         end
-        if ds_element.relation_type == "has_one" or ds_element.relation_type == "has_many"
-          meta_string += "#{ds_element.relation_type} '#{ds_element.key}', :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.relation_field}_id, :autosave => true \n"
+        if ds_element.relation_type == "has_one"
+          meta_string += "#{ds_element.relation_type} :#{ds_element.key}, :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_id, :inverse_of => :#{ds_element.relation_field}, :autosave => true \n"
+        elsif ds_element.relation_type == "has_many"
+          meta_string += "#{ds_element.relation_type} :#{ds_element.key}, :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_ids, :inverse_of => :#{ds_element.relation_field}, :autosave => true \n"
+        elsif ds_element.relation_type == "has_and_belongs_to_many"
+          meta_string += "#{ds_element.relation_type} :#{ds_element.key}, :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_ids, :inverse_of => :#{ds_element.relation_field}, :autosave => true \n"
         elsif ds_element.relation_type == "belongs_to"
-          meta_string += "#{ds_element.relation_type} '#{ds_element.key}', :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_id, :autosave => true \n"
+          meta_string += "#{ds_element.relation_type} :#{ds_element.key}, :class_name => '#{gen_class_name(ds_element.relation_ds)}', :foreign_key => :#{ds_element.key}_id, :inverse_of => :#{ds_element.relation_field}, :autosave => true \n"
         end
       else
         meta_string += add_text_fields(ds_element, setting)

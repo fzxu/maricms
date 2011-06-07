@@ -82,9 +82,10 @@
           <%= link_to "Create", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
           <script>
             $(function(){
-              $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
+              
               //open the dialog before sending the request
               $('#<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
                 $('#new_record_dialog').dialog('open');
               });
               //get the response and fill in the dialog
@@ -108,13 +109,13 @@
 
         <% elsif element.relation_type == "belongs_to" %>
           <%= form_element.collection_select "#{element.key}_id", relation_ds.get_klass.all, :id, :"#{element.relation_disp_field}", :prompt => true %>
-        <% elsif element.relation_type == "has_many" %>
+        <% elsif element.relation_type == "has_many" || element.relation_type == "has_and_belongs_to_many" %>
           
           <% if @record.send(element.key)%>
             <% @record.send(element.key).each do |rel| %>
               <div id="<%= rel.id %>">
                 <%= rel.send("#{element.relation_disp_field}__#{@setting.default_language}") %>
-                <input id="record_<%= element.key%>[]" name="record[<%= element.key%>][]" value="<%= rel.id %>"></input>
+                <input type="hidden" id="record_<%= element.key%>[]" name="record[<%= element.key%>][]" value="<%= rel.id %>"></input>
                 <%= link_to_function "Remove", "$('##{rel.id}').remove()"%>
               </div>
             <% end %>
@@ -122,23 +123,28 @@
 
           <%= link_to "Add", "/ds_#{relation_ds.ds_type.downcase.pluralize}?d=#{relation_ds.id}&disp_field=#{element.relation_disp_field}", :remote => true, :id => "add_#{element.id}"%>
           <script>
-            $(function(){ 
-              $('#add_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false,
-                buttons:{
-                  "OK": function(){
-
-                    $( ".ui-selected", this ).each(function() {
-                      $('#add_<%= element.id %>').before('<input id="record_<%= element.key %>[]" name="record[<%= element.key %>][]" value=' + this.id + '></input><br/>');
-                    });
-                    $(this).dialog("close");
-                  },
-                  Cancel: function(){
-                    $(this).dialog("close");
-                  }
-                }
-              });
+            $(function(){
+              
               //open the dialog before sending the request
               $('#add_<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#add_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false,
+                  buttons:{
+                    "OK": function(){
+  
+                      $( ".ui-selected", this ).each(function() {
+                        $('#add_<%= element.id %>').before(
+                          '<div id=' + this.id + '>' + this.textContent + 
+                          '<input type="hidden" id="record_<%= element.key %>[]" name="record[<%= element.key %>][]" value=' + this.id + '></input>' +
+                          '<a onclick="$(\'#'+this.id +'\').remove(); return false;" href="#">Remove</a>' + '</div>'
+                        );
+                      });
+                      $(this).dialog("destroy");
+                    },
+                    Cancel: function(){
+                      $(this).dialog("destroy");
+                    }
+                  }
+                });
                 $('#add_record_dialog').dialog('open');
               });
               //get the response and fill in the dialog
@@ -153,9 +159,10 @@
           <%= link_to "Create", "/ds_#{relation_ds.ds_type.downcase.pluralize}/new?d=#{relation_ds.id}", :remote => true, :id => element.id %>
           <script>
             $(function(){ 
-              $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
+              
               //open the dialog before sending the request
               $('#<%= element.id%>').bind("ajax:beforeSend", function(evt, xhr, settings){
+                $('#new_record_dialog').dialog({width: '90%', height: '450', modal: true, autoOpen: false});
                 $('#new_record_dialog').dialog('open');
               });
               //get the response and fill in the dialog

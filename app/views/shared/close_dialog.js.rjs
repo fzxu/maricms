@@ -1,1 +1,3 @@
+#close is used to trigger the event
+page << "$('#new_record_dialog').dialog('close')"
 page << "$('#new_record_dialog').dialog('destroy')"

@@ -53,7 +53,6 @@ class Page
   field :per_page, :type => Integer, :default => 20
     
   embeds_many :r_page_ds
-  embeds_many :page_metas
   
   has_one :mg_url, :as => :record, :autosave => true
   

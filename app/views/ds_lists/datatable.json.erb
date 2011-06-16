@@ -4,27 +4,26 @@
   "iTotalDisplayRecords": <%= @total_disp_records_size %>,
   "aaData": [
   <% @records.each_with_index do |rec,ind| %>
-    <% indentation = '-' * rec.depth %>
     [
-      "<%= indentation + (ActiveSupport::JSON.encode rec.mg_name) %>",
       <% @d.ds_elements.each do |ds_element|%>
         <% if ds_element.ftype == "Text" || ds_element.ftype == "RichText"%>
-          "<%= ActiveSupport::JSON.encode truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) unless rec.send(ds_element.key).blank? %>",
+          "<%= truncate(rec.send(ds_element.key).gsub(/<\/?[^>]*>/, "")) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "Image" %>
           "<%= (image_tag rec.send(ds_element.key).mg_small.url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "DateTime" %>
           "<%= rec.send(ds_element.key).strftime(@setting.date_format) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "File" %>
           "<%= (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send(ds_element.key).url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
+        <% elsif ds_element.ftype == "Relation" %>
+          "<%= rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% else %>
-          "<%= ActiveSupport::JSON.encode rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
+          "<%= rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>
       <% end %>
-      "<%= ActiveSupport::JSON.encode rec.parent.mg_name if rec.parent %>",
       "<%= (link_to rec.mg_url.path, edit_mg_url_path(rec.mg_url)).gsub(/\"/, "'") if rec.mg_url %>",
       "<%= rec.position.to_i %>",
-      "<%= (button_to "Up", move_up_ds_tree_path(rec, :d => @d.id), :remote => true, :class=>"ui-icon ui-icon-arrowthick-1-n").gsub(/\"/, "'")%> <%= (button_to "Down", move_down_ds_tree_path(rec, :d => @d.id), :remote => true, :class => "ui-icon ui-icon-arrowthick-1-s").gsub(/\"/, "'") %>",
-      "<%= (link_to "Show", ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Edit", edit_ds_tree_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= (link_to "Destroy", ds_tree_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+      "<%= raw (button_to "Up", move_down_ds_list_path(rec, :d => @d.id), :remote => true, :class=>"ui-icon ui-icon-arrowthick-1-n").gsub(/\"/, "'")%> <%= raw (button_to "Down", move_up_ds_list_path(rec, :d => @d.id), :remote => true, :class => "ui-icon ui-icon-arrowthick-1-s").gsub(/\"/, "'") %>",
+      "<%= raw (link_to "Show", ds_list_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= raw (link_to "Edit", edit_ds_list_path(rec, :d => @d.id)).gsub(/\"/, "'") %> <%= raw (link_to "Destroy", ds_list_path(rec, :d => @d.id), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
     ]
     <% if ind < @records.size - 1%>
     ,

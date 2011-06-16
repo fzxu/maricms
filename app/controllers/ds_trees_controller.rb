@@ -63,7 +63,7 @@ class DsTreesController < ApplicationController
     @total_records = total_records(@d)
 
     respond_to do |format|
-      format.js {render :layout => false}
+      format.json {render :layout => false}
     end
   end
 

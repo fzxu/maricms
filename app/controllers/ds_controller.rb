@@ -62,7 +62,7 @@ class DsController < ApplicationController
     @total_records = total_records()
 
     respond_to do |format|
-      format.js {render :layout => false}
+      format.json {render :layout => false }
     end
   end
 

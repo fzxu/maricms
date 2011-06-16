@@ -1,0 +1,22 @@
+{
+  "sEcho": <%= params[:sEcho] || -1 %>,
+  "iTotalRecords": <%= @total_records %>,
+  "iTotalDisplayRecords": <%= @total_disp_records_size %>,
+  "aaData": [
+  <% @records.each_with_index do |rec,ind| %>
+    [
+      "<%= rec.key %>",
+      "<%= rec.name unless rec.name.blank? %>",
+      "<%= rec.ds_type %>",
+      "<%= rec.ds_view_type %>",
+      "<%= rec.time_log %>",
+      "<%= rec.ds_elements.size %>",
+      "<%= raw (button_to 'Up', move_up_d_path(rec), :remote => true, :class=>"ui-icon ui-icon-arrowthick-1-n").gsub(/\"/, "'") %> <%= raw (button_to 'Down', move_down_d_path(rec), :remote => true, :class => "ui-icon ui-icon-arrowthick-1-s").gsub(/\"/, "'") %>",
+      "<%= raw (link_to 'Manage', manage_d_path(rec)).gsub(/\"/, "'") %> <%= raw (link_to "Show", d_path(rec)).gsub(/\"/, "'") %> <%= raw (link_to "Edit", edit_d_path(rec)).gsub(/\"/, "'") %> <%= raw (link_to "Destroy", d_path(rec), :confirm => 'Are you sure?', :method => :delete).gsub(/\"/, "'")  %>"    
+    ]
+    <% if ind < @records.size - 1%>
+    ,
+    <% end %>
+  <% end %>
+  ]
+}

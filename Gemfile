@@ -10,7 +10,7 @@ gem "mongoid", "~> 2.0"
 
 #gem "mongoid", :git => "git://github.com/mongoid/mongoid.git"
 
-gem 'mongoid-tree', :git => "https://github.com/arkxu/mongoid-tree.git", :require => 'mongoid/tree'
+gem 'mongoid-tree', :git => "git://github.com/arkxu/mongoid-tree.git", :require => 'mongoid/tree'
 gem 'mongoid_order'
 
 #gem 'mongoid_order', :git => 'https://github.com/arkxu/mongoid_order.git'
@@ -23,7 +23,7 @@ gem "themes_for_rails"
 gem 'rmagick'
 gem 'carrierwave'
 
-gem "liquid", :git => "https://github.com/arkxu/liquid.git"
+gem "liquid", :git => "git://github.com/arkxu/liquid.git"
 #gem "liquid", :path => "/Users/arkxu/r/liquid"
 
 gem 'http_accept_language'

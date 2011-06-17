@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 #source 'http://gemcutter.org'
 
-gem 'rails', '3.0.8'
+gem 'rails', '3.0.9'
 gem 'jquery-rails'
 
 #gem "mongo_mapper"

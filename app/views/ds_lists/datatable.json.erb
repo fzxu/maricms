@@ -20,6 +20,8 @@
               "<%= rec.send(ds_element.key).map{|s| s.send(ds_element.relation_disp_field)}.join(",") unless rec.send(ds_element.key).blank? %>",
             <% elsif ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"%>
               "<%= rec.send(ds_element.key).send(ds_element.relation_disp_field) unless rec.send(ds_element.key).blank? %>",
+            <% else %>
+              "you have an relation here, but does not specify the relation type",
             <% end %>
           <% end %>
         <% else %>

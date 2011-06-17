@@ -122,6 +122,29 @@ class DsTreesController < ApplicationController
       @record.mg_url = MgUrl.new(mg_url)
     end
 
+    # process the relationship
+    @d.ds_elements.each do |ds_element|
+      if ds_element.ftype == "Relation"
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"
+          p_related_record = params[:record].delete("#{ds_element.key}")
+          if p_related_record && !p_related_record.blank?
+            related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+            @record.send("#{ds_element.key}=", related_record)
+          end
+        elsif ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"
+          p_related_records = params[:record].delete("#{ds_element.key}")
+          if p_related_records && !p_related_records.empty?
+            related_records = []
+            p_related_records.each do |p_related_record|
+              related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+              related_records << related_record
+            end
+            @record.send("#{ds_element.key}=", related_records)
+          end          
+        end
+      end
+    end
+
     respond_to do |format|
       if @record.save
         expire_action_cache(@record)
@@ -160,6 +183,31 @@ class DsTreesController < ApplicationController
     end
     
     #TODO need to remove the existing alias when the passing mg_url is null and @recoard.mg_url has value
+
+    # process the relationship
+    @d.ds_elements.each do |ds_element|
+      if ds_element.ftype == "Relation"
+        if ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"
+          p_related_record = params[:record].delete("#{ds_element.key}")
+          if p_related_record && !p_related_record.blank?
+            related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+            @record.send("#{ds_element.key}=", related_record)
+          end
+        elsif ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"
+          p_related_records = params[:record].delete("#{ds_element.key}")
+          if p_related_records && !p_related_records.empty?
+            related_records = @record.send("#{ds_element.key}")
+            @record.send("#{ds_element.key}").nullify && @record.save
+            p_related_records.each do |p_related_record|
+              related_record = D.where(:key => ds_element.relation_ds).first.get_klass.find(p_related_record)
+              related_records << related_record
+            end
+          else
+            @record.send("#{ds_element.key}").nullify
+          end          
+        end
+      end
+    end
 
     respond_to do |format|
       if @record.update_attributes(params[:record])

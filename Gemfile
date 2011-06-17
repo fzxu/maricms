@@ -30,6 +30,9 @@ gem 'http_accept_language'
 
 gem 'rspec-rails', :group => [:development, :test]
 
+# for ruby debug ide
+gem 'require_relative', :group => [:development, :test]
+
 if RUBY_VERSION =~ /1\.8/
   gem 'SystemTimer'
 end

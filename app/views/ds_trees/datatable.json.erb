@@ -16,6 +16,18 @@
           "<%= rec.send(ds_element.key).strftime(@setting.date_format) unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "File" %>
           "<%= raw (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send(ds_element.key).url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
+        <% elsif ds_element.ftype == "Relation" %>
+          <% if rec.send(ds_element.key).blank? %>
+            "",
+          <% else %>
+            <% if ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"%>
+              "<%= rec.send(ds_element.key).map{|s| s.send(ds_element.relation_disp_field)}.join(",") unless rec.send(ds_element.key).blank? %>",
+            <% elsif ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"%>
+              "<%= rec.send(ds_element.key).send(ds_element.relation_disp_field) unless rec.send(ds_element.key).blank? %>",
+            <% else %>
+              "you have an relation here, but does not specify the relation type",
+            <% end %>
+          <% end %>
         <% else %>
           "<%= rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>

@@ -15,7 +15,13 @@
         <% elsif ds_element.ftype == "File" %>
           "<%= raw (link_to rec.send("#{ds_element.key}__#{@setting.default_language}_filename"), rec.send(ds_element.key).url).gsub(/\"/, "'") unless rec.send(ds_element.key).blank? %>",
         <% elsif ds_element.ftype == "Relation" %>
-          "<%= rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
+          <% unless rec.send(ds_element.key).blank? %>
+            <% if ds_element.relation_type == "has_many" || ds_element.relation_type == "has_and_belongs_to_many"%>
+              "<%= rec.send(ds_element.key).map{|s| s.send(ds_element.relation_disp_field)}.join(",") unless rec.send(ds_element.key).blank? %>",
+            <% elsif ds_element.relation_type == "has_one" || ds_element.relation_type == "belongs_to"%>
+              "<%= rec.send(ds_element.key).send(ds_element.relation_disp_field) unless rec.send(ds_element.key).blank? %>",
+            <% end %>
+          <% end %>
         <% else %>
           "<%= rec.send(ds_element.key) unless rec.send(ds_element.key).blank? %>",
         <% end %>

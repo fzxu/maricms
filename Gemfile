@@ -37,6 +37,10 @@ if RUBY_VERSION =~ /1\.8/
   gem 'SystemTimer'
 end
 
+group :development do
+  gem "thin", :require => false
+end
+
 #gem "mongoid_rails_migrations", ">=0.0.10"
 
 #gem 'rack-contrib', :require => 'rack/contrib'

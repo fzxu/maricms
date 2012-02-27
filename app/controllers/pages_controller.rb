@@ -42,6 +42,8 @@
 # by  金盏信息科技(上海)有限公司 | MariGold Information Tech. Co,. Ltd.
 ##
 
+require 'liquid/theme_file_system'
+
 class PagesController < ApplicationController
   before_filter :get_setting
   before_filter :handle_mobile, :only => :show
@@ -172,7 +174,7 @@ class PagesController < ApplicationController
         v.each do |condition|
           result = result.where(condition)
         end
-        render_params["#{TEMPLATE_DYNAMIC_DS_PREFIX}#{k}"] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+        render_params["#{TEMPLATE_DYNAMIC_DS_PREFIX}#{k}"] = result.page(params[:page]).per(@page.per_page || 20)
       end
 
       # datasource query hash
@@ -200,13 +202,13 @@ class PagesController < ApplicationController
           d_key = r_page_d.new_d_name
           end
           if q[d_key].nil?
-            render_params[d_key] = r_page_d.default_query.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+            render_params[d_key] = r_page_d.default_query.page(params[:page]).per(@page.per_page || 20)
           else
             result = r_page_d.default_query
             q[d_key].each do |condition|
               result = result.where(condition)
             end
-            render_params[d_key] = result.paginate(:page => params[:page], :per_page => @page.per_page || 20)
+            render_params[d_key] = result.page(params[:page]).per(@page.per_page || 20)
           end
 
         end

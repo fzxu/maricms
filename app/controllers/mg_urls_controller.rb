@@ -154,8 +154,7 @@ class MgUrlsController < ApplicationController
     end
     @total_disp_records_size = result.size
 
-    result.desc(:position).paginate :page => current_page,
-    :per_page => params[:iDisplayLength]
+    result.desc(:position).page(current_page).per(params[:iDisplayLength])
   end
   
   def total_records

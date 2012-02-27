@@ -237,8 +237,7 @@ class DsController < ApplicationController
     end
     @total_disp_records_size = result.size
 
-    result.asc(:position).paginate :page => current_page,
-    :per_page => params[:iDisplayLength]
+    result.asc(:position).page(current_page).per(params[:iDisplayLength])
   end
   
   def total_records

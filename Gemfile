@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 #source 'http://gemcutter.org'
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.2.1'
 gem 'jquery-rails'
 
 #gem "mongo_mapper"
@@ -16,15 +16,18 @@ gem 'mongoid_order'
 #gem 'mongoid_order', :git => 'https://github.com/arkxu/mongoid_order.git'
 #gem 'mongoid_order', :path => "/Users/arkxu/r/mongoid_order"#, :require => 'mongoid/orderable'
 
-gem "devise"
+gem 'devise', '2.0.4'
 gem "themes_for_rails"
 
 #gem "mongoid-paperclip", :require => "mongoid_paperclip"
 gem 'rmagick'
 gem 'carrierwave'
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+
+gem 'kaminari'
 
 gem "liquid", :git => "git://github.com/arkxu/liquid.git"
-#gem "liquid", :path => "/Users/arkxu/r/liquid"
+#gem "liquid", :path => "/Users/axu/prj/marigold/code/liquid/"
 
 gem 'http_accept_language'
 
@@ -35,10 +38,6 @@ gem 'require_relative', :group => [:development, :test]
 
 if RUBY_VERSION =~ /1\.8/
   gem 'SystemTimer'
-end
-
-group :development do
-  gem "thin", :require => false
 end
 
 #gem "mongoid_rails_migrations", ">=0.0.10"
